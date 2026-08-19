@@ -12,6 +12,7 @@ données, zéro asset sous licence.
 | 🎗️ **SERPENTIN** | Curve fever / Tron | Les traînées de tes coéquipiers sont traversables. Asym : « L'Anguille » |
 | 🎪 **CARAMBOLE** | Sumo × auto-tamponneuses | Bonus forains (enclume, aimant, gant doré). Asym : « Le Taureau » |
 | 💰 **MAGOT** | Butin & tacles (original) | Plus tu portes, plus tu es lent. Tacle = tout tombe. Asym : « Le Dragon » |
+| 🥫 **CHAMBOULE** | Billard humain (original) | Visée SECRÈTE simultanée (10 s), envol général, plateforme qui rétrécit. Asym : « Le Quilleur » |
 
 ## Lancer en local
 

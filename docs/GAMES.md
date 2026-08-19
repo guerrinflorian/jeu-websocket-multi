@@ -1,6 +1,6 @@
 # Les jeux — LA KERMESSE
 
-Trois stands de fête foraine : deux classiques revisités, un original.
+Quatre stands de fête foraine : deux classiques revisités, deux originaux.
 Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, manches courtes, règles en jeu, titres rigolos en fin de partie.
 
 ---
@@ -40,7 +40,17 @@ Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, ma
 
 ---
 
-## Idée en réserve pour un 4ᵉ stand
+## 🥫 CHAMBOULE — original n°2 (visée secrète & carambolages)
+
+**Pitch** : billard humain au-dessus du vide. Chacun vise en secret, tout le monde part en même temps.
+
+- **Boucle (par salve)** : tous les joueurs sont posés sur une plateforme ronde, positions visibles de tous. **10 secondes** pour choisir en secret direction + puissance (glisser = fronde). Les autres voient seulement ta coche « prêt » — jamais ta visée. Puis **envol simultané** : physique de palets, les chocs transfèrent l'énergie, tombé = éliminé. La plateforme **rétrécit à chaque salve**.
+- **Ce qui fait rire** : la lecture dans les pensées (« il va viser là… »), le double bluff, le bourrin qui se jette tout seul dans le vide à pleine puissance, le sandwich coordonné, la statue qui ne bouge jamais et gagne.
+- **Asymétrique — « Le Quilleur »** : 1 contre tous. Masse ×2,5, lancer surpuissant, 2 vies (retour au centre). Strike ou ridicule.
+- **Formats** : FFA, équipes 2-4 (équilibrées ou non), asym 1vN.
+- **Contrôles** : glisser depuis n'importe où (direction + longueur = puissance), re-visée autorisée tant que le chrono tourne. Clavier : flèches (puissance fixe).
+
+## Idée en réserve pour un 5ᵉ stand
 
 **🎭 INCOGNITO** (bluff & paranoïa) : fonds-toi dans une foule de figurants PNJ pendant que des tireurs au réticule (5 balles) essaient de te démasquer ; 3 missions discrètes à accomplir ; toucher un innocent = klaxon de la honte. Formats 1v7/2v6/3v5 + FFA armé. Conçu, non implémenté — le contrat de jeu permet de l'ajouter en créant simplement `games/incognito/`.
 

@@ -17,6 +17,10 @@ function drive(sim, meta, i) {
   }
   const btns = meta.controls.buttons || [];
   if (btns.length && i % 6 === 0) sim.send({ t: 'act', a: btns[i % btns.length].id });
+  if (meta.id === 'chamboule' && i % 5 === 0) {
+    const a = i * 1.3;
+    sim.send({ t: 'act', a: 'aim', d: { ax: Math.cos(a), ay: Math.sin(a), pow: 0.3 + ((i % 7) / 10) } });
+  }
   // Fuzz : le serveur doit ignorer les inputs absurdes sans broncher.
   if (i % 11 === 0) sim.send({ t: 'input', d: { turn: 'lol', mx: 1e9, junk: [1, 2] } });
   if (i % 13 === 0) sim.send({ t: 'act', a: 'inexistant' });
