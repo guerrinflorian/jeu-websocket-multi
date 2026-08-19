@@ -57,6 +57,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           juice.flash('#FFC93C', 0.18);
         } else if (ev.e === 'hit') {
           juice.burst(ev.x, ev.y, { n: Math.round(6 + ev.s * 16), color: '#FFC93C', speed: 100 + ev.s * 200, life: 0.45, size: 3 });
+          if (ev.s > 0.35) juice.ring(ev.x, ev.y, { color: '#F5EFE6', maxR: 30 + ev.s * 55, life: 0.4 });
           juice.shake(2 + ev.s * 7);
           sfx.play('hit');
         } else if (ev.e === 'fall') {
@@ -74,6 +75,10 @@ export function createClient({ ctx, helpers, config, you, send }) {
           juice.shake(4);
         } else if (ev.e === 'roundEnd') {
           sfx.play(ev.team === null ? 'klaxon' : 'ready');
+          if (ev.team !== null) {
+            const colors = (config.teams[ev.team] || []).map((pid) => config.players[pid]?.color || '#3DFF8A');
+            juice.confetti(CX, CY - 60, colors.length ? colors : ['#3DFF8A'], 50);
+          }
         }
       }
     },
@@ -135,6 +140,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
         if (!p.al) continue;
         const color = config.players[pid]?.color || '#888';
         const R = pid === quillPid ? 19 : 15;
+        helpers.shadow(ctx, p.x, p.y, R);
         // Traînée pendant l'envol.
         if (flying) {
           const pv = view.a?.players?.[pid];
@@ -188,7 +194,8 @@ export function createClient({ ctx, helpers, config, you, send }) {
           const ex = meP.x + ax * arrowLen, ey = meP.y + ay * arrowLen;
           const col = pow > 0.75 ? '#FF4757' : pow > 0.4 ? '#FFC93C' : '#3DFF8A';
           ctx.globalAlpha = live ? 0.95 : 0.55;
-          ctx.setLineDash(live ? [] : [7, 6]);
+          ctx.setLineDash([9, 7]);
+          ctx.lineDashOffset = -(performance.now() / 22) % 16;
           ctx.beginPath();
           ctx.moveTo(meP.x, meP.y);
           ctx.lineTo(ex, ey);
@@ -197,6 +204,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           ctx.lineCap = 'round';
           ctx.stroke();
           ctx.setLineDash([]);
+          ctx.lineDashOffset = 0;
           const aAng = Math.atan2(ay, ax);
           ctx.beginPath();
           ctx.moveTo(ex + Math.cos(aAng) * 12, ey + Math.sin(aAng) * 12);
@@ -248,6 +256,12 @@ export function createClient({ ctx, helpers, config, you, send }) {
         ctx.font = '34px Bungee, sans-serif';
         ctx.fillStyle = state.pt <= 3 ? '#FF4757' : '#3DFF8A';
         ctx.fillText(String(ceil), w / 2, 86);
+        if (state.pt <= 3) {
+          const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 110);
+          ctx.strokeStyle = `rgba(255,71,87,${0.3 * pulse})`;
+          ctx.lineWidth = 8;
+          ctx.strokeRect(4, 4, w - 8, h - 8);
+        }
         if (meP?.al) {
           const ready = myAim || state.players[you]?.ch;
           ctx.font = '600 14px Rubik, sans-serif';

@@ -7,7 +7,7 @@ import * as sfx from './sfx.js';
 import { t } from './strings.js';
 import {
   PLAYER_COLORS, TEAM_SHAPES, TAU,
-  clamp, lerp, angleLerp, interpEnts,
+  clamp, lerp, angleLerp, interpEnts, makeRng,
 } from '/shared/const.js';
 
 const INTERP_DELAY = 110; // ms de retard de rendu (voir docs/RESEARCH.md)
@@ -75,6 +75,12 @@ export class GameHost {
           ctx.strokeText(name, x, y);
           ctx.fillStyle = color;
           ctx.fillText(name, x, y);
+        },
+        shadow: (ctx, x, y, r) => {
+          ctx.beginPath();
+          ctx.ellipse(x, y + r * 0.9, r * 1.05, r * 0.4, 0, 0, TAU);
+          ctx.fillStyle = 'rgba(0,0,0,.32)';
+          ctx.fill();
         },
       },
     };
@@ -191,25 +197,110 @@ export class GameHost {
     };
   }
 
-  // Fond commun « nuit de fête foraine » : dégradé + lumières lointaines.
+  // Fond commun « nuit de fête foraine » : ciel étoilé, silhouettes de
+  // grande roue et de chapiteau, halos de néons. Rendu une fois par taille
+  // dans un canvas hors écran, puis blitté chaque frame.
+  buildBgCache() {
+    const c = document.createElement('canvas');
+    c.width = Math.max(1, Math.round(this.w * this.dpr));
+    c.height = Math.max(1, Math.round(this.h * this.dpr));
+    const b = c.getContext('2d');
+    b.scale(this.dpr, this.dpr);
+    const w = this.w, h = this.h;
+
+    const g = b.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, '#0C0620');
+    g.addColorStop(0.55, '#140A26');
+    g.addColorStop(1, '#221240');
+    b.fillStyle = g;
+    b.fillRect(0, 0, w, h);
+
+    // Étoiles (déterministes : même ciel à chaque frame).
+    const rng = makeRng(777);
+    for (let i = 0; i < 70; i++) {
+      const x = rng.next() * w;
+      const y = rng.next() * h * 0.7;
+      b.globalAlpha = 0.12 + rng.next() * 0.4;
+      b.fillStyle = rng.chance(0.2) ? '#FFC93C' : '#F5EFE6';
+      b.fillRect(x, y, rng.chance(0.15) ? 2 : 1.2, rng.chance(0.15) ? 2 : 1.2);
+    }
+    b.globalAlpha = 1;
+
+    // Halos de néons lointains.
+    for (const [fx, fy, r, col] of [
+      [0.15, 0.95, w * 0.5, 'rgba(255,61,138,.06)'],
+      [0.85, 0.9, w * 0.45, 'rgba(41,217,255,.06)'],
+      [0.5, 1.05, w * 0.6, 'rgba(255,201,60,.05)'],
+    ]) {
+      const rad = b.createRadialGradient(fx * w, fy * h, 0, fx * w, fy * h, r);
+      rad.addColorStop(0, col);
+      rad.addColorStop(1, 'rgba(0,0,0,0)');
+      b.fillStyle = rad;
+      b.fillRect(0, 0, w, h);
+    }
+
+    // Grande roue en silhouette (bas gauche).
+    const wx = w * 0.1, wy = h * 0.98, wr = Math.min(w, h) * 0.3;
+    b.strokeStyle = 'rgba(185,168,208,.09)';
+    b.lineWidth = 2;
+    b.beginPath();
+    b.arc(wx, wy - wr, wr, 0, TAU);
+    b.stroke();
+    b.beginPath();
+    b.arc(wx, wy - wr, wr * 0.7, 0, TAU);
+    b.stroke();
+    for (let i = 0; i < 10; i++) {
+      const a = (i / 10) * TAU;
+      b.beginPath();
+      b.moveTo(wx, wy - wr);
+      b.lineTo(wx + Math.cos(a) * wr, wy - wr + Math.sin(a) * wr);
+      b.stroke();
+      b.fillStyle = 'rgba(185,168,208,.12)';
+      b.fillRect(wx + Math.cos(a) * wr - 3, wy - wr + Math.sin(a) * wr, 6, 5);
+    }
+
+    // Chapiteau en silhouette (bas droite).
+    const tx = w * 0.88, ty = h, tw = Math.min(w, h) * 0.3;
+    b.fillStyle = 'rgba(185,168,208,.07)';
+    b.beginPath();
+    b.moveTo(tx - tw / 2, ty);
+    b.quadraticCurveTo(tx - tw * 0.2, ty - tw * 0.45, tx, ty - tw * 0.55);
+    b.quadraticCurveTo(tx + tw * 0.2, ty - tw * 0.45, tx + tw / 2, ty);
+    b.closePath();
+    b.fill();
+    b.fillRect(tx - 1.5, ty - tw * 0.7, 3, tw * 0.16);
+    b.beginPath();
+    b.moveTo(tx, ty - tw * 0.7);
+    b.lineTo(tx + 12, ty - tw * 0.66);
+    b.lineTo(tx, ty - tw * 0.62);
+    b.closePath();
+    b.fill();
+
+    this.bgCache = { c, w, h };
+  }
+
   drawBg(ctx) {
     if (!this.bgCache || this.bgCache.w !== this.w || this.bgCache.h !== this.h) {
-      const g = ctx.createLinearGradient(0, 0, 0, this.h);
-      g.addColorStop(0, '#0E0720');
-      g.addColorStop(0.6, '#140A26');
-      g.addColorStop(1, '#1E1038');
-      this.bgCache = { g, w: this.w, h: this.h };
+      this.buildBgCache();
     }
-    ctx.fillStyle = this.bgCache.g;
-    ctx.fillRect(0, 0, this.w, this.h);
-    // Guirlande d'ampoules discrète en haut de l'écran.
+    ctx.drawImage(this.bgCache.c, 0, 0, this.w, this.h);
+    // Guirlande d'ampoules animée en haut de l'écran.
     const nb = Math.floor(this.w / 56);
     const time = performance.now() / 1000;
+    ctx.strokeStyle = 'rgba(185,168,208,.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let i = 0; i <= nb; i++) {
+      const x = (i / nb) * this.w;
+      const y = 10 + Math.sin((i / nb) * Math.PI * 3) * 6;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
     for (let i = 0; i <= nb; i++) {
       const x = (i / nb) * this.w;
       const y = 10 + Math.sin((i / nb) * Math.PI * 3) * 6;
       const on = (Math.floor(time * 2) + i) % 3 === 0;
-      ctx.fillStyle = on ? 'rgba(255,201,60,.8)' : 'rgba(255,201,60,.22)';
+      ctx.fillStyle = on ? 'rgba(255,201,60,.85)' : 'rgba(255,201,60,.22)';
       ctx.beginPath();
       ctx.arc(x, y, on ? 3 : 2.2, 0, TAU);
       ctx.fill();

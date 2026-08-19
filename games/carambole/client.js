@@ -32,6 +32,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       for (const ev of evs) {
         if (ev.e === 'hit') {
           juice.burst(ev.x, ev.y, { n: Math.round(6 + ev.s * 14), color: '#FFC93C', speed: 100 + ev.s * 160, life: 0.4, size: 3 });
+          if (ev.s > 0.45) juice.ring(ev.x, ev.y, { color: '#FFC93C', maxR: 34 + ev.s * 40, life: 0.35 });
           juice.shake(2 + ev.s * 6);
           sfx.play('hit');
         } else if (ev.e === 'dash') {
@@ -41,7 +42,8 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           const color = config.players[ev.pid]?.color || '#FFF';
           falls.push({ x: ev.x, y: ev.y, color, t: 0 });
           juice.shake(ev.pid === you ? 10 : 5);
-          juice.floater(ev.x, ev.y, ev.out ? 'ÉJECTÉ !' : '-1 ❤️', { color, size: 18 });
+          const cry = ['ÉJECTÉ !', 'PLOUF !', 'AU REVOIR !', 'BYE BYE !', 'OUPS !'][(ev.x | 0) % 5];
+          juice.floater(ev.x, ev.y, ev.out ? cry : '-1 ❤️', { color, size: 18 });
           sfx.play('fall');
         } else if (ev.e === 'bonus') {
           sfx.play('pickup');
@@ -53,6 +55,10 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           sfx.play('pickup');
         } else if (ev.e === 'roundEnd') {
           sfx.play(ev.team === null ? 'klaxon' : 'ready');
+          if (ev.team !== null) {
+            const colors = (config.teams[ev.team] || []).map((pid) => config.players[pid]?.color || '#FFC93C');
+            juice.confetti(CX, CY - 60, colors.length ? colors : ['#FFC93C'], 50);
+          }
         }
       }
     },
@@ -79,6 +85,16 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       ctx.arc(CX, CY, platR, 0, TAU);
       ctx.fillStyle = grad;
       ctx.fill();
+      // Toile de chapiteau vue du dessus : secteurs alternés.
+      for (let i = 0; i < 12; i++) {
+        if (i % 2) continue;
+        ctx.beginPath();
+        ctx.moveTo(CX, CY);
+        ctx.arc(CX, CY, platR, (i / 12) * TAU, ((i + 1) / 12) * TAU);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(255,61,138,.05)';
+        ctx.fill();
+      }
       for (let i = 1; i <= 3; i++) {
         ctx.beginPath();
         ctx.arc(CX, CY, platR * (i / 3.5), 0, TAU);
@@ -86,6 +102,10 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         ctx.lineWidth = 2;
         ctx.stroke();
       }
+      ctx.beginPath();
+      ctx.arc(CX, CY, 10, 0, TAU);
+      ctx.fillStyle = 'rgba(255,122,61,.35)';
+      ctx.fill();
       ctx.beginPath();
       ctx.arc(CX, CY, platR, 0, TAU);
       ctx.strokeStyle = shrinking ? '#FF4757' : '#FF7A3D';
@@ -132,6 +152,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         const color = config.players[pid]?.color || '#888';
         const R = pid === bullPid ? 21 : 16;
         const anvil = p.fx & 1, magnet = p.fx & 2, gant = p.fx & 4, inv = p.fx & 8;
+        helpers.shadow(ctx, p.x, p.y, R);
 
         if (pid === you) {
           ctx.beginPath();

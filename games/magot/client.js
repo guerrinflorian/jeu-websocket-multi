@@ -37,9 +37,23 @@ export function createClient({ ctx, helpers, config, you, controls }) {
     onEvents(evs) {
       for (const ev of evs) {
         if (ev.e === 'coin') {
-          if (ev.pid === you) sfx.play('coin');
+          if (ev.pid === you) sfx.play(ev.g > 1 ? 'bank' : 'coin');
         } else if (ev.e === 'bank') {
           if (ev.pid === you) sfx.play('bank');
+        } else if (ev.e === 'rainWarn') {
+          sfx.play('whistle');
+          juice.floater(ev.x, ev.y, '💰 PLUIE D\'OR !', { color: '#FFC93C', size: 18 });
+        } else if (ev.e === 'rain') {
+          sfx.play('bank');
+          juice.burst(ev.x, ev.y, { n: 30, color: '#FFC93C', speed: 200, life: 0.9, size: 4, grav: 220 });
+          juice.ring(ev.x, ev.y, { color: '#FFC93C', maxR: 90, life: 0.5 });
+          juice.shake(4);
+        } else if (ev.e === 'pileEmpty') {
+          sfx.play('klaxon');
+          juice.floater(450, 240, 'LE TAS EST VIDE !', { color: '#FF4757', size: 24 });
+        } else if (ev.e === 'golden') {
+          sfx.play('mission');
+          juice.flash('#FFC93C', 0.25);
         } else if (ev.e === 'drop') {
           juice.burst(ev.x, ev.y, { n: Math.min(30, 8 + ev.n * 2), color: '#FFC93C', speed: 170, life: 0.7, size: 3.5, grav: 60 });
           juice.shake(ev.pid === you ? 9 : 4);
@@ -81,7 +95,25 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       ctx.lineWidth = 2.5;
       ctx.strokeRect(0, 0, AW, AH);
 
-      // Caisses.
+      // Zone de pluie d'or annoncée : cercle clignotant.
+      if (view.b.rain) {
+        const blink = 0.4 + 0.6 * Math.abs(Math.sin(performance.now() / 130));
+        ctx.globalAlpha = blink;
+        ctx.setLineDash([10, 8]);
+        ctx.beginPath();
+        ctx.arc(view.b.rain.x, view.b.rain.y, 72, 0, TAU);
+        ctx.strokeStyle = '#FFC93C';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font = '22px system-ui';
+        ctx.textAlign = 'center';
+        ctx.fillText('💰', view.b.rain.x, view.b.rain.y + 8);
+        ctx.globalAlpha = 1;
+      }
+
+      // Caisses (couronne sur celle du leader).
+      const leaderBank = Math.max(0, ...((view.b.caisses || []).map((c) => c.banked)));
       for (const c of view.b.caisses || []) {
         const color = teamColor(c.team);
         const mine = config.teams[c.team]?.includes(you);
@@ -101,10 +133,14 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         ctx.font = '600 10px Rubik, sans-serif';
         ctx.fillStyle = 'rgba(245,239,230,.55)';
         ctx.fillText(mine ? 'TA CAISSE' : 'CAISSE', c.x, c.y - 14);
+        if (c.banked > 0 && c.banked === leaderBank) {
+          ctx.font = '16px system-ui';
+          ctx.fillText('👑', c.x, c.y - 28);
+        }
       }
 
-      // Le tas central.
-      const pileScale = state.pile < 0 ? 1 : Math.max(0.15, Math.min(1, state.pile / 44));
+      // Le tas central (fini : il fond à vue d'œil).
+      const pileScale = Math.max(0.1, Math.min(1, state.pile / (state.pileMax || 44)));
       ctx.beginPath();
       ctx.arc(CX, CY, 64, 0, TAU);
       ctx.fillStyle = 'rgba(255,201,60,.07)';
@@ -125,12 +161,10 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         ctx.lineWidth = 1.2;
         ctx.stroke();
       }
-      if (state.pile >= 0) {
-        ctx.font = '800 16px Rubik, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#FFC93C';
-        ctx.fillText(`🐉 ${state.pile}`, CX, CY - 74);
-      }
+      ctx.font = '800 16px Rubik, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = state.pile === 0 ? '#FF4757' : '#FFC93C';
+      ctx.fillText(`${state.asym ? '🐉' : '🪙'} ${state.pile}`, CX, CY - 74);
 
       // Jetons au sol.
       for (const f of view.b.floor || []) {
@@ -154,6 +188,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       for (const [pid, p] of Object.entries(ps)) {
         const color = config.players[pid]?.color || '#888';
         const R = pid === dragonPid ? 19 : 14;
+        helpers.shadow(ctx, p.x, p.y, R);
 
         if (pid === you) {
           ctx.beginPath();
@@ -215,12 +250,41 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         lastCarry = meP.c;
       }
 
-      // HUD : chrono + score.
+      // HUD : chrono + scores en direct + heure dorée.
       ctx.textAlign = 'center';
       ctx.font = '26px Bungee, sans-serif';
       const tl = state.timeLeft;
-      ctx.fillStyle = tl <= 15 ? '#FF4757' : '#F5EFE6';
+      ctx.fillStyle = state.golden ? '#FFC93C' : tl <= 30 ? '#FF4757' : '#F5EFE6';
       ctx.fillText(`${Math.floor(tl / 60)}:${String(tl % 60).padStart(2, '0')}`, w / 2, 34);
+
+      const caisses = view.b.caisses || [];
+      const chipW = Math.min(64, (w - 170) / Math.max(1, caisses.length));
+      const x0 = w / 2 - (caisses.length * chipW) / 2 + chipW / 2;
+      const bestBank = Math.max(0, ...caisses.map((c) => c.banked));
+      caisses.forEach((c, i) => {
+        const cx = x0 + i * chipW;
+        ctx.beginPath();
+        ctx.arc(cx - 14, 50, 6, 0, TAU);
+        ctx.fillStyle = teamColor(c.team);
+        ctx.fill();
+        ctx.font = '800 15px Rubik, sans-serif';
+        ctx.fillStyle = '#F5EFE6';
+        ctx.textAlign = 'left';
+        ctx.fillText(`${c.banked}${c.banked > 0 && c.banked === bestBank ? '👑' : ''}`, cx - 4, 55);
+        ctx.textAlign = 'center';
+      });
+
+      if (state.golden) {
+        const pulse = 0.7 + 0.3 * Math.sin(performance.now() / 150);
+        ctx.globalAlpha = pulse;
+        ctx.font = '18px Bungee, sans-serif';
+        ctx.fillStyle = '#FFC93C';
+        ctx.fillText('✨ HEURE DORÉE — DÉPÔTS ×2 ✨', w / 2, 80);
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = `rgba(255,201,60,${0.25 * pulse})`;
+        ctx.lineWidth = 6;
+        ctx.strokeRect(3, 3, w - 6, h - 6);
+      }
 
       if (meP && meP.c > 0) {
         ctx.font = '600 14px Rubik, sans-serif';

@@ -23,10 +23,10 @@ export default {
     duration: { label: 'Durée', values: [120, 150, 180], labels: ['2:00', '2:30', '3:00'], def: 150 },
   },
   howto: [
-    { icon: '🪙', text: 'Reste sur le tas pour ramasser. Chaque jeton porté te RALENTIT.' },
-    { icon: '🏦', text: 'Dépose à ta caisse pour sécuriser. Le plus riche à la fin gagne.' },
-    { icon: '💥', text: 'TACLE un porteur : il lâche TOUT en éventail. Servez-vous.' },
-    { icon: '🕵️', text: 'Reste sur une caisse ennemie pour la siphonner. Rentable. Risqué.' },
-    { icon: '🐉', text: 'Le Dragon (1 contre tous) garde le trésor : pillez plus de la moitié !' },
+    { icon: '🪙', text: 'Le tas central est FINI. Ramasse vite — chaque jeton porté te RALENTIT.' },
+    { icon: '🏦', text: 'Dépose à ta caisse pour sécuriser. TACLE un porteur : il lâche tout !' },
+    { icon: '🌧️', text: 'Des PLUIES D’OR tombent dans des zones annoncées. Ruée générale. ★ = 5.' },
+    { icon: '✨', text: '20 dernières secondes : HEURE DORÉE, les dépôts comptent ×2.' },
+    { icon: '🐉', text: 'Siphonne les caisses ennemies. Le Dragon (1 vs tous) garde son trésor.' },
   ],
 };

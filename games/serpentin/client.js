@@ -81,6 +81,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           const color = config.players[ev.pid]?.color || '#FFF';
           juice.burst(ev.x, ev.y, { n: 26, color, speed: 160, life: 0.7, size: 3.5 });
           juice.burst(ev.x, ev.y, { n: 10, color: '#FFC93C', speed: 90, life: 0.5, size: 2.5 });
+          juice.ring(ev.x, ev.y, { color, maxR: 46, life: 0.4 });
           juice.shake(ev.pid === you ? 9 : 5);
           juice.floater(ev.x, ev.y, '💥', { size: 22 });
           sfx.play(ev.by === 'wall' ? 'hit' : 'death');
@@ -90,6 +91,10 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           sfx.play('boost');
         } else if (ev.e === 'roundEnd') {
           sfx.play(ev.team === null ? 'klaxon' : (isAsym && ev.team === 0) ? 'whistle' : 'ready');
+          if (ev.team !== null) {
+            const colors = (config.teams[ev.team] || []).map((pid) => config.players[pid]?.color || '#FFC93C');
+            juice.confetti(AW / 2, AH / 3, colors.length ? colors : ['#FFC93C'], 50);
+          }
         }
       }
     },
@@ -103,15 +108,31 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       ctx.save();
       vp.apply(ctx);
 
-      // Piste : panneau nuit + bord néon.
-      ctx.fillStyle = 'rgba(30,16,56,.55)';
+      // Piste : panneau nuit, points de repère, double bord néon.
+      ctx.fillStyle = 'rgba(30,16,56,.6)';
       ctx.fillRect(0, 0, AW, AH);
-      ctx.strokeStyle = 'rgba(41,217,255,.18)';
-      ctx.lineWidth = 10;
-      ctx.strokeRect(-5, -5, AW + 10, AH + 10);
+      ctx.fillStyle = 'rgba(245,239,230,.05)';
+      for (let gx = 80; gx < AW; gx += 80) {
+        for (let gy = 80; gy < AH; gy += 80) {
+          ctx.fillRect(gx - 1.5, gy - 1.5, 3, 3);
+        }
+      }
+      ctx.strokeStyle = 'rgba(41,217,255,.14)';
+      ctx.lineWidth = 12;
+      ctx.strokeRect(-6, -6, AW + 12, AH + 12);
+      ctx.strokeStyle = 'rgba(41,217,255,.45)';
+      ctx.lineWidth = 6;
+      ctx.strokeRect(-2, -2, AW + 4, AH + 4);
       ctx.strokeStyle = '#29D9FF';
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 2.2;
       ctx.strokeRect(0, 0, AW, AH);
+      // Coins lumineux.
+      ctx.fillStyle = '#29D9FF';
+      for (const [cx2, cy2] of [[0, 0], [AW, 0], [0, AH], [AW, AH]]) {
+        ctx.beginPath();
+        ctx.arc(cx2, cy2, 5, 0, TAU);
+        ctx.fill();
+      }
 
       // Traînées.
       const now = performance.now();
@@ -121,7 +142,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         for (const line of lines) {
           const pts = line.pts;
           if (pts.length < 6) continue;
-          for (const [width, alpha] of [[8, 0.18], [3.4, 0.92]]) {
+          for (const [width, alpha] of [[13, 0.07], [7, 0.2], [3.2, 0.95]]) {
             ctx.beginPath();
             let started = false;
             for (let i = 0; i < pts.length; i += 3) {
@@ -167,6 +188,13 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           juice.burst(p.x - Math.cos(p.a) * 6, p.y - Math.sin(p.a) * 6,
             { n: 1, color, speed: 40, life: 0.35, size: 2.5 });
         }
+        // Halo lumineux derrière la tête.
+        ctx.globalAlpha = 0.22;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 11, 0, TAU);
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
         ctx.beginPath();
         ctx.arc(p.x, p.y, 5, 0, TAU);
         ctx.fillStyle = color;

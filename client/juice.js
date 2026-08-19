@@ -6,6 +6,7 @@ const REDUCED = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches 
 const MAX_PARTS = 512;
 const parts = [];
 const floaters = [];
+const rings = [];
 let shakePower = 0;
 let flashColor = null;
 let flashAlpha = 0;
@@ -13,8 +14,14 @@ let flashAlpha = 0;
 export function reset() {
   parts.length = 0;
   floaters.length = 0;
+  rings.length = 0;
   shakePower = 0;
   flashAlpha = 0;
+}
+
+// Onde de choc : cercle qui s'étend et s'estompe (coords monde).
+export function ring(x, y, { color = '#FFC93C', maxR = 60, life = 0.4, width = 3 } = {}) {
+  if (rings.length < 40) rings.push({ x, y, color, maxR, life, width, t: 0 });
 }
 
 export function shake(power = 6) {
@@ -67,6 +74,10 @@ export function update(dt) {
     f.t += dt;
     if (f.t >= f.life) floaters.splice(i, 1);
   }
+  for (let i = rings.length - 1; i >= 0; i--) {
+    rings[i].t += dt;
+    if (rings[i].t >= rings[i].life) rings.splice(i, 1);
+  }
   shakePower *= Math.pow(0.001, dt); // décroissance rapide
   if (shakePower < 0.3) shakePower = 0;
   flashAlpha = Math.max(0, flashAlpha - dt * 1.8);
@@ -83,6 +94,17 @@ export function shakeOffset() {
 
 // À appeler dans le repère MONDE du jeu.
 export function drawWorld(ctx) {
+  for (const r of rings) {
+    const k = r.t / r.life;
+    const ease = 1 - (1 - k) * (1 - k);
+    ctx.globalAlpha = (1 - k) * 0.8;
+    ctx.beginPath();
+    ctx.arc(r.x, r.y, Math.max(1, r.maxR * ease), 0, Math.PI * 2);
+    ctx.strokeStyle = r.color;
+    ctx.lineWidth = r.width * (1 - k * 0.6);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
   for (const p of parts) {
     const a = 1 - p.t / p.life;
     ctx.globalAlpha = a;

@@ -9,21 +9,25 @@ const H = meta.arena.h;
 const CX = W / 2, CY = H / 2;
 const P_R = 14;
 const SPEED = 175;
-const SLOW_PER_COIN = 0.045;
-const SLOW_MIN = 0.45;
+const SLOW_PER_COIN = 0.055;
+const SLOW_MIN = 0.4;
 const PILE_R = 64;
+const PILE_PER_PLAYER = 9; // tas de départ FINI : la rareté fait la bagarre
 const PICK_EVERY = 0.4;    // s par jeton ramassé sur le tas
 const CAISSE_R = 44;
 const BANK_EVERY = 0.25;   // s par jeton déposé
-const SIPHON_EVERY = 1.0;  // s par jeton siphonné
+const SIPHON_EVERY = 0.8;  // s par jeton siphonné
 const TACKLE_V = 430;
-const TACKLE_CD = 2.5;
+const TACKLE_CD = 2.2;
 const TACKLE_ATK = 0.3;
 const STUN_T = 0.8;
 const FLOOR_TTL = 15;      // s de vie d'un jeton au sol
 const FLOOR_MAX = 90;
-const GOLD_EVERY = 15;     // s
+const RAIN_EVERY = 25;     // s entre deux pluies d'or
+const RAIN_WARN = 2.5;     // s d'annonce de la zone avant la pluie
+const RAIN_COINS = 8;      // + 1 jeton d'or (x5) par pluie
 const GOLD_VALUE = 5;
+const GOLDEN_AT = 20;      // s restantes : l'« heure dorée » (dépôts x2)
 const DRAGON_TREASURE = 44;
 const DRAGON_SPEED = 200;
 const DRAGON_CD = 1.8;
@@ -36,6 +40,8 @@ const r2 = (v) => Math.round(v * 100) / 100;
 export function createState(cfg) {
   const asym = cfg.format.kind === 'asym';
   const nTeams = cfg.teams.length;
+  const nPlayers = cfg.teams.flat().length;
+  const pile0 = asym ? DRAGON_TREASURE : PILE_PER_PLAYER * nPlayers;
   const state = {
     cfg,
     rng: cfg.rng,
@@ -44,10 +50,14 @@ export function createState(cfg) {
     phase: 'pre',
     phaseT: PRE_T,
     timeLeft: cfg.settings.duration || 150,
-    pile: asym ? DRAGON_TREASURE : Infinity,
+    pile: pile0,
+    pileMax: pile0,
+    pileEmptied: false,
     floor: [],           // jetons au sol {id, x, y, v, ttl}
     floorId: 0,
-    goldT: GOLD_EVERY,
+    rainT: RAIN_EVERY,
+    rain: null,          // {x, y, in} : pluie d'or annoncée
+    golden: false,       // heure dorée : dépôts x2
     caisses: [],         // {team, x, y, banked}
     players: {},
     evq: [],
@@ -131,18 +141,43 @@ export function tick(state, dt) {
 
   state.timeLeft -= dt;
 
-  // Jeton d'or (pas en mode Dragon : le trésor est déjà limité).
+  // Heure dorée : dans les 20 dernières secondes, chaque dépôt compte x2.
+  if (!state.golden && state.timeLeft <= GOLDEN_AT) {
+    state.golden = true;
+    evs.push({ e: 'golden' });
+  }
+
+  // Pluie d'or : zone annoncée à l'avance → tout le monde y court.
+  // (pas en mode Dragon : son trésor fini est la seule richesse)
   if (!state.asym) {
-    state.goldT -= dt;
-    if (state.goldT <= 0) {
-      state.goldT = GOLD_EVERY;
-      state.floor.push({
-        id: ++state.floorId,
-        x: r1(state.rng.range(70, W - 70)),
-        y: r1(state.rng.range(70, H - 70)),
-        v: GOLD_VALUE, ttl: 30,
-      });
-      evs.push({ e: 'gold' });
+    state.rainT -= dt;
+    if (!state.rain && state.rainT <= RAIN_WARN && state.timeLeft > 10) {
+      state.rain = {
+        x: r1(state.rng.range(90, W - 90)),
+        y: r1(state.rng.range(90, H - 90)),
+        in: RAIN_WARN,
+      };
+      evs.push({ e: 'rainWarn', x: state.rain.x, y: state.rain.y });
+    }
+    if (state.rain) {
+      state.rain.in -= dt;
+      if (state.rain.in <= 0) {
+        const { x, y } = state.rain;
+        for (let i = 0; i < RAIN_COINS; i++) {
+          const ang = state.rng.range(0, TAU);
+          const d = state.rng.range(0, 65);
+          state.floor.push({
+            id: ++state.floorId,
+            x: r1(clamp(x + Math.cos(ang) * d, 20, W - 20)),
+            y: r1(clamp(y + Math.sin(ang) * d, 20, H - 20)),
+            v: 1, ttl: 20,
+          });
+        }
+        state.floor.push({ id: ++state.floorId, x, y, v: GOLD_VALUE, ttl: 20 });
+        evs.push({ e: 'rain', x, y });
+        state.rain = null;
+        state.rainT = RAIN_EVERY;
+      }
     }
   }
 
@@ -203,8 +238,12 @@ export function tick(state, dt) {
         if (p.pickT >= PICK_EVERY) {
           p.pickT = 0;
           p.carry++;
-          if (state.asym) state.pile--;
+          state.pile--;
           evs.push({ e: 'pick', pid: p.pid });
+          if (state.pile === 0 && !state.asym && !state.pileEmptied) {
+            state.pileEmptied = true;
+            evs.push({ e: 'pileEmpty' });
+          }
         }
       }
     } else p.pickT = 0;
@@ -229,9 +268,10 @@ export function tick(state, dt) {
           if (p.bankT >= BANK_EVERY) {
             p.bankT = 0;
             p.carry--;
-            c.banked++;
-            p.stats.banked++;
-            evs.push({ e: 'coin', pid: p.pid, team: c.team });
+            const gain = state.golden ? 2 : 1;
+            c.banked += gain;
+            p.stats.banked += gain;
+            evs.push({ e: 'coin', pid: p.pid, team: c.team, g: gain });
           }
         }
       } else if (c.banked > 0) {
@@ -281,7 +321,7 @@ function tackleHit(state, atk, vic, nx, ny, evs) {
     const spawn = Math.min(n, FLOOR_MAX - state.floor.length);
     for (let i = 0; i < spawn; i++) {
       const ang = state.rng.range(0, TAU);
-      const d = state.rng.range(18, 60 + n * 2);
+      const d = state.rng.range(16, 44 + n * 1.5);
       state.floor.push({
         id: ++state.floorId,
         x: r1(clamp(vic.x + Math.cos(ang) * d, 20, W - 20)),
@@ -313,7 +353,10 @@ export function view(state) {
     phase: state.phase,
     timeLeft: Math.max(0, Math.ceil(state.timeLeft)),
     asym: state.asym,
-    pile: state.asym ? state.pile : -1,
+    pile: state.pile,
+    pileMax: state.pileMax,
+    rain: state.rain ? { x: state.rain.x, y: state.rain.y } : null,
+    golden: state.golden ? 1 : 0,
     caisses: state.caisses,
     floor: state.floor.map((f) => ({ id: f.id, x: f.x, y: f.y, v: f.v })),
     players,
@@ -400,7 +443,11 @@ export function botAct(state, pid, mind, api) {
     const myCaisse = state.caisses.find((c) => c.team === p.team);
     const greed = 3 + Math.round(pers.aggro * 5);
     const danger = state.asym ? dragonDist(state, p) : Infinity;
-    if (p.carry >= greed || (p.carry > 0 && danger < 120 && rng.chance(0.7))) {
+    if (state.golden && p.carry > 0 && rng.chance(0.85)) {
+      goal = myCaisse; // heure dorée : on sécurise tout, ça compte double
+    } else if (state.rain && rng.chance(0.6 + pers.aggro * 0.3)) {
+      goal = state.rain; // pluie d'or annoncée : on fonce à la zone
+    } else if (p.carry >= greed || (p.carry > 0 && danger < 120 && rng.chance(0.7))) {
       goal = myCaisse; // aller sécuriser
     } else {
       const floorNear = nearestFloor(state, p, 220);

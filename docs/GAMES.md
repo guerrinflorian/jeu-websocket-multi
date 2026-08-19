@@ -31,7 +31,7 @@ Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, ma
 
 **Pitch** : un tas de jetons au centre, ta caisse au coin. Plus tu portes, plus tu es lent — et tout le monde a le droit de te tacler.
 
-- **Boucle (150 s)** : ramasse des jetons sur le tas central (1/0,4 s), rapporte-les à ta caisse pour les mettre en sécurité. **Chaque jeton porté te ralentit.** **Tacle** (dash, cooldown) : un ennemi percuté lâche TOUT en éventail. On peut aussi **siphonner la caisse ennemie** en restant dessus (1 jeton/s → dans tes bras : très rentable, très risqué). Un **Jeton d'Or** (valeur 5) apparaît parfois dans un coin. Le plus riche à la fin gagne.
+- **Boucle (150 s)** : le tas central est **FINI** (9 jetons/joueur) — premier arrivé, premier servi. Rapporte à ta caisse pour sécuriser ; **chaque jeton porté te ralentit** (jusqu'à −60 %). **Tacle** : un porteur percuté lâche TOUT en éventail serré (mêlée générale au sol). **Siphon** des caisses ennemies (1 jeton/0,8 s, l'équipe volée est alertée). Des **pluies d'or** tombent dans des zones annoncées 2,5 s à l'avance → ruée. Les **20 dernières secondes** sont l'**heure dorée** : dépôts ×2, les retournements sont permanents. Le plus riche à la fin gagne.
 - **Le dilemme qui fait le jeu** : rentrer avec 4 jetons en sécurité, ou pousser à 12 en tortue géante ? Chaque trajet est un pari, chaque tacle une tragédie publique.
 - **Asymétrique — « Le Dragon »** : 1 contre tous. Le trésor central appartient au Dragon (40 jetons). Les pillards doivent le vider vers leurs caisses ; le Dragon (plus rapide, tacle renforcé, voit les porteurs surlignés) récupère ce qu'il fait lâcher. Dragon vainqueur s'il garde ≥ la moitié.
 - **Formats** : FFA (caisse chacun), équipes 2-4 (caisse commune, 2v2 … 3v5), asym 1vN.
