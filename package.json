@@ -1,0 +1,18 @@
+{
+  "name": "la-kermesse",
+  "version": "1.0.0",
+  "description": "La fête foraine multijoueur en WebSocket — 4 jeux, 1 à 8 joueurs, dans le navigateur.",
+  "type": "module",
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node test/run.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  }
+}
