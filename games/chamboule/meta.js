@@ -1,4 +1,4 @@
-// CHAMBOULE — méta isomorphe (serveur + client). Données pures, JSON-able.
+// CHAMBOULE : méta isomorphe (serveur + client). Données pures, JSON-able.
 
 export default {
   id: 'chamboule',
@@ -24,7 +24,7 @@ export default {
   },
   howto: [
     { icon: '🎯', text: 'GLISSE ton doigt (de n’importe où) : direction + longueur = puissance.' },
-    { icon: '⏱️', text: '10 secondes pour choisir. Personne ne voit ta visée — juste que tu es prêt.' },
+    { icon: '⏱️', text: '10 secondes pour choisir. Personne ne voit ta visée, juste que tu es prêt.' },
     { icon: '💥', text: 'Tout le monde part EN MÊME TEMPS. Les chocs propulsent selon la vitesse.' },
     { icon: '🕳️', text: 'Hors de la plateforme = le vide. Elle rétrécit à chaque salve !' },
     { icon: '🎳', text: 'Le Quilleur (1 contre tous) : lourd, surpuissant, 2 vies. Strike ou ridicule.' },

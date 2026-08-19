@@ -1,11 +1,11 @@
 # 🎪 LA KERMESSE
 
 **La fête foraine multijoueur dans ton navigateur.** 1 à 8 joueurs, en équipes
-libres (FFA, 2v2, 4v4, 3v5, 1 contre tous…), des bots forains pour combler les
-places, jouable au doigt sur téléphone. Un seul process Node, zéro base de
-données, zéro asset sous licence.
+libres (FFA, 1v1, 2v2, 4v4, 3v5, 1 contre tous…), des bots forains pour combler
+les places, jouable au doigt sur téléphone. Un seul process Node, zéro base de
+données, zéro asset sous licence (cartes, dés et canards dessinés au Canvas).
 
-**Les stands :**
+**Les stands (10) :**
 
 | Jeu | Genre | Le twist |
 |---|---|---|
@@ -13,6 +13,12 @@ données, zéro asset sous licence.
 | 🎪 **CARAMBOLE** | Sumo × auto-tamponneuses | Bonus forains (enclume, aimant, gant doré). Asym : « Le Taureau » |
 | 💰 **MAGOT** | Butin & tacles (original) | Plus tu portes, plus tu es lent. Tacle = tout tombe. Asym : « Le Dragon » |
 | 🥫 **CHAMBOULE** | Billard humain (original) | Visée SECRÈTE simultanée (10 s), envol général, plateforme qui rétrécit. Asym : « Le Quilleur » |
+| 🔴 **LIGNE 4** | Puissance 4 | La grille grandit avec les camps ; en équipe on joue la même couleur en alternance. Asym : « Le Cerveau » |
+| 🃏 **BLACKJACK** | 21 contre la banque | Décisions SIMULTANÉES (zéro attente), blackjack 3:2, prêt du forain. Asym : « Le Croupier » (tu es la banque) |
+| 👪 **7 FAMILLES** | Jeu des 7 familles | Familles-stands de la Kermesse, demandes publiques : la mémoire fait tout. Asym : « Le Collectionneur » |
+| 🎲 **YAMS** | Yams / dés | Tout le monde lance EN MÊME TEMPS, les dés des autres tremblent en direct. Asym : « Le Flambeur » (4 lancers) |
+| 🚧 **BARRIÈRES** | Course & murs (original) | Camp bas vs camp haut, 15 barrières chacun, passage TOUJOURS garanti (BFS). Asym : « Le Contremaître » (2 actions) |
+| 🦆 **CANARDS** | Pêche aux canards (original) | Valeur des canards CACHÉE, bluff de démarche, splash qui fait tout lâcher. Asym : « Le Héron » |
 
 ## Lancer en local
 
@@ -29,7 +35,7 @@ npm test                     # harnais : 8 clients WS réels jouent chaque jeu
 node test/browser.smoke.js   # smoke test navigateur (Playwright, optionnel)
 ```
 
-## Déployer sur Render (gratuit) — pas à pas
+## Déployer sur Render (gratuit) : pas à pas
 
 1. **Pousse ce repo sur GitHub** (ou GitLab) :
    ```bash
@@ -56,7 +62,7 @@ reconnectent tout seuls au lobby.
 ## Ajouter un jeu (le guide qui compte)
 
 Un jeu = **un dossier** dans `games/`. Le serveur et le client le découvrent
-tout seuls — il n'y a **rien d'autre à modifier**.
+tout seuls, il n'y a **rien d'autre à modifier**.
 
 ```
 games/mon-jeu/
@@ -89,17 +95,17 @@ export default {
 };
 ```
 
-### 2. `server.js` — le contrat (7 fonctions)
+### 2. `server.js` : le contrat (7 fonctions)
 
 ```js
 export function createState(cfg) { … }        // cfg: {teams, players, format, settings, rng, seed}
-export function onInput(state, pid, d) { … }  // intention continue (joystick…) — VALIDE TOUT
-export function onAction(state, pid, a, d) {} // action discrète (dash…) — VALIDE TOUT
-export function tick(state, dt) { return evs } // 20 Hz, dt=0.05 — retourne les événements (juice)
+export function onInput(state, pid, d) { … }  // intention continue (joystick…) : VALIDE TOUT
+export function onAction(state, pid, a, d) {} // action discrète (dash…) : VALIDE TOUT
+export function tick(state, dt) { return evs } // 20 Hz, dt=0.05 : retourne les événements (juice)
 export function isOver(state) { return bool }
 export function view(state, pid) { return {} } // état sérialisable envoyé aux clients (par joueur si secrets)
 export function results(state) { return { ranking, winners, titles } }
-export function botAct(state, pid, mind, api) {} // api.input(d) / api.act(a) — même chemin que les humains
+export function botAct(state, pid, mind, api) {} // api.input(d) / api.act(a) : même chemin que les humains
 // Optionnel : fullView(state, pid) → snapshot complet à la (re)connexion
 ```
 
@@ -128,7 +134,7 @@ l'affichage des boutons.
 ### 4. Teste
 
 `npm test` joue automatiquement ton nouveau jeu de bout en bout (2 humains
-simulés + bots, FFA **et** asymétrique) — si le harnais est vert, ton jeu
+simulés + bots, FFA **et** asymétrique) : si le harnais est vert, ton jeu
 tourne.
 
 ## Architecture en bref

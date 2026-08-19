@@ -1,4 +1,4 @@
-// Moteur de formats d'équipes — brique partagée (serveur + client).
+// Moteur de formats d'équipes : brique partagée (serveur + client).
 // Aucun format n'est codé en dur dans les jeux : chaque jeu déclare ses
 // capacités (caps) dans meta.js, ce module génère les formats valides.
 //

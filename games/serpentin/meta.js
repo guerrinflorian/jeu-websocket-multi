@@ -1,4 +1,4 @@
-// SERPENTIN — méta isomorphe (serveur + client). Données pures, JSON-able.
+// SERPENTIN : méta isomorphe (serveur + client). Données pures, JSON-able.
 
 export default {
   id: 'serpentin',
@@ -6,7 +6,7 @@ export default {
   emoji: '🎗️',
   color: '#29D9FF',
   tagline: 'Trace, coupe, survis.',
-  pitch: 'Trace ton serpentin lumineux et coupe la route des autres. Les traînées de tes coéquipiers sont des portes pour toi — et des murs pour eux.',
+  pitch: 'Trace ton serpentin lumineux et coupe la route des autres. Les traînées de tes coéquipiers sont des portes pour toi, et des murs pour eux.',
   minPlayers: 2,
   maxPlayers: 8,
   arena: { w: 1000, h: 620 },
@@ -27,6 +27,6 @@ export default {
     { icon: '💥', text: 'Mur, traînée ennemie… ou la tienne = ÉLIMINÉ.' },
     { icon: '🤝', text: 'Les traînées de tes coéquipiers sont traversables. Tissez des pièges !' },
     { icon: '🚀', text: 'BOOST (espace) pour percer un encerclement. Recharge 4,5 s.' },
-    { icon: '🐍', text: 'L’Anguille (1 contre tous) : plus rapide, traînée fugace — survis 40 s.' },
+    { icon: '🐍', text: 'L’Anguille (1 contre tous) : plus rapide, traînée fugace : survis 40 s.' },
   ],
 };

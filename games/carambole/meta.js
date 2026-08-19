@@ -1,4 +1,4 @@
-// CARAMBOLE — méta isomorphe (serveur + client). Données pures, JSON-able.
+// CARAMBOLE : méta isomorphe (serveur + client). Données pures, JSON-able.
 
 export default {
   id: 'carambole',
@@ -6,7 +6,7 @@ export default {
   emoji: '🎪',
   color: '#FF7A3D',
   tagline: 'Éjecte tout le monde de la piste.',
-  pitch: 'Des auto-tamponneuses sur une piste qui rétrécit. Percute, éjecte, survis — et méfie-toi des bonus qui tombent du ciel.',
+  pitch: 'Des auto-tamponneuses sur une piste qui rétrécit. Percute, éjecte, survis, et méfie-toi des bonus qui tombent du ciel.',
   minPlayers: 2,
   maxPlayers: 8,
   arena: { w: 640, h: 640 },

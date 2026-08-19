@@ -1,4 +1,4 @@
-// MAGOT — rendu client : tas d'or, caisses, porteurs ralentis, tacles.
+// MAGOT : rendu client : tas d'or, caisses, porteurs ralentis, tacles.
 
 import meta from './meta.js';
 
@@ -279,7 +279,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         ctx.globalAlpha = pulse;
         ctx.font = '18px Bungee, sans-serif';
         ctx.fillStyle = '#FFC93C';
-        ctx.fillText('✨ HEURE DORÉE — DÉPÔTS ×2 ✨', w / 2, 80);
+        ctx.fillText('✨ HEURE DORÉE · DÉPÔTS ×2 ✨', w / 2, 80);
         ctx.globalAlpha = 1;
         ctx.strokeStyle = `rgba(255,201,60,${0.25 * pulse})`;
         ctx.lineWidth = 6;
@@ -289,7 +289,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       if (meP && meP.c > 0) {
         ctx.font = '600 14px Rubik, sans-serif';
         ctx.fillStyle = '#FFC93C';
-        ctx.fillText(`💰 ×${meP.c} — tu ralentis…`, w / 2, h - 24);
+        ctx.fillText(`💰 ×${meP.c} : tu ralentis…`, w / 2, h - 24);
       }
       if (state.phase === 'pre') {
         ctx.font = 'bold 40px Bungee, sans-serif';

@@ -1,4 +1,4 @@
-// Smoke test navigateur (Playwright, hors `npm test` — lancé à la main :
+// Smoke test navigateur (Playwright, hors `npm test` : lancé à la main :
 // `node test/browser.smoke.js`). Charge l'app, crée une room, ajoute des
 // forains, lance SERPENTIN, vérifie zéro erreur console, capture des écrans.
 

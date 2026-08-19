@@ -3,7 +3,7 @@
 ## Le principe
 Tous les joueurs sont posés sur une plateforme ronde, au-dessus du **vide**. Tout le monde voit tout le monde. À chaque **salve** :
 
-1. **10 secondes pour viser, en secret** : glisse ton doigt (ou ta souris) — la direction du geste = ta direction, la longueur = ta **puissance**. Les autres voient seulement que tu as choisi (✔), jamais où tu vas.
+1. **10 secondes pour viser, en secret** : glisse ton doigt (ou ta souris) : la direction du geste = ta direction, la longueur = ta **puissance**. Les autres voient seulement que tu as choisi (✔), jamais où tu vas.
 2. Quand tout le monde a choisi (ou à la fin du compte à rebours) : **tout le monde part en même temps**. Les corps se percutent, l'énergie se transmet, ça propulse dans tous les sens.
 3. Tombé de la plateforme = éliminé. Et la plateforme **rétrécit à chaque salve**…
 

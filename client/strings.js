@@ -4,7 +4,7 @@
 const STR = {
   // Général
   'app.name': 'LA KERMESSE',
-  'app.tagline': 'La fête foraine en ligne — pour toi et tes 7 meilleurs ennemis.',
+  'app.tagline': 'La fête foraine en ligne, pour toi et tes 7 meilleurs ennemis.',
   'app.enter': 'ENTRER DANS LA FÊTE',
   'btn.create': 'OUVRIR UN STAND',
   'btn.join': 'REJOINDRE',
@@ -54,12 +54,12 @@ const STR = {
   'fmt.ffa': 'Chacun pour soi',
   'fmt.teams': '{sizes}',
   'fmt.vs': ' contre ',
-  'fmt.asym': '{solo} — {sizes}',
+  'fmt.asym': '{solo} · {sizes}',
 
   // Jeu
-  'game.spectator': '👻 SPECTATEUR — tu vois tout, profite',
+  'game.spectator': '👻 SPECTATEUR : tu vois tout, profite',
   'game.dead': 'ÉLIMINÉ·E ! Reste pour le spectacle…',
-  'game.afk': 'AFK — un forain tient ta place',
+  'game.afk': 'AFK : un forain tient ta place',
   'game.ping': 'ping',
   'game.round': 'Manche {n}',
   'game.quit': 'Quitter',
@@ -80,7 +80,7 @@ const STR = {
   'err.SERVER_FULL': 'La fête est bondée, réessaie dans un instant.',
   'err.NOT_READY': 'Tout le monde n\'est pas prêt !',
   'err.RATE': 'Doucement sur les boutons !',
-  'err.GAME_CRASH': 'Le manège a déraillé — retour au stand.',
+  'err.GAME_CRASH': 'Le manège a déraillé : retour au stand.',
   'err.ROOM_CLOSED': 'Le stand a fermé ses portes.',
   'err.NOT_HOST': 'Seul l\'hôte peut faire ça.',
 
@@ -101,7 +101,7 @@ export function t(key, params = {}) {
 
 // Libellé FR d'un format produit par shared/formats.js.
 export function formatLabel(fmt) {
-  if (!fmt) return '—';
+  if (!fmt) return '-';
   if (fmt.kind === 'ffa') return t('fmt.ffa');
   const sizes = fmt.sizes.join(t('fmt.vs'));
   if (fmt.kind === 'asym') return t('fmt.asym', { solo: fmt.roles?.solo || 'Solo', sizes });

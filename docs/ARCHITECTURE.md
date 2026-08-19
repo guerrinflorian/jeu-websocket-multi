@@ -1,4 +1,4 @@
-# Architecture — LA KERMESSE
+# Architecture : LA KERMESSE
 
 ## Stack (et pourquoi)
 
@@ -7,7 +7,7 @@
 | Runtime | Node ≥ 20, ESM, **zéro build** | Un process, un `node server/index.js`, déployé tel quel sur Render |
 | WebSocket | **`ws`** (seule dépendance runtime) | Léger, standard de fait, largement suffisant pour des rooms de 8 (voir RESEARCH.md) |
 | Front | **Vanilla JS + Canvas 2D**, ES modules servis statiques | 60 fps sans framework ni bundler ; le DOM sert pour les menus, le Canvas pour les jeux |
-| Rendu jeux | Canvas 2D pour les 4 jeux, DOM pour lobby/menus | Les 4 jeux sont spatiaux/temps réel → Canvas ; l'UI est du document → DOM |
+| Rendu jeux | Canvas 2D pour les 10 jeux, DOM pour lobby/menus | Les jeux sont spatiaux (temps réel ou plateau) → Canvas ; l'UI est du document → DOM |
 | Son | WebAudio 100 % synthétisé | Zéro asset sous licence |
 | Art | CSS + SVG + Canvas génératif | Idem |
 | État | Mémoire process uniquement | Contrainte free tier assumée |
@@ -53,7 +53,7 @@ Navigateur                         Serveur (autoritatif)
 - Rendu client : interpolation entre snapshots à `t − 110 ms`, feedback cosmétique immédiat sur input local.
 - Heartbeat : ping applicatif client→serveur toutes les 5 s (sert aussi d'indicateur de latence) + `ws.ping` serveur toutes les 25 s.
 
-## Protocole — liste exhaustive
+## Protocole : liste exhaustive
 
 Tous les messages sont du JSON `{t: "type", ...champs}`.
 
@@ -62,23 +62,23 @@ Tous les messages sont du JSON `{t: "type", ...champs}`.
 | Type | Champs | Contexte |
 |---|---|---|
 | `hello` | `token?, name?, face?` | À la connexion. Token connu + grâce active → reprise de place |
-| `create` | — | Crée une room, devient hôte |
+| `create` | - | Crée une room, devient hôte |
 | `join` | `code` | Rejoint par code (insensible à la casse) |
-| `leave` | — | Quitte la room |
+| `leave` | - | Quitte la room |
 | `profile` | `name, face` | Pseudo (≤ 16 car.) + avatar (index de visage SVG) |
 | `ready` | `on` | Prêt / pas prêt dans le lobby |
 | `setGame` | `gameId` | Hôte uniquement |
 | `setFormat` | `formatId` | Hôte ; formatId issu du moteur de formats |
 | `setTeam` | `pid` | Hôte ; fait tourner le joueur vers l'équipe suivante |
-| `shuffle` | — | Hôte ; redistribue les équipes du format courant |
+| `shuffle` | - | Hôte ; redistribue les équipes du format courant |
 | `setSettings` | `patch` | Hôte ; validé champ par champ contre le schéma du jeu |
-| `addBot` / `removeBot` | — / `pid` | Hôte |
-| `start` | — | Hôte ; refuse si format invalide ou joueurs pas prêts |
+| `addBot` / `removeBot` | - / `pid` | Hôte |
+| `start` | - | Hôte ; refuse si format invalide ou joueurs pas prêts |
 | `input` | `seq, d` | En jeu ; `d` dépend du schéma de contrôle du jeu |
 | `act` | `a, d?` | Action discrète (dash, tir…) ; validée par le jeu |
 | `emote` | `e` | Lobby, jeu, spectateur (index d'emote, rate-limité) |
-| `again` | — | Hôte, écran résultats → relance même jeu/format |
-| `toLobby` | — | Hôte, écran résultats → retour lobby |
+| `again` | - | Hôte, écran résultats → relance même jeu/format |
+| `toLobby` | - | Hôte, écran résultats → retour lobby |
 | `ping` | `t` | Latence ; réponse `pong {t}` immédiate |
 
 ### Serveur → Client
@@ -86,7 +86,7 @@ Tous les messages sont du JSON `{t: "type", ...champs}`.
 | Type | Champs | Rôle |
 |---|---|---|
 | `welcome` | `pid, token, resumed?` | Identité + token à stocker en localStorage |
-| `error` | `code` | `BAD_CODE, ROOM_FULL, SERVER_FULL, NOT_HOST, BAD_NAME, RATE, CANT_START…` — traduit côté client |
+| `error` | `code` | `BAD_CODE, ROOM_FULL, SERVER_FULL, NOT_HOST, BAD_NAME, RATE, CANT_START…` : traduit côté client |
 | `room` | état lobby complet | Joueurs (pseudo, visage, couleur, équipe, prêt, hôte, bot, connecté), jeu, format, formats valides, réglages, phase |
 | `countdown` | `n` | 3, 2, 1 |
 | `start` | `gameId, config, you` | Le client charge `/games/<id>/client.js` |
@@ -107,7 +107,7 @@ Le message `room` est **idempotent** (état complet, pas de diffs) : trivial à 
 - **AFK** : 20 s sans input en partie → autopilote + badge « AFK » ; le moindre input rend la main.
 - **Spectateur** : les morts et les arrivants en cours de partie reçoivent les snapshots normalement (+ infos bonus selon le jeu). Jamais d'écran noir.
 - **Nettoyage** : room sans aucun humain connecté → détruite après 120 s ; room en lobby inactive 30 min → détruite ; caps `MAX_ROOMS=100`, `MAX_CONNS=400`, 8 joueurs/room.
-- **Rate limiting** : token bucket par connexion — 40 msg/s pour `input`, 10/s pour le reste, déconnexion en cas d'abus répété.
+- **Rate limiting** : token bucket par connexion : 40 msg/s pour `input`, 10/s pour le reste, déconnexion en cas d'abus répété.
 
 ## Moteur de formats d'équipes (`shared/formats.js`)
 
@@ -132,7 +132,7 @@ games/<game-id>/
                schéma de réglages, schéma de contrôles, howto[] (mini-tuto illustré)
   server.js  → createState(cfg) ; onInput(state,pid,d) ; onAction(state,pid,a,d)
                tick(state,dt) → ev[] ; isOver(state) ; results(state)
-               botAct(state,pid,mind,api) — même chemin d'input que les humains
+               botAct(state,pid,mind,api) : même chemin d'input que les humains
   client.js  → createClient({canvas,helpers,you,config}) → {render(view,dt), destroy()}
   rules.md   → règles complètes affichées en jeu (bouton « ? »)
 ```
@@ -140,7 +140,7 @@ games/<game-id>/
 - `gameloader.js` scanne `games/`, importe `meta.js` + `server.js`, **valide chaque export** au démarrage (fail fast).
 - Le client charge `/games/<id>/client.js` en module ES à la volée. `server.js` est **bloqué** par le serveur statique.
 - `helpers` fournis au client : interpolation, juice (screenshake, particules, texte flottant), SFX, chaînes FR, couleurs joueurs, dessin du fond foraine.
-- `config` reçu par `createState` : `{ teams, players: {pid: {name, color, bot, face}}, format, settings, rng }` — `rng` est un PRNG seedé (parties reproductibles en test).
+- `config` reçu par `createState` : `{ teams, players: {pid: {name, color, bot, face}}, format, settings, rng }` : `rng` est un PRNG seedé (parties reproductibles en test).
 - Événements de tick (`ev[]`) : `{e:'boom', x, y, pid?…}` → le client les mappe sur SFX + particules. Le serveur reste muet sur le rendu.
 
 **Ajouter un 5ᵉ jeu = créer le dossier, remplir le contrat.** Rien d'autre à toucher.

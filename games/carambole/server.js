@@ -1,4 +1,4 @@
-// CARAMBOLE — simulation serveur : physique de palets (masse, impulsions),
+// CARAMBOLE : simulation serveur : physique de palets (masse, impulsions),
 // piste circulaire qui rétrécit, dash, bonus, format « Le Taureau ».
 
 import { TAU, clamp } from '../../shared/const.js';
@@ -358,13 +358,13 @@ export function results(state) {
   const all = Object.values(state.players);
   const top = (fn) => all.slice().sort((a, b) => fn(b.stats) - fn(a.stats))[0];
   const ej = top((s) => s.ejections);
-  if (ej.stats.ejections >= 2) titles.push({ pid: ej.pid, emoji: '🐂', text: `Force de la nature — ${ej.stats.ejections} éjections` });
+  if (ej.stats.ejections >= 2) titles.push({ pid: ej.pid, emoji: '🐂', text: `Force de la nature : ${ej.stats.ejections} éjections` });
   const solo = top((s) => s.selfFalls);
-  if (solo.stats.selfFalls >= 2) titles.push({ pid: solo.pid, emoji: '🤡', text: `Tombé tout seul — ${solo.stats.selfFalls} fois` });
+  if (solo.stats.selfFalls >= 2) titles.push({ pid: solo.pid, emoji: '🤡', text: `Tombé tout seul : ${solo.stats.selfFalls} fois` });
   const dash = top((s) => s.dashes);
-  if (dash.stats.dashes >= 5) titles.push({ pid: dash.pid, emoji: '🚗', text: `Klaxonneur fou — ${dash.stats.dashes} dashs` });
+  if (dash.stats.dashes >= 5) titles.push({ pid: dash.pid, emoji: '🚗', text: `Klaxonneur fou : ${dash.stats.dashes} dashs` });
   const bon = top((s) => s.bonuses);
-  if (bon.stats.bonuses >= 2) titles.push({ pid: bon.pid, emoji: '🎁', text: `Rafleur de bonus — ${bon.stats.bonuses} ramassés` });
+  if (bon.stats.bonuses >= 2) titles.push({ pid: bon.pid, emoji: '🎁', text: `Rafleur de bonus : ${bon.stats.bonuses} ramassés` });
   const shy = all.slice().sort((a, b) => (a.stats.bumps + a.stats.dashes) - (b.stats.bumps + b.stats.dashes))[0];
   titles.push({ pid: shy.pid, emoji: '🐔', text: 'Le plus pacifiste (ou le plus lâche ?)' });
 

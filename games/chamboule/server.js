@@ -1,4 +1,4 @@
-// CHAMBOULE — simulation serveur. Chaque salve : phase « aim » (visée
+// CHAMBOULE : simulation serveur. Chaque salve : phase « aim » (visée
 // secrète, 10 s max, départ anticipé si tout le monde a choisi) puis phase
 // « fly » (tous propulsés en même temps, collisions, chutes dans le vide).
 // La plateforme rétrécit à chaque salve. Format asym « Le Quilleur ».
@@ -335,20 +335,20 @@ export function results(state) {
   const all = Object.values(state.players);
   const top = (fn) => all.slice().sort((a, b) => fn(b.stats) - fn(a.stats))[0];
   const boulet = top((s) => s.ejections);
-  if (boulet.stats.ejections >= 2) titles.push({ pid: boulet.pid, emoji: '🎳', text: `Le Boulet humain — ${boulet.stats.ejections} éjections` });
+  if (boulet.stats.ejections >= 2) titles.push({ pid: boulet.pid, emoji: '🎳', text: `Le Boulet humain : ${boulet.stats.ejections} éjections` });
   const gouffre = top((s) => s.selfFalls);
-  if (gouffre.stats.selfFalls >= 2) titles.push({ pid: gouffre.pid, emoji: '🕳️', text: `L'appel du vide — ${gouffre.stats.selfFalls} plongeons solo` });
+  if (gouffre.stats.selfFalls >= 2) titles.push({ pid: gouffre.pid, emoji: '🕳️', text: `L'appel du vide : ${gouffre.stats.selfFalls} plongeons solo` });
   const statue = top((s) => s.skipped);
-  if (statue.stats.skipped >= 2) titles.push({ pid: statue.pid, emoji: '🗿', text: `La Statue — n'a pas visé ${statue.stats.skipped} fois` });
+  if (statue.stats.skipped >= 2) titles.push({ pid: statue.pid, emoji: '🗿', text: `La Statue : n'a pas visé ${statue.stats.skipped} fois` });
   const aimers = all.filter((p) => p.stats.aims >= 3);
   if (aimers.length) {
     const bourrin = aimers.slice().sort((a, b) => b.stats.powSum / b.stats.aims - a.stats.powSum / a.stats.aims)[0];
     if (bourrin.stats.powSum / bourrin.stats.aims > 0.82) {
-      titles.push({ pid: bourrin.pid, emoji: '🐗', text: 'Bourrin certifié — toujours pleine puissance' });
+      titles.push({ pid: bourrin.pid, emoji: '🐗', text: 'Bourrin certifié : toujours pleine puissance' });
     }
     const agneau = aimers.slice().sort((a, b) => a.stats.powSum / a.stats.aims - b.stats.powSum / b.stats.aims)[0];
     if (agneau.stats.powSum / agneau.stats.aims < 0.4 && agneau.pid !== bourrin.pid) {
-      titles.push({ pid: agneau.pid, emoji: '🐑', text: 'Doux comme un agneau — jamais fort' });
+      titles.push({ pid: agneau.pid, emoji: '🐑', text: 'Doux comme un agneau, jamais fort' });
     }
   }
   if (!titles.length) {

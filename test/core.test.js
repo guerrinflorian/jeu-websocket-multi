@@ -13,7 +13,7 @@ const FULL_CAPS = {
 };
 
 export async function run() {
-  section('formats — unitaire');
+  section('formats : unitaire');
   {
     const ids8 = computeFormats(FULL_CAPS, 8).map((f) => f.id);
     for (const id of ['ffa', 't-4-4', 't-5-3', 't-6-2', 't-3-3-2', 't-2-2-2-2', 'asym-1-7', 'asym-2-6']) {
@@ -36,7 +36,7 @@ export async function run() {
     eq(ffaTeams, [['a'], ['b']], 'assignTeams FFA → équipes de 1');
   }
 
-  section('lobby — intégration WS réelle');
+  section('lobby : intégration WS réelle');
   const srv = await startServer();
   try {
     // 3 humains : création, jointure par code, profils.

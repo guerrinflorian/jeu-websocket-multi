@@ -27,7 +27,7 @@ function drive(sim, meta, i) {
 }
 
 async function playGame(srv, meta, { formatKind = null, label = '' } = {}) {
-  section(`${meta.id}${label} — partie complète`);
+  section(`${meta.id}${label} : partie complète`);
   const a = new Sim(srv.url, 'Anna');
   const b = new Sim(srv.url, 'Bilal');
   await Promise.all([a.connect(), b.connect()]);
@@ -83,7 +83,7 @@ async function playGame(srv, meta, { formatKind = null, label = '' } = {}) {
 }
 
 async function testMidGame(srv, meta) {
-  section(`${meta.id} — reconnexion & spectateur en pleine partie`);
+  section(`${meta.id} : reconnexion & spectateur en pleine partie`);
   const a = new Sim(srv.url, 'Momo');
   const b = new Sim(srv.url, 'Lina');
   await Promise.all([a.connect(), b.connect()]);

@@ -1,4 +1,4 @@
-// SERPENTIN — rendu client. Les traînées sont accumulées localement à
+// SERPENTIN : rendu client. Les traînées sont accumulées localement à
 // partir des snapshots (le serveur n'envoie que les têtes), et
 // reconstruites via le snapshot complet à la (re)connexion.
 

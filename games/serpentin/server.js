@@ -1,4 +1,4 @@
-// SERPENTIN — simulation serveur (contrat de jeu, voir docs/ARCHITECTURE.md).
+// SERPENTIN : simulation serveur (contrat de jeu, voir docs/ARCHITECTURE.md).
 // Curve-fever revisité : traînées persistantes avec trous périodiques,
 // traînées alliées traversables, boost, format asymétrique « L'Anguille ».
 
@@ -328,15 +328,15 @@ export function results(state) {
   const titles = [];
   const byStat = (fn) => Object.values(state.players).slice().sort((a, b) => fn(b.stats) - fn(a.stats))[0];
   const kills = byStat((s) => s.kills);
-  if (kills.stats.kills >= 2) titles.push({ pid: kills.pid, emoji: '🔪', text: `Le Boucher — ${kills.stats.kills} victimes` });
+  if (kills.stats.kills >= 2) titles.push({ pid: kills.pid, emoji: '🔪', text: `Le Boucher : ${kills.stats.kills} victimes` });
   const crash = byStat((s) => s.crashes);
-  if (crash.stats.crashes >= 2) titles.push({ pid: crash.pid, emoji: '💣', text: `Kamikaze — ${crash.stats.crashes} sorties de route` });
+  if (crash.stats.crashes >= 2) titles.push({ pid: crash.pid, emoji: '💣', text: `Kamikaze : ${crash.stats.crashes} sorties de route` });
   const tank = byStat((s) => s.surv);
-  titles.push({ pid: tank.pid, emoji: '🛡️', text: `Increvable — ${Math.round(tank.stats.surv)} s de survie` });
+  titles.push({ pid: tank.pid, emoji: '🛡️', text: `Increvable : ${Math.round(tank.stats.surv)} s de survie` });
   const early = byStat((s) => s.firstDeaths);
-  if (early.stats.firstDeaths >= 2) titles.push({ pid: early.pid, emoji: '⚰️', text: `Mort en premier — ${early.stats.firstDeaths} fois` });
+  if (early.stats.firstDeaths >= 2) titles.push({ pid: early.pid, emoji: '⚰️', text: `Mort en premier : ${early.stats.firstDeaths} fois` });
   const boost = byStat((s) => s.boosts);
-  if (boost.stats.boosts >= 4) titles.push({ pid: boost.pid, emoji: '🚀', text: `Pied au plancher — ${boost.stats.boosts} boosts` });
+  if (boost.stats.boosts >= 4) titles.push({ pid: boost.pid, emoji: '🚀', text: `Pied au plancher : ${boost.stats.boosts} boosts` });
 
   return { ranking, winners, titles };
 }

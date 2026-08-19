@@ -1,4 +1,4 @@
-// MAGOT — simulation serveur : ramasser, porter (ralenti), banquer,
+// MAGOT : simulation serveur : ramasser, porter (ralenti), banquer,
 // tacler (tout lâcher), siphonner les caisses, format « Le Dragon ».
 
 import { TAU, clamp } from '../../shared/const.js';
@@ -400,13 +400,13 @@ export function results(state) {
   const all = Object.values(state.players);
   const top = (fn) => all.slice().sort((a, b) => fn(b.stats) - fn(a.stats))[0];
   const mule = top((s) => s.banked);
-  if (mule.stats.banked >= 3) titles.push({ pid: mule.pid, emoji: '🐜', text: `La Fourmi — ${mule.stats.banked} jetons sécurisés` });
+  if (mule.stats.banked >= 3) titles.push({ pid: mule.pid, emoji: '🐜', text: `La Fourmi : ${mule.stats.banked} jetons sécurisés` });
   const thief = top((s) => s.siphoned);
-  if (thief.stats.siphoned >= 3) titles.push({ pid: thief.pid, emoji: '🕵️', text: `Pickpocket — ${thief.stats.siphoned} jetons siphonnés` });
+  if (thief.stats.siphoned >= 3) titles.push({ pid: thief.pid, emoji: '🕵️', text: `Pickpocket : ${thief.stats.siphoned} jetons siphonnés` });
   const brute = top((s) => s.tackles);
-  if (brute.stats.tackles >= 3) titles.push({ pid: brute.pid, emoji: '🥊', text: `Le Bourrin — ${brute.stats.tackles} tacles` });
+  if (brute.stats.tackles >= 3) titles.push({ pid: brute.pid, emoji: '🥊', text: `Le Bourrin : ${brute.stats.tackles} tacles` });
   const turtle = top((s) => s.biggestLoss);
-  if (turtle.stats.biggestLoss >= 6) titles.push({ pid: turtle.pid, emoji: '🐢', text: `Tortue imprudente — ${turtle.stats.biggestLoss} jetons perdus d'un coup` });
+  if (turtle.stats.biggestLoss >= 6) titles.push({ pid: turtle.pid, emoji: '🐢', text: `Tortue imprudente : ${turtle.stats.biggestLoss} jetons perdus d'un coup` });
   const lazy = all.slice().sort((a, b) =>
     (a.stats.banked + a.stats.siphoned + a.stats.tackles) - (b.stats.banked + b.stats.siphoned + b.stats.tackles))[0];
   if (!state.asym || lazy.team !== 0) titles.push({ pid: lazy.pid, emoji: '🦥', text: 'N\'a strictement rien fait' });

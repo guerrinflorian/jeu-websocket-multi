@@ -1,4 +1,4 @@
-# Phase 0 — Recherche (août 2026)
+# Phase 0 : Recherche (août 2026)
 
 Conclusions vérifiées avant d'écrire la moindre ligne de code.
 
@@ -38,7 +38,7 @@ Patterns retenus, adaptés à des party games (pas un FPS compétitif) :
 - **Serveur autoritatif à tick fixe : 20 Hz** (dt = 50 ms). Suffisant pour des jeux d'arcade lisibles, économe en CPU/bande passante sur une instance free.
 - **Snapshot complet à chaque tick** (pas de delta encoding) : à 8 joueurs, un snapshot JSON fait 1-6 Ko ; 20 Hz × 6 Ko × 8 clients ≈ 1 Mo/s max, trivial. La simplicité gagne.
 - **Interpolation côté client : rendu à `t - 110 ms`** entre les deux snapshots qui encadrent, comme Source. Le jeu est fluide à 60 fps même avec du jitter.
-- **Pas de client-side prediction complète** (rollback/replay) : trop coûteux à généraliser sur 4 jeux différents. À la place : **feedback d'input immédiat** (le client montre instantanément l'effet cosmétique : orientation du joystick, flash du dash, son) + interpolation courte. Pour des manches de 2-5 min entre potes, c'est le bon compromis latence/complexité — décision documentée et assumée.
+- **Pas de client-side prediction complète** (rollback/replay) : trop coûteux à généraliser sur 4 jeux différents. À la place : **feedback d'input immédiat** (le client montre instantanément l'effet cosmétique : orientation du joystick, flash du dash, son) + interpolation courte. Pour des manches de 2-5 min entre potes, c'est le bon compromis latence/complexité, décision documentée et assumée.
 - **Inputs** : le client envoie des intentions (vecteur de déplacement, virage, actions discrètes) à ≤ 30 Hz, avec numéro de séquence. Le serveur garde le dernier input par joueur et l'applique au tick. Toute validation (cooldown, portée, tour) est serveur.
 - **Horloge** : le serveur timestampe chaque snapshot ; le client estime l'offset via ping/pong et cale son curseur d'interpolation dessus.
 
@@ -61,13 +61,13 @@ Sources : devlogs HTML5 touch controls (aaronbell.com), nippleJS/virtual-joystic
 
 ## Sources
 
-- [Render — Deploy for Free](https://render.com/docs/free)
-- [Render — WebSockets](https://render.com/docs/websocket)
-- [AnyCable — Node.js WebSocket Server Comparison 2026](https://anycable.io/compare/nodejs-websocket/)
-- [PkgPulse — Socket.IO vs ws vs uWebSockets.js 2026](https://www.pkgpulse.com/guides/socketio-vs-ws-vs-uwebsockets-websocket-servers-nodejs-2026)
-- [Velt — Best WebSocket Libraries for Node.js (juillet 2026)](https://velt.dev/blog/best-nodejs-websocket-libraries)
-- [Valve — Source Multiplayer Networking](https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking)
-- [SnapNet — Netcode Architectures Part 3: Snapshot Interpolation](https://snapnet.dev/blog/netcode-architectures-part-3-snapshot-interpolation/)
-- [geckos.io — snapshot-interpolation](https://github.com/geckosio/snapshot-interpolation)
-- [codersblock — Client-Side Prediction Revisited](https://codersblock.org/multiplayer-fps/part8/)
-- [aaronbell.com — Mobile touch controls from scratch in HTML5](https://www.aaronbell.com/mobile-touch-controls-from-scratch/)
+- [Render - Deploy for Free](https://render.com/docs/free)
+- [Render - WebSockets](https://render.com/docs/websocket)
+- [AnyCable - Node.js WebSocket Server Comparison 2026](https://anycable.io/compare/nodejs-websocket/)
+- [PkgPulse - Socket.IO vs ws vs uWebSockets.js 2026](https://www.pkgpulse.com/guides/socketio-vs-ws-vs-uwebsockets-websocket-servers-nodejs-2026)
+- [Velt - Best WebSocket Libraries for Node.js (juillet 2026)](https://velt.dev/blog/best-nodejs-websocket-libraries)
+- [Valve - Source Multiplayer Networking](https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking)
+- [SnapNet - Netcode Architectures Part 3: Snapshot Interpolation](https://snapnet.dev/blog/netcode-architectures-part-3-snapshot-interpolation/)
+- [geckos.io - snapshot-interpolation](https://github.com/geckosio/snapshot-interpolation)
+- [codersblock - Client-Side Prediction Revisited](https://codersblock.org/multiplayer-fps/part8/)
+- [aaronbell.com - Mobile touch controls from scratch in HTML5](https://www.aaronbell.com/mobile-touch-controls-from-scratch/)

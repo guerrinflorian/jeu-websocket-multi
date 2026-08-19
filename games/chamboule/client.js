@@ -1,4 +1,4 @@
-// CHAMBOULE — rendu client : plateforme cible, visée fronde secrète
+// CHAMBOULE : rendu client : plateforme cible, visée fronde secrète
 // (glisser n'importe où = direction + puissance), envol simultané.
 
 import meta from './meta.js';
@@ -266,7 +266,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           const ready = myAim || state.players[you]?.ch;
           ctx.font = '600 14px Rubik, sans-serif';
           ctx.fillStyle = ready ? '#3DFF8A' : '#B9A8D0';
-          ctx.fillText(ready ? '✔ PRÊT — tu peux re-viser' : 'GLISSE pour viser : direction + longueur = puissance', w / 2, h - 24);
+          ctx.fillText(ready ? '✔ PRÊT : tu peux re-viser' : 'GLISSE pour viser : direction + longueur = puissance', w / 2, h - 24);
         }
       }
       if (state.phase !== lastPhase) {

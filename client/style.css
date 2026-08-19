@@ -1,4 +1,4 @@
-/* LA KERMESSE — design system « fête foraine électrique » (docs/DESIGN.md) */
+/* LA KERMESSE : design system « fête foraine électrique » (docs/DESIGN.md) */
 
 /* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
@@ -224,7 +224,9 @@ body[data-screen="results"] #scr-results { display: block; }
 .hint { color: var(--craie-2); font-size: var(--fs-1); margin-top: var(--sp-2); text-align: center; }
 
 .game-row {
-  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(150px, 1fr);
+  display: grid; grid-auto-flow: column;
+  grid-template-rows: repeat(2, auto);
+  grid-auto-columns: minmax(150px, 1fr);
   gap: var(--sp-3); overflow-x: auto; padding-bottom: var(--sp-2);
   scroll-snap-type: x mandatory;
 }

@@ -153,7 +153,7 @@ export class Room {
   }
 
   // Remplit les équipes dans l'ordre d'arrivée (équipe 0 d'abord : en asym,
-  // le premier joueur — l'hôte — prend le rôle solo).
+  // le premier joueur (l'hôte) prend le rôle solo).
   reassignTeams() {
     const fmt = this.currentFormat();
     const players = this.eligible();

@@ -1,18 +1,18 @@
-# TODO — LA KERMESSE
+# TODO : LA KERMESSE
 
-## Phase 0 — Recherche
+## Phase 0 : Recherche
 - [x] Render free tier / WebSocket 2026 vérifié (docs officielles)
 - [x] Choix lib WS (`ws`) justifié
 - [x] Patterns netcode (tick 20 Hz, interpolation 110 ms)
 - [x] Contrôles tactiles / accessibilité
 - [x] `docs/RESEARCH.md`
 
-## Phase 1 — Conception
+## Phase 1 : Conception
 - [x] `docs/ARCHITECTURE.md` (stack, protocole exhaustif, contrat de jeu)
 - [x] `docs/GAMES.md`
 - [x] `docs/DESIGN.md` (DA « fête foraine électrique »)
 
-## Phase 2 — Le cœur (testé avant tout jeu)
+## Phase 2 : Le cœur (testé avant tout jeu)
 - [x] Moteur de formats d'équipes + PRNG + helpers partagés
 - [x] Serveur : statique + /healthz + WS (rate limit, heartbeat, caps)
 - [x] Rooms : codes, lobby, machine à états, migration d'hôte, nettoyage
@@ -22,14 +22,14 @@
       SFX WebAudio, juice, i18n FR centralisé
 - [x] Harnais : 8 clients WS réels (lobby, reconnexion, migration, flood)
 
-## Phase 3 — Les jeux (complets un par un)
+## Phase 3 : Les jeux (complets un par un)
 - [x] SERPENTIN (serveur + client + bots + rules + testé)
 - [x] CARAMBOLE (idem)
 - [x] MAGOT (idem)
-- [x] ~~INCOGNITO~~ — coupé du périmètre (conçu dans docs/GAMES.md,
+- [x] ~~INCOGNITO~~ : coupé du périmètre (conçu dans docs/GAMES.md,
       ajoutable plus tard via le contrat de jeu)
 
-## Phase 4 — Polish
+## Phase 4 : Polish
 - [x] Écran d'accueil (enseigne néon animée, avatars)
 - [x] Countdown, emotes, toasts, bannières réseau/spectateur
 - [x] Cas moches : déco en pleine partie, AFK, égalité, room zombie
@@ -37,8 +37,23 @@
 - [x] Passe zéro console.log / code mort
 - [x] Smoke test navigateur (Playwright) : zéro erreur console + captures
 
-## Phase 5 — Déploiement
+## Phase 5 : Déploiement
 - [x] `render.yaml` (blueprint free tier, healthcheck)
 - [x] `README.md` (local, Render pas à pas, guide « ajouter un jeu »)
 - [x] `CREDITS.md`
 - [x] Harnais complet vert avant remise
+
+## Phase 6 : Six nouveaux stands (août 2026)
+- [x] Purge des em-dashes sur tout le projet
+- [x] `client/cardkit.js` : cartes françaises, dés et jetons 100 % Canvas
+- [x] `shared/cards.js` + `shared/dice.js` (données isomorphes)
+- [x] LIGNE 4 (puissance 4 à 2-8 camps, grille adaptative, menaces)
+- [x] BLACKJACK (mains simultanées, banque jouable en asym)
+- [x] 7 FAMILLES (mains secrètes, demandes publiques, anti-enlisement)
+- [x] YAMS (tours simultanés, feuille express/complète, aperçu des points)
+- [x] BARRIÈRES (Quoridor par camps, passage garanti BFS, 15 murs/joueur,
+      1v1 2v2 3v3 5v3 1v2… ; Contremaître à 2 actions)
+- [x] CANARDS (pêche temps réel, valeurs cachées, splash, Héron)
+- [x] Simulation headless 8 bots (FFA/asym/équipes) sur les 6 jeux
+- [x] Smoke test Playwright par jeu : zéro erreur console + captures
+- [x] Docs à jour (README, GAMES.md, ARCHITECTURE inchangée : même contrat)

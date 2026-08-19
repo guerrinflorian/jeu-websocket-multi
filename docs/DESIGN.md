@@ -1,4 +1,4 @@
-# Direction artistique — LA KERMESSE
+# Direction artistique : LA KERMESSE
 
 ## Le concept : « fête foraine électrique, la nuit »
 
@@ -25,8 +25,8 @@ C'est chaleureux, saturé, un peu kitsch, totalement assumé. Pas de gris Bootst
 
 ## Typographie
 
-- **Display / enseignes : « Bungee »** (Google Fonts, OFL) — dessinée pour la signalétique verticale de fête foraine. Titres, logos de jeux, gros scores. Toujours en capitales, souvent avec glow néon.
-- **UI / texte : « Rubik »** (OFL) — ronde, lisible, sympathique. 400/600/800.
+- **Display / enseignes : « Bungee »** (Google Fonts, OFL) : dessinée pour la signalétique verticale de fête foraine. Titres, logos de jeux, gros scores. Toujours en capitales, souvent avec glow néon.
+- **UI / texte : « Rubik »** (OFL) : ronde, lisible, sympathique. 400/600/800.
 - Échelle : `12 / 14 / 16 / 20 / 26 / 36 / 52 px` (tokens `--fs-*`). Base 16, jamais en dessous de 14 pour du texte utile.
 - Fallback : `system-ui` (l'app reste utilisable sans réseau vers Google Fonts).
 

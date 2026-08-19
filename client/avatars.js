@@ -2,7 +2,7 @@
 // Zéro asset : tout est dessiné ici.
 
 const FACES = [
-  // [yeux, bouche] — petits chemins SVG centrés dans un viewBox 100×100.
+  // [yeux, bouche] : petits chemins SVG centrés dans un viewBox 100×100.
   { eyes: 'dots', mouth: 'smile' },
   { eyes: 'happy', mouth: 'open' },
   { eyes: 'wink', mouth: 'tongue' },

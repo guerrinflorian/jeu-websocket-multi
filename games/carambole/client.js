@@ -1,4 +1,4 @@
-// CARAMBOLE — rendu client : piste circulaire, auto-tamponneuses, bonus.
+// CARAMBOLE : rendu client : piste circulaire, auto-tamponneuses, bonus.
 
 import meta from './meta.js';
 

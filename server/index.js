@@ -1,4 +1,4 @@
-// LA KERMESSE — un seul process : statique + WebSocket + /healthz.
+// LA KERMESSE : un seul process : statique + WebSocket + /healthz.
 
 import http from 'node:http';
 import path from 'node:path';
