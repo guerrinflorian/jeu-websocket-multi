@@ -185,7 +185,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       ctx.fillStyle = '#B9A8D0';
       ctx.fillText(t('game.round', { n: `${state.round}/${state.rounds}` }), w / 2, 26);
       const teams = config.teams;
-      const chipW = 54;
+      const chipW = Math.min(54, (w - 170) / Math.max(1, teams.length));
       const x0 = w / 2 - (teams.length * chipW) / 2 + chipW / 2;
       teams.forEach((tm, i) => {
         const cx = x0 + i * chipW;

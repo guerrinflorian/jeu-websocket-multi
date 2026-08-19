@@ -1,0 +1,12 @@
+# Déploiement Render (Blueprint) — un seul web service, plan gratuit.
+services:
+  - type: web
+    name: la-kermesse
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node server/index.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production

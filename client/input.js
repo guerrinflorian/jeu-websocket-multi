@@ -118,7 +118,8 @@ export class Input {
     const r = this.canvas.getBoundingClientRect();
     const x = e.clientX - r.left, y = e.clientY - r.top;
     if (this.scheme === 'tap') {
-      this.onTap?.(x, y);
+      this.tapId = e.pointerId;
+      this.onTap?.(x, y, 'start');
       return;
     }
     if (this.scheme === 'steer') {
@@ -134,6 +135,11 @@ export class Input {
   }
 
   pointerMove(e) {
+    if (this.scheme === 'tap' && this.tapId === e.pointerId) {
+      const r = this.canvas.getBoundingClientRect();
+      this.onTap?.(e.clientX - r.left, e.clientY - r.top, 'move');
+      return;
+    }
     if (this.scheme === 'joystick' && this.joy && e.pointerId === this.joy.id) {
       const dx = e.clientX - this.joy.ox, dy = e.clientY - this.joy.oy;
       const len = Math.hypot(dx, dy);
@@ -146,6 +152,11 @@ export class Input {
   }
 
   pointerUp(e) {
+    if (this.scheme === 'tap' && this.tapId === e.pointerId) {
+      this.tapId = null;
+      const r = this.canvas.getBoundingClientRect();
+      this.onTap?.(e.clientX - r.left, e.clientY - r.top, 'end');
+    }
     if (this.joy && e.pointerId === this.joy.id) {
       this.joy = null;
       this.moveVec = { x: 0, y: 0 };
@@ -194,7 +205,7 @@ export class Input {
     if (this.scheme === 'steer') {
       this.turn = (right ? 1 : 0) - (left ? 1 : 0);
       this.emitMove();
-    } else if (this.scheme === 'joystick') {
+    } else if (this.scheme === 'joystick' || this.scheme === 'tap') {
       if (!this.joy) {
         const x = (right ? 1 : 0) - (left ? 1 : 0);
         const y = (down ? 1 : 0) - (up ? 1 : 0);
@@ -208,7 +219,7 @@ export class Input {
   emitMove() {
     let d;
     if (this.scheme === 'steer') d = { turn: this.turn };
-    else if (this.scheme === 'joystick') {
+    else if (this.scheme === 'joystick' || this.scheme === 'tap') {
       d = { mx: Math.round(this.moveVec.x * 100) / 100, my: Math.round(this.moveVec.y * 100) / 100 };
     } else return;
     const key = JSON.stringify(d);

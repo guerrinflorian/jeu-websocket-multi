@@ -192,7 +192,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
 
       // Scores par équipe (pastilles).
       const teams = config.teams;
-      const chipW = 54;
+      const chipW = Math.min(54, (w - 170) / Math.max(1, teams.length));
       const x0 = w / 2 - (teams.length * chipW) / 2 + chipW / 2;
       teams.forEach((tm, i) => {
         const cx = x0 + i * chipW;

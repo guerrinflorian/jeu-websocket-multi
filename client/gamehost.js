@@ -86,7 +86,7 @@ export class GameHost {
       const r = this.instance?.onButton?.(id);
       if (r !== false) env.send.act(id);
     };
-    this.input.onTap = (x, y) => this.instance?.onTap?.(x, y);
+    this.input.onTap = (x, y, phase) => this.instance?.onTap?.(x, y, phase);
 
     this.instance = mod.createClient(env);
     this.running = true;

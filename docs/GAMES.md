@@ -1,6 +1,6 @@
 # Les jeux — LA KERMESSE
 
-Quatre stands de fête foraine. Deux classiques revisités, deux originaux.
+Trois stands de fête foraine : deux classiques revisités, un original.
 Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, manches courtes, règles en jeu, titres rigolos en fin de partie.
 
 ---
@@ -27,17 +27,7 @@ Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, ma
 - **Pourquoi c'est drôle** : le dash raté qui t'éjecte tout seul, les sandwichs à deux, l'aimant qui aspire un pote au bord.
 - **Contrôles** : joystick + bouton Dash. WASD/flèches + espace au clavier.
 
-## 🎭 INCOGNITO — original n°1 (bluff & paranoïa)
-
-**Pitch** : fonds-toi dans la foule de figurants de la fête foraine. Les tireurs du stand de tir ont 5 balles… et la foule leur ressemble beaucoup.
-
-- **Boucle (90-120 s)** : la piste est remplie de ~30 **figurants** (PNJ) qui déambulent entre les stands. Les **Infiltrés** (joueurs) leur sont identiques et doivent accomplir **3 missions** discrètes (rester 2 s dans une zone : photomaton, stand churros, grande roue…). Les **Tireurs** contrôlent un réticule, avec 5 balles et un temps de recharge : toucher un Infiltré = éliminé ; toucher un figurant = klaxon de la honte + réticule gelé 3 s + balle perdue.
-- **Situations sociales garanties** : marcher « comme un PNJ » pendant que ton pote hurle « C'EST LUI, LE LOUCHE PRÈS DES CHURROS », le tir dans le figurant innocent, les morts spectateurs qui **voient qui est qui** et souffrent en silence.
-- **Victoire** : Infiltrés si l'un termine ses 3 missions ou si ≥ 1 survit au chrono ; Tireurs s'ils éliminent tout le monde. Score individuel aux missions et aux tirs propres.
-- **Asymétrique par nature** : 1v7, 2v6, 3v5. **FFA** : chacun est un Infiltré armé d'**une** balle — premier à 3 missions gagne, tirer juste élimine, tirer un figurant t'élimine TOI.
-- **Contrôles** : Infiltré = tap-pour-marcher (la vitesse est plafonnée à celle des PNJ : courir se voit). Tireur = glisser le réticule + bouton Tir.
-
-## 💰 MAGOT — original n°2 (avarice & tacles)
+## 💰 MAGOT — original (avarice & tacles)
 
 **Pitch** : un tas de jetons au centre, ta caisse au coin. Plus tu portes, plus tu es lent — et tout le monde a le droit de te tacler.
 
@@ -50,7 +40,11 @@ Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, ma
 
 ---
 
-## Commun aux 4 jeux
+## Idée en réserve pour un 4ᵉ stand
+
+**🎭 INCOGNITO** (bluff & paranoïa) : fonds-toi dans une foule de figurants PNJ pendant que des tireurs au réticule (5 balles) essaient de te démasquer ; 3 missions discrètes à accomplir ; toucher un innocent = klaxon de la honte. Formats 1v7/2v6/3v5 + FFA armé. Conçu, non implémenté — le contrat de jeu permet de l'ajouter en créant simplement `games/incognito/`.
+
+## Commun aux jeux
 
 - **Bots** : les forains de la Kermesse (Jacky Churros, Mamie Pétard, Gégé Tirelire…), personnalités différentes (agressivité, précision, temps de réaction), corrects mais faillibles, difficulté réglable dans le lobby.
 - **Fin de partie** : classement + stats rigolotes + **titres** décernés (« Le Plus Lâche », « Mort en premier, comme d'habitude », « Serial taquineur », « A tiré sur 3 innocents », « N'a strictement rien fait »).
