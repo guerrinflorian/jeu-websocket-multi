@@ -107,8 +107,10 @@ async function testMidGame(srv, meta) {
   ok(w.resumed && w.pid === bPid, 'reprise en pleine partie → même pid');
   const startMsg = await b2.next('start', null, 5000);
   ok(startMsg.gameId === meta.id, 'la reprise renvoie le bundle start');
-  const full = await b2.next('snap', (m) => m.full === true, 5000).catch(() => null);
-  ok(!!full, 'snapshot complet (traînées) reçu à la reprise');
+  if (meta.id === 'serpentin') {
+    const full = await b2.next('snap', (m) => m.full === true, 5000).catch(() => null);
+    ok(!!full, 'snapshot complet (traînées) reçu à la reprise');
+  }
   await b2.next('snap', (m) => !m.full, 5000);
   ok(true, 'les snapshots reprennent');
 
@@ -145,7 +147,7 @@ export async function run() {
     for (const meta of manifest) {
       await playGame(srv, meta, { formatKind: 'asym', label: ' (asym 1vN)' });
     }
-    await testMidGame(srv, manifest[0]);
+    await testMidGame(srv, manifest.find((m) => m.id === 'serpentin') || manifest[0]);
     ok(srv.errors.length === 0, `aucune erreur serveur (${srv.errors[0]?.slice(0, 120) || 'ok'})`);
   } finally {
     await srv.stop();
