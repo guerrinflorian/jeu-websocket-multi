@@ -225,6 +225,14 @@ export class Room {
     if (this.startConfig) {
       this.send(m, { t: 'start', gameId: this.startConfig.gameId, config: this.startConfig, you: m.pid });
     }
+    if (this.phase === 'playing' && this.gs && this.gameDef?.srv.fullView) {
+      // Snapshot complet (ex. traînées entières) pour reconstruire le rendu.
+      const pid = this.gamePids.includes(m.pid) ? m.pid : null;
+      this.send(m, {
+        t: 'snap', full: true, tick: this.tickNo, now: Date.now(),
+        state: this.gameDef.srv.fullView(this.gs, pid), ev: [],
+      });
+    }
     if (this.phase === 'results' && this.lastResults) this.send(m, this.lastResults);
   }
 

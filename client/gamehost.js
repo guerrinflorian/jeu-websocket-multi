@@ -113,6 +113,9 @@ export class GameHost {
 
   feedSnap(msg) {
     const at = performance.now();
+    if (msg.full) {
+      try { this.instance?.onFull?.(msg.state); } catch (err) { this.reportGameError(err); }
+    }
     // Horloge serveur estimée (EMA lente : stable malgré le jitter).
     const o = msg.now - at;
     this.offset = this.offset === null ? o : this.offset * 0.95 + o * 0.05;

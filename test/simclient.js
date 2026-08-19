@@ -36,10 +36,13 @@ export class Sim {
     if (msg.t === 'room') this.lastRoom = msg;
     if (msg.t === 'snap') { this.lastSnap = msg; this.snapCount++; }
     if (msg.t === 'over') this.lastOver = msg;
-    this.buf.push(msg);
+    const entry = { msg, used: false };
+    this.buf.push(entry);
+    if (this.buf.length > 800) this.buf.splice(0, 200);
     for (let i = 0; i < this.waiters.length; i++) {
       const w = this.waiters[i];
       if (w.match(msg)) {
+        entry.used = true;
         this.waiters.splice(i, 1);
         w.resolve(msg);
         return;
@@ -51,9 +54,17 @@ export class Sim {
     this.ws.send(JSON.stringify(obj));
   }
 
-  // Attend le prochain message qui matche (n'inspecte pas le passé).
+  // Attend le prochain message qui matche. Consomme d'abord les messages
+  // déjà reçus non consommés (les rafales TCP livrent plusieurs messages
+  // dans le même tour de boucle : ne jamais les rater).
   next(type, pred = null, timeout = 8000) {
     const match = (m) => m.t === type && (!pred || pred(m));
+    for (const entry of this.buf) {
+      if (!entry.used && match(entry.msg)) {
+        entry.used = true;
+        return Promise.resolve(entry.msg);
+      }
+    }
     return new Promise((resolve, reject) => {
       const timer = setTimeout(() => {
         const i = this.waiters.findIndex((w) => w.resolve === resolve);
