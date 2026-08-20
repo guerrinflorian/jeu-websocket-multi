@@ -113,7 +113,7 @@ export class Input {
   }
 
   pointerDown(e) {
-    if (e.target.closest('.ctl-btn, .hud, .emote-bar, .modal')) return;
+    if (e.target.closest('.ctl-btn, .hud, .emote-bar, .modal, .game-text')) return;
     e.preventDefault();
     const r = this.canvas.getBoundingClientRect();
     const x = e.clientX - r.left, y = e.clientY - r.top;

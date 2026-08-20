@@ -67,6 +67,20 @@ export class GameHost {
         ix: (view, key, angKeys) => interpEnts(view.a?.[key], view.b?.[key], view.alpha, angKeys),
         viewport: (worldW, worldH, pad = 0) => host.viewport(worldW, worldH, pad),
         bg: (ctx) => host.drawBg(ctx),
+        // Saisie de texte pour les jeux de mots. Champ DOM par-dessus le
+        // canvas : c'est ce qui ouvre le clavier natif sur telephone.
+        text: {
+          show: (opts) => host.showText(opts),
+          hide: () => host.hideText(),
+          value: () => (host.textEl ? host.textEl.value : ''),
+          clear: () => { if (host.textEl) host.textEl.value = ''; },
+          focus: () => { try { host.textEl?.focus(); } catch { /* refus du navigateur */ } },
+          mark: (state) => {
+            if (!host.textEl) return;
+            host.textEl.classList.toggle('bad', state === 'bad');
+            host.textEl.classList.toggle('good', state === 'good');
+          },
+        },
         nameTag: (ctx, x, y, name, color, size = 12) => {
           ctx.font = `600 ${size}px Rubik, system-ui, sans-serif`;
           ctx.textAlign = 'center';
@@ -107,10 +121,51 @@ export class GameHost {
     this.raf = requestAnimationFrame(loop);
   }
 
+  // ── Champ de saisie (jeux de mots) ──
+  showText({ placeholder = '', maxLength = 24, onChange = null, onSubmit = null, focus = true } = {}) {
+    if (!this.textEl) {
+      const el = document.createElement('input');
+      el.className = 'game-text';
+      el.type = 'text';
+      el.autocomplete = 'off';
+      el.autocapitalize = 'none';
+      el.spellcheck = false;
+      el.setAttribute('enterkeyhint', 'send');
+      el.addEventListener('input', () => this.textCb.change?.(el.value));
+      el.addEventListener('keydown', (e) => {
+        e.stopPropagation();
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.textCb.submit?.(el.value);
+        }
+      });
+      this.layer.appendChild(el);
+      this.textEl = el;
+      this.textCb = {};
+    }
+    this.textCb = { change: onChange, submit: onSubmit };
+    this.textEl.placeholder = placeholder;
+    this.textEl.maxLength = maxLength;
+    this.textEl.style.display = 'block';
+    if (focus) {
+      try { this.textEl.focus({ preventScroll: true }); } catch { /* refus du navigateur */ }
+    }
+  }
+
+  hideText() {
+    if (!this.textEl) return;
+    this.textEl.blur();
+    this.textEl.value = '';
+    this.textEl.classList.remove('bad', 'good');
+    this.textEl.style.display = 'none';
+    this.textCb = {};
+  }
+
   stop() {
     this.running = false;
     cancelAnimationFrame(this.raf);
     removeEventListener('resize', this.boundResize);
+    if (this.textEl) { this.textEl.remove(); this.textEl = null; this.textCb = {}; }
     try { this.instance?.destroy?.(); } catch { /* jeu déjà démonté */ }
     this.instance = null;
     this.input.setScheme(null);

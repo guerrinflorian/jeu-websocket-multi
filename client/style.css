@@ -398,6 +398,26 @@ body[data-screen="game"] #spectator-banner.show { display: block; }
 .steer-right { right: 12%; }
 @media (hover: hover) and (pointer: fine) { .steer-hint { display: none; } }
 
+/* ── Champ de saisie des jeux de mots ──────────────────────────────── */
+.game-text {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: calc(var(--sp-6) + var(--safe-b));
+  width: min(420px, 82vw); max-width: 82vw;
+  padding: 14px 18px;
+  font-family: var(--display); font-size: var(--fs-4); letter-spacing: .06em;
+  text-align: center; text-transform: uppercase;
+  color: var(--craie);
+  background: rgba(20, 10, 38, .94);
+  border: 3px solid var(--jaune);
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(255, 201, 60, .35), 0 8px 20px rgba(0, 0, 0, .5);
+  outline: none; z-index: 24; display: none;
+}
+.game-text::placeholder { color: rgba(185, 168, 208, .55); letter-spacing: .04em; }
+.game-text.good { border-color: var(--vert); box-shadow: 0 0 24px rgba(61, 255, 138, .45); }
+.game-text.bad { border-color: var(--rouge); box-shadow: 0 0 24px rgba(255, 71, 87, .45); }
+@media (max-width: 560px) { .game-text { font-size: var(--fs-3); padding: 12px 14px; } }
+
 /* ── Emotes ─────────────────────────────────────────────────────────── */
 .emote-bar {
   position: fixed; bottom: calc(var(--sp-4) + var(--safe-b)); left: 50%;
