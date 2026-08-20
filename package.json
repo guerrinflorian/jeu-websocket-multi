@@ -1,7 +1,7 @@
 {
   "name": "la-kermesse",
   "version": "1.0.0",
-  "description": "La fête foraine multijoueur en WebSocket : 11 jeux, 1 à 8 joueurs, dans le navigateur.",
+  "description": "La fête foraine multijoueur en WebSocket : 13 jeux, 1 à 8 joueurs, dans le navigateur.",
   "type": "module",
   "main": "server/index.js",
   "engines": {

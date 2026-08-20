@@ -1,6 +1,6 @@
 # Les jeux : LA KERMESSE
 
-Onze stands de fête foraine : quatre jeux d'arcade (dont deux originaux), six classiques de société revisités (Ligne 4, Blackjack, Yams, Petits Chevaux, Pétanque, Bataille Navale) et un original au tour par tour (Barrières).
+Treize stands de fête foraine : quatre jeux d'arcade (dont deux originaux), huit classiques de société revisités (Ligne 4, Blackjack, Yams, Petits Chevaux, Pétanque, Bataille Navale, Menteur, Huit américain) et un original au tour par tour (Barrières).
 Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, manches courtes, règles en jeu (`rules.md` + mini-tuto), vignette d'aperçu (`preview.js`) dans les menus, titres rigolos en fin de partie.
 
 ---
@@ -104,12 +104,30 @@ Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, man
 - **Asymétrique : « L'Amiral »** : grille 10×10, flotte double, plusieurs tirs par salve.
 - **Contrôles** : tap (grille, puis case). Tir auto intelligent au chrono.
 
+## 🤥 MENTEUR : classique revisité (le bluff aux dés, façon Perudo)
+
+**Pitch** : cinq dés chacun sous un gobelet. On enchérit sur ce que cache TOUTE la table. Celui qui a tort jette un dé.
+
+- **Boucle (par manche)** : tout le monde secoue et regarde ses dés **en secret**. À tour de rôle on surenchérit (« quatre 3 » : au moins quatre 3 sur la table), les **1 sont des jokers**. À ton tour tu peux couper court : **MENTEUR !** (on lève tout et on compte : qui a tort perd un dé) ou **PILE !** (tu paries sur le compte exact : réussi, tu récupères un dé). Plus de dés, plus de joueur : dernier debout, victoire.
+- **Le twist** : l'information est privée (tes dés) mais la décision est publique. Tout est lisible sur les visages, sauf qu'il n'y a pas de visages : il reste le rythme, les hésitations et les enchères absurdes. En équipe, les coéquipiers voient leurs dés : complicité assumée.
+- **Asymétrique : « Le Tricheur »** : 6 dés au lieu de 5 et une relance secrète par manche. À la table de le prouver.
+- **Contrôles** : tout au doigt (quantité, valeur, ENCHÉRIR, MENTEUR !, PILE !).
+
+## 🎴 HUIT AMÉRICAIN : classique (l'ancêtre d'UNO)
+
+**Pitch** : débarrasse-toi de tes cartes avant les autres, et sois vache en chemin.
+
+- **Boucle (par manche)** : pose une carte de la même **couleur** ou du même **rang** que celle du dessus, sinon pioche. **8** : joker, tu choisis la couleur. **7** : le suivant pioche 2, **cumulable** (seul un 7 pare un 7). **As** : demi-tour. **Roi** : le suivant saute son tour. Premier à vider sa main : les autres comptent leurs cartes en pénalité (8 = 50, As = 20, figures = 10). Le plus petit total après N manches gagne.
+- **Le twist** : **CARTE SEULE !** Quand il ne te reste qu'une carte, tu as 4 secondes pour l'annoncer, pendant que la partie continue. Un joueur qui te dénonce à temps te colle 2 cartes. Les bots distraits oublient, les bots teigneux dénoncent.
+- **Asymétrique : « Le Requin »** : 2 cartes de moins au départ et il voit le dessus de la pioche.
+- **Contrôles** : tap sur une carte de ta main, sur la pioche, sur la couleur après un 8, et sur les boutons ANNONCER / DÉNONCER.
+
 ## Stands retirés
 
 - **7 FAMILLES** : retiré à la demande (le dossier peut revenir via le contrat de jeu).
 - **CANARDS** : remplacé par la PÉTANQUE (même esprit forain, gameplay plus lisible et plus drôle).
 
-## Idée en réserve pour un 12ᵉ stand
+## Idée en réserve pour un 14ᵉ stand
 
 **🎭 INCOGNITO** (bluff & paranoïa) : fonds-toi dans une foule de figurants PNJ pendant que des tireurs au réticule essaient de te démasquer. Conçu, non implémenté : le contrat de jeu permet de l'ajouter en créant simplement `games/incognito/`.
 

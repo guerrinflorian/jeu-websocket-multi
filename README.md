@@ -6,7 +6,7 @@ les places, jouable au doigt sur téléphone comme au clavier. Un seul process
 Node, zéro base de données, zéro asset sous licence (cartes, dés et boules
 dessinés au Canvas).
 
-**Les stands (11) :**
+**Les stands (13) :**
 
 | Jeu | Genre | Le twist |
 |---|---|---|
@@ -21,6 +21,8 @@ dessinés au Canvas).
 | 🐴 **PETITS CHEVAUX** | Ludo / petits chevaux | Piste circulaire qui s'adapte à 2-8 camps, un 6 pour sortir, captures cruelles. Asym : « Le Jockey » (relance son dé) |
 | 🥌 **PÉTANQUE** | Pointer & tirer | Physique de boules, carreaux, mesure au cochonnet, vraie règle du point. Asym : « Le Tireur » (bras de mule) |
 | 🚢 **BATAILLE NAVALE** | Touché-coulé | Salves SIMULTANÉES : tout le monde arme son tir, tout explose en même temps. Asym : « L'Amiral » (armada géante) |
+| 🤥 **MENTEUR** | Bluff aux dés (Perudo) | Cinq dés cachés, on enchérit sur toute la table, les 1 sont jokers. MENTEUR ! ou PILE ! Asym : « Le Tricheur » |
+| 🎴 **HUIT AMÉRICAIN** | L'ancêtre d'UNO | 8 joker, 7 qui fait piocher (cumulable), As demi-tour, Roi qui saute. Et le « CARTE SEULE ! » à ne pas oublier. Asym : « Le Requin » |
 
 ## Lancer en local
 

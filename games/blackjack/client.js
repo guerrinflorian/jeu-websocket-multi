@@ -136,7 +136,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
       size: opts.size || 15, weight: 800, color: opts.ink || '#160B2B', display: true,
     });
     if (opts.sub) {
-      label(opts.sub, x + w / 2, y + h - 8, { size: 10, weight: 600, color: 'rgba(22,11,43,.72)' });
+      label(opts.sub, x + w / 2, y + h - 8, { size: 10, weight: 600, color: opts.ink && opts.ink !== '#160B2B' ? 'rgba(245,239,230,.78)' : 'rgba(22,11,43,.72)' });
     }
     ctx.restore();
     if (on && opts.fn) zones.push({ x, y, w, h, fn: opts.fn });
@@ -551,7 +551,12 @@ export function createClient({ ctx, helpers, config, you, send }) {
       if (afford) {
         zones.push({
           x: x - cr - 3, y: chipY - cr - 8, w: cr * 2 + 6, h: cr * 2 + 16,
-          fn: () => { dragBet = null; sendBet(Math.min(me.chips, bet + val), true); sfx.play('coin'); },
+          fn: () => {
+            const base = dragBet != null ? dragBet : me.bet;
+            dragBet = Math.min(me.chips, base + val);
+            sendBet(dragBet, true);
+            sfx.play('coin');
+          },
         });
       }
     });
@@ -974,6 +979,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
       drawDealer(v, now);
       drawOthers(v, now);
       const me = v.players[you];
+      if (me && dragBet != null && (me.bet === dragBet || v.phase !== 'bet')) dragBet = null;
       if (me && !meCroupier) drawMyHands(v, now);
       drawFlights(dt);
 

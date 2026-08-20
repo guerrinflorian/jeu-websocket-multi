@@ -104,3 +104,15 @@
       un joueur déconnecté reste remplacé par un forain partout
 - [x] Correctif : la pétanque dépassait le budget de temps du harnais
       (convergence deux fois plus rapide, sous-pas de physique, garde-fous durs)
+
+## Phase 9 : Deux classiques de plus (août 2026)
+- [x] MENTEUR (bluff aux dés façon Perudo : dés secrets par joueur,
+      enchères, jokers, MENTEUR ! et PILE !, élimination dé par dé ;
+      asym « Le Tricheur » à 6 dés avec relance secrète)
+- [x] HUIT AMÉRICAIN (l'ancêtre d'UNO : 8 joker, 7 cumulable, As demi-tour,
+      Roi qui saute, fenêtre CARTE SEULE ! avec dénonciation ;
+      asym « Le Requin »)
+- [x] Test d'interaction réelle du blackjack (vrais événements pointeur et
+      clavier) : jetons, réglette, boutons contextuels, raccourcis
+- [x] Correctif : deux taps rapides sur un jeton ne comptaient que pour un
+      (mise locale optimiste, confirmée par le serveur)
