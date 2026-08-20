@@ -558,8 +558,8 @@ export function createClient({ ctx, helpers, config, you, send }) {
 
     // Reglette : absolument n'importe quel montant.
     const sy = top + (L.portrait ? 224 : 122);
-    const sx0 = L.portrait ? 52 : 40;
-    const sx1 = L.portrait ? L.AW - 52 : L.AW - 220;
+    const sx0 = L.portrait ? 78 : 44;
+    const sx1 = L.portrait ? L.AW - 78 : L.AW - 268;
     const frac = clamp((bet - 1) / Math.max(1, me.chips - 1), 0, 1);
     roundRectPath(ctx, sx0, sy - 5, sx1 - sx0, 10, 5);
     ctx.fillStyle = 'rgba(255,255,255,.12)';
@@ -585,8 +585,8 @@ export function createClient({ ctx, helpers, config, you, send }) {
         },
       });
     }
-    label('1', sx0 - 8, sy + 4, { size: 10, weight: 700, color: MAUVE, align: 'right' });
-    label('TAPIS', sx1 + 8, sy + 4, { size: 10, weight: 700, color: MAUVE, align: 'left' });
+    label('1', sx0 - 10, sy + 4, { size: 10, weight: 700, color: MAUVE, align: 'right' });
+    label('TAPIS', sx1 + 10, sy + 4, { size: 10, weight: 700, color: MAUVE, align: 'left' });
 
     // Raccourcis de mise.
     const quick = [
