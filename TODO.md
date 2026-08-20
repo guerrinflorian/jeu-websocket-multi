@@ -116,3 +116,13 @@
       clavier) : jetons, réglette, boutons contextuels, raccourcis
 - [x] Correctif : deux taps rapides sur un jeton ne comptaient que pour un
       (mise locale optimiste, confirmée par le serveur)
+
+## Phase 10 : Le mot et la carte (août 2026)
+- [x] Socle : saisie de texte (helpers.text) pour les jeux de mots, avec
+      clavier natif sur mobile et isolation des touches et des taps
+- [x] BOMBER (mot à la bombe : syllabe de 2 ou 3 lettres, mèche commune qui
+      brûle pendant que la bombe circule, coeurs, bonus alphabet, dictionnaire
+      de 3595 mots avec syllabes garanties solubles ; asym « L'Artificier »)
+- [x] POKER Texas Hold'em (blindes montantes, 4 tours d'enchères, relance
+      libre, tapis, évaluateur 7 vers 5 avec kickers, pots secondaires,
+      partage à égalité ; asym « Le Requin » et son coup d'oeil)

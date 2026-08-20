@@ -1,6 +1,6 @@
 # Les jeux : LA KERMESSE
 
-Treize stands de fête foraine : quatre jeux d'arcade (dont deux originaux), huit classiques de société revisités (Ligne 4, Blackjack, Yams, Petits Chevaux, Pétanque, Bataille Navale, Menteur, Huit américain) et un original au tour par tour (Barrières).
+Quinze stands de fête foraine : quatre jeux d'arcade (dont deux originaux), dix classiques de société et de bistrot revisités (Ligne 4, Blackjack, Yams, Petits Chevaux, Pétanque, Bataille Navale, Menteur, Huit américain, Bomber, Poker) et un original au tour par tour (Barrières).
 Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, manches courtes, règles en jeu (`rules.md` + mini-tuto), vignette d'aperçu (`preview.js`) dans les menus, titres rigolos en fin de partie.
 
 ---
@@ -122,12 +122,30 @@ Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, man
 - **Asymétrique : « Le Requin »** : 2 cartes de moins au départ et il voit le dessus de la pioche.
 - **Contrôles** : tap sur une carte de ta main, sur la pioche, sur la couleur après un 8, et sur les boutons ANNONCER / DÉNONCER.
 
+## 💣 BOMBER : classique de soirée (le mot à la bombe)
+
+**Pitch** : une syllabe, un mot français, et vite : la mèche brûle pendant que la bombe passe de main en main.
+
+- **Boucle** : une suite de 2 ou 3 lettres s'affiche sur la bombe (« TRA », « ON »). Celui qui la tient tape un mot qui la contient et valide : la bombe file au suivant avec une nouvelle syllabe. **La mèche est commune** et continue de brûler : celui qui tient la bombe quand elle explose perd un coeur. Trois coeurs, dernier debout gagne.
+- **Le twist** : le clavier natif s'ouvre sur téléphone (brique de saisie ajoutée au socle), un mot déjà servi est refusé, et compléter son **alphabet** au fil de ses mots redonne un coeur. Le stand embarque son dictionnaire (3595 mots courants, accents normalisés) et ne propose que des syllabes réellement solubles, avec trois niveaux de difficulté.
+- **Asymétrique : « L'Artificier »** : 4 coeurs et des syllabes de 2 lettres seulement, mais la bombe lui revient deux fois plus souvent.
+- **Contrôles** : le champ de saisie apparaît quand c'est à toi, Entrée pour valider.
+
+## ♠️ POKER : classique (Texas Hold'em, les uns contre les autres)
+
+**Pitch** : le seul stand où l'on joue vraiment contre ses voisins, pas contre la banque.
+
+- **Boucle** : bouton de donneur tournant, blindes qui doublent régulièrement, 2 cartes fermées chacun, puis flop, turn et river. À chaque tour d'enchères : **SE COUCHER**, **CHECKER** ou **SUIVRE**, **RELANCER** du montant que tu veux (réglette, 1/2 pot, pot) ou **TAPIS**. Abattage : meilleure main de 5 cartes parmi 7, kickers compris.
+- **Le twist** : vrai moteur de poker, avec **pots secondaires** quand quelqu'un part à tapis pour moins que les autres, partage à égalité, et surlignage doré des cinq cartes qui composent ta meilleure main avec son nom (« Double paire, as et deux »). Tapis vide, tu es éliminé et tu vois alors toutes les cartes.
+- **Asymétrique : « Le Requin »** : tapis double et un **coup d'oeil** par main sur une carte fermée d'un adversaire. La table est prévenue qu'il regarde, mais pas de quoi.
+- **Contrôles** : tout au doigt (réglette de relance, mises rapides), raccourcis F, C, R, A sur PC.
+
 ## Stands retirés
 
 - **7 FAMILLES** : retiré à la demande (le dossier peut revenir via le contrat de jeu).
 - **CANARDS** : remplacé par la PÉTANQUE (même esprit forain, gameplay plus lisible et plus drôle).
 
-## Idée en réserve pour un 14ᵉ stand
+## Idée en réserve pour un 16ᵉ stand
 
 **🎭 INCOGNITO** (bluff & paranoïa) : fonds-toi dans une foule de figurants PNJ pendant que des tireurs au réticule essaient de te démasquer. Conçu, non implémenté : le contrat de jeu permet de l'ajouter en créant simplement `games/incognito/`.
 
