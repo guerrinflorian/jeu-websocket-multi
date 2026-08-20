@@ -104,7 +104,7 @@ Le message `room` est **idempotent** (état complet, pas de diffs) : trivial à 
 - **Hôte** : le plus ancien humain connecté. Migration automatique à la déconnexion.
 - **Bots** : membres du lobby comme les autres (ajout/retrait par l'hôte, auto-prêts) ; ils passent par `onInput/onAction` comme un client normal → aucune triche possible par construction.
 - **Reconnexion** : token UUID en localStorage ; à la déconnexion le joueur passe en grâce 60 s, son pion est piloté par un autopilote bot. Retour avec le même token → reprise instantanée (lobby ou partie en cours).
-- **AFK** : 20 s sans input en partie → autopilote + badge « AFK » ; le moindre input rend la main.
+- **AFK** : uniquement dans les jeux temps réel (`meta.idleBot`) : 20 s sans input → autopilote ; le moindre input rend la main. Dans les jeux au tour par tour, attendre son tour n est pas être absent : seul un joueur **déconnecté** est repris par un forain, sinon c est le chrono de tour du jeu qui joue le coup.
 - **Spectateur** : les morts et les arrivants en cours de partie reçoivent les snapshots normalement (+ infos bonus selon le jeu). Jamais d'écran noir.
 - **Nettoyage** : room sans aucun humain connecté → détruite après 120 s ; room en lobby inactive 30 min → détruite ; caps `MAX_ROOMS=100`, `MAX_CONNS=400`, 8 joueurs/room.
 - **Rate limiting** : token bucket par connexion : 40 msg/s pour `input`, 10/s pour le reste, déconnexion en cas d'abus répété.
@@ -129,7 +129,9 @@ FFA ; toutes les partitions à 2 équipes `[a, n−a]` (dont déséquilibrées s
 ```
 games/<game-id>/
   meta.js    → isomorphe : id, nom, emoji, pitch, joueurs min/max, caps,
-               schéma de réglages, schéma de contrôles, howto[] (mini-tuto illustré)
+               schéma de réglages, schéma de contrôles, howto[] (mini-tuto illustré),
+               idleBot (true = temps réel : autopilote après 20 s sans input ;
+               false = tour par tour : le jeu gère lui-même ses chronos)
   server.js  → createState(cfg) ; onInput(state,pid,d) ; onAction(state,pid,a,d)
                tick(state,dt) → ev[] ; isOver(state) ; results(state)
                botAct(state,pid,mind,api) : même chemin d'input que les humains

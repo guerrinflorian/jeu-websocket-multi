@@ -13,6 +13,7 @@ export function createClient({ ctx, helpers, config, you, controls }) {
   const trails = new Map();   // pid → [{ pts: [x,y,t,…], open }]
   let lastTick = -1;
   let lastRound = 0;
+  let goAt = 0;               // instant du dernier « go » (pour l'aide TOI)
   const isAsym = config.format.kind === 'asym';
   const soloPids = new Set(isAsym ? config.teams[0] : []);
   const myTeam = config.teams.findIndex((tm) => tm.includes(you));
@@ -87,6 +88,8 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           sfx.play(ev.by === 'wall' ? 'hit' : 'death');
         } else if (ev.e === 'go') {
           sfx.play('go');
+          goAt = performance.now();
+          juice.floater(AW / 2, AH / 2 - 60, 'GO !', { color: '#3DFF8A', size: 34 });
         } else if (ev.e === 'boost') {
           sfx.play('boost');
         } else if (ev.e === 'roundEnd') {
@@ -206,6 +209,29 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         ctx.closePath();
         ctx.fillStyle = '#F5EFE6';
         ctx.fill();
+        // Aide au départ : trajectoire de lancement en pointillés + « TOI ».
+        const showHelp = state.phase === 'pre' || (goAt && now - goAt < 1600);
+        if (showHelp) {
+          ctx.setLineDash([7, 6]);
+          ctx.globalAlpha = 0.65;
+          ctx.beginPath();
+          ctx.moveTo(p.x + Math.cos(p.a) * 12, p.y + Math.sin(p.a) * 12);
+          ctx.lineTo(p.x + Math.cos(p.a) * 44, p.y + Math.sin(p.a) * 44);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.globalAlpha = 1;
+          if (pid === you) {
+            ctx.font = '800 13px Rubik, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.strokeStyle = 'rgba(20,10,38,.85)';
+            ctx.lineWidth = 3;
+            ctx.fillStyle = '#F5EFE6';
+            ctx.strokeText('TOI ▼', p.x, p.y - 28);
+            ctx.fillText('TOI ▼', p.x, p.y - 28);
+          }
+        }
         helpers.nameTag(ctx, p.x, p.y - 14, config.players[pid]?.name || '', color);
       }
 
@@ -247,7 +273,10 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       if (state.phase === 'pre') {
         ctx.font = 'bold 42px Bungee, sans-serif';
         ctx.fillStyle = '#FFC93C';
-        ctx.fillText('PRÊT ?', w / 2, h / 2 - 40);
+        ctx.fillText(`MANCHE ${state.round}`, w / 2, h / 2 - 46);
+        ctx.font = '600 16px Rubik, sans-serif';
+        ctx.fillStyle = '#B9A8D0';
+        ctx.fillText('Repère ta flèche de départ…', w / 2, h / 2 - 16);
       } else if (state.phase === 'end') {
         ctx.font = 'bold 34px Bungee, sans-serif';
         const evTeam = lastWinnerTeam(state);

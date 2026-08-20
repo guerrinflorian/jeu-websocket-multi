@@ -9,6 +9,9 @@ export default {
   pitch: 'Deux camps face à face, en bas et en haut. À ton tour : avance d\'une case, ou pose une barrière pour faire faire le grand tour à l\'ennemi. Interdit d\'emmurer complètement : il reste TOUJOURS un passage. Le premier pion qui touche la base adverse gagne.',
   minPlayers: 2,
   maxPlayers: 8,
+  // Tour par tour ou par phases : le jeu a ses propres chronos, aucun
+  // pilote automatique d inactivite (sinon il confisquerait les tours).
+  idleBot: false,
   arena: { w: 900, h: 640 },
   caps: {
     ffa: true,

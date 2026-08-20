@@ -19,7 +19,7 @@ const MIME = {
   '.webmanifest': 'application/manifest+json',
 };
 
-const GAME_PUBLIC = new Set(['meta.js', 'client.js', 'rules.md']);
+const GAME_PUBLIC = new Set(['meta.js', 'client.js', 'rules.md', 'preview.js']);
 
 export function makeStatics(rootDir, prod) {
   const clientDir = path.join(rootDir, 'client');

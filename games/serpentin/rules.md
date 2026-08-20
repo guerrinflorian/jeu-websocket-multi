@@ -5,7 +5,9 @@ Tu es un point lumineux qui avance **tout seul, tout le temps**. Tu ne contrôle
 
 **Touche un mur, une traînée ennemie ou ta propre traînée : tu es éliminé.**
 
-Dernière équipe en vie remporte la manche. La partie se joue en 3, 5 ou 7 manches.
+Dernière équipe en vie remporte la manche (double K.O. : personne ne marque). La partie se joue en 3, 5 ou 7 manches ; l'équipe avec le plus de manches gagne. En cas d'égalité au classement individuel, le temps de survie total départage.
+
+Au départ de chaque manche, une **flèche en pointillés** montre ta direction de lancement : repère-toi avant le GO !
 
 ## Le twist d'équipe
 Les traînées de **tes coéquipiers sont traversables** pour toi (pas les tiennes !). Une bonne équipe tisse une toile : des murs pour les ennemis, des portes pour les alliés. Enfermez un adversaire dans votre filet, passez au travers, savourez.

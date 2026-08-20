@@ -18,11 +18,35 @@ export function createClient({ ctx, helpers, config, you, send }) {
   let winCells = null;
   let winT = 0;
   let lastTurnPid = null;
+  let endBanner = null;     // { text, color } affiché pendant la phase 'end'
+
+  // Arène adaptée à l'orientation : la grille reste grande sur mobile
+  // en portrait (le serveur ne reçoit que des act 'drop', jamais de coords).
+  function dims() {
+    const { w, h } = helpers.size();
+    return h > w * 1.05 ? { aw: 640, ah: 940 } : { aw: AW, ah: AH };
+  }
 
   function layout(v) {
-    const cell = Math.min(780 / v.cols, 470 / v.rows);
+    const A = dims();
+    const portrait = A.ah > A.aw;
+    const availW = portrait ? A.aw - 50 : 780;
+    const availH = portrait ? A.ah - 330 : 470;
+    const cell = Math.min(availW / v.cols, availH / v.rows);
     const bw = cell * v.cols, bh = cell * v.rows;
-    return { cell, bw, bh, bx: (AW - bw) / 2, by: 118 + (470 - bh) / 2 };
+    return {
+      A, cell, bw, bh,
+      bx: (A.aw - bw) / 2,
+      by: (portrait ? 170 : 118) + (availH - bh) / 2,
+    };
+  }
+
+  function campLabel(teamIdx) {
+    if (!byTeam) {
+      const pid = config.teams[teamIdx]?.[0];
+      return config.players[pid]?.name || '?';
+    }
+    return `l'équipe ${shapes[teamIdx % shapes.length]}`;
   }
 
   function discColor(seatPid) {
@@ -64,9 +88,9 @@ export function createClient({ ctx, helpers, config, you, send }) {
     onTap(x, y, phase) {
       const v = lastView;
       if (!v || v.turn !== you) { hoverCol = -1; return; }
-      const vp = helpers.viewport(AW, AH, 10);
-      const w = vp.toWorld(x, y);
       const L = layout(v);
+      const vp = helpers.viewport(L.A.aw, L.A.ah, 10);
+      const w = vp.toWorld(x, y);
       const c = Math.floor((w.x - L.bx) / L.cell);
       const inX = c >= 0 && c < v.cols;
       if (phase === 'start' || phase === 'move') {
@@ -82,38 +106,39 @@ export function createClient({ ctx, helpers, config, you, send }) {
 
     onEvents(evs, view) {
       const v = view?.latest;
+      const L = v ? layout(v) : null;
       for (const ev of evs) {
         if (ev.e === 'drop') {
-          if (v) {
-            const L = layout(v);
+          if (L) {
             anims.push({ c: ev.c, r: ev.r, seat: ev.seat, y: L.by - L.cell * 0.8, v: 260, t: 0, bounced: false });
           }
           sfx.play('pickup');
         } else if (ev.e === 'turn') {
           lastTurnPid = ev.pid;
-          if (ev.pid === you) {
+          if (ev.pid === you && L) {
             sfx.play('ready');
-            juice.floater(AW / 2, 96, 'À TOI !', { color: '#3DFF8A', size: 22 });
+            juice.floater(L.A.aw / 2, L.by - 52, 'À TOI !', { color: '#3DFF8A', size: 22 });
           }
         } else if (ev.e === 'win') {
           winCells = ev.cells;
           winT = 0;
           sfx.play('win');
           const color = discColor(ev.pid);
-          if (v) {
-            const L = layout(v);
+          endBanner = { text: `MANCHE POUR ${campLabel(ev.team).toUpperCase()} !`, color };
+          if (L) {
             const [c0, r0] = ev.cells[0];
             juice.confetti(L.bx + (c0 + 0.5) * L.cell, L.by + (r0 + 0.5) * L.cell, [color, '#FFC93C', '#F5EFE6'], 60);
           }
           juice.shake(6);
         } else if (ev.e === 'full') {
           sfx.play('klaxon');
-          juice.floater(AW / 2, 160, ev.team == null
-            ? 'GRILLE PLEINE : ÉGALITÉ !'
-            : 'GRILLE PLEINE : la manche va au camp le plus menaçant !', { color: '#FFC93C', size: 18 });
+          endBanner = ev.team == null
+            ? { text: 'GRILLE PLEINE : ÉGALITÉ !', color: '#FFC93C' }
+            : { text: `GRILLE PLEINE : MANCHE POUR ${campLabel(ev.team).toUpperCase()} !`, color: '#FFC93C' };
         } else if (ev.e === 'round') {
           anims.length = 0;
           winCells = null;
+          endBanner = null;
         }
       }
     },
@@ -123,11 +148,11 @@ export function createClient({ ctx, helpers, config, you, send }) {
       lastView = v;
       const { w, h } = helpers.size();
       helpers.bg(ctx);
-      const vp = helpers.viewport(AW, AH, 10);
+      const L = layout(v);
+      const vp = helpers.viewport(L.A.aw, L.A.ah, 10);
       ctx.save();
       vp.apply(ctx);
 
-      const L = layout(v);
       const board = parseBoard(v);
       const rad = L.cell * 0.4;
 
@@ -276,6 +301,20 @@ export function createClient({ ctx, helpers, config, you, send }) {
         ctx.font = 'bold 36px Bungee, sans-serif';
         ctx.fillStyle = meta.color;
         ctx.fillText('LIGNE 4 !', w / 2, h / 2 - 30);
+      }
+      // Bannière de fin de manche : qui a pris le point, bien en évidence.
+      if (v.phase === 'end' && endBanner) {
+        const pulse = 1 + 0.03 * Math.sin(performance.now() / 140);
+        ctx.save();
+        ctx.translate(w / 2, h / 2 - 40);
+        ctx.scale(pulse, pulse);
+        ctx.font = `bold ${Math.min(26, w / 18)}px Bungee, sans-serif`;
+        ctx.strokeStyle = 'rgba(20,10,38,.85)';
+        ctx.lineWidth = 6;
+        ctx.strokeText(endBanner.text, 0, 0);
+        ctx.fillStyle = endBanner.color;
+        ctx.fillText(endBanner.text, 0, 0);
+        ctx.restore();
       }
     },
 

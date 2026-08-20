@@ -83,9 +83,57 @@ function mdLite(md) {
   return html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 }
 
+// ── Aperçus des jeux ───────────────────────────────────────────────────
+// Chaque jeu peut fournir games/<id>/preview.js exportant drawPreview(ctx,
+// w, h) : une vignette illustrée dessinée au Canvas. Sinon : fond + emoji.
+
+const previewMods = new Map(); // id → Promise<module|null>
+
+function previewMod(id) {
+  if (!previewMods.has(id)) {
+    previewMods.set(id, import(`/games/${id}/preview.js`).catch(() => null));
+  }
+  return previewMods.get(id);
+}
+
+export function paintThumbs(root, manifest) {
+  root.querySelectorAll('canvas[data-thumb]').forEach(async (cv) => {
+    const id = cv.dataset.thumb;
+    const meta = manifest.find((m) => m.id === id);
+    const rect = cv.getBoundingClientRect();
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const w = Math.max(120, Math.round(rect.width));
+    const h = Math.max(68, Math.round(rect.height) || Math.round(w * 9 / 16));
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    const ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const fallback = () => {
+      const g = ctx.createLinearGradient(0, 0, 0, h);
+      g.addColorStop(0, '#241245');
+      g.addColorStop(1, '#140A26');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, w, h);
+      ctx.font = `${Math.round(h * 0.48)}px system-ui, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(meta?.emoji || '🎪', w / 2, h / 2 + 2);
+      ctx.textBaseline = 'alphabetic';
+    };
+    fallback();
+    const mod = await previewMod(id);
+    if (!mod?.drawPreview || !cv.isConnected) return;
+    try {
+      ctx.save();
+      mod.drawPreview(ctx, w, h);
+      ctx.restore();
+    } catch { fallback(); }
+  });
+}
+
 // ── Écran accueil ──────────────────────────────────────────────────────
 
-export function renderHome(el, { profile, prefillCode, onCreate, onJoin, onProfile }) {
+export function renderHome(el, { profile, prefillCode, manifest = [], onCreate, onJoin, onProfile }) {
   const faces = Array.from({ length: FACE_COUNT }, (_, i) => `
     <button class="face-pick ${i === profile.face ? 'sel' : ''}" data-face="${i}">
       ${avatarSvg(i, PLAYER_COLORS[i % PLAYER_COLORS.length], 44)}
@@ -113,6 +161,19 @@ export function renderHome(el, { profile, prefillCode, onCreate, onJoin, onProfi
           <button class="btn btn-secondary" id="btn-join">${t('btn.join')}</button>
         </div>
       </div>
+      ${manifest.length ? `
+      <section class="stands">
+        <h3 class="sec-title">${t('home.stands')} <span class="sec-count">${manifest.length}</span></h3>
+        <div class="stand-grid">
+          ${manifest.map((m) => `
+            <button class="stand" data-stand="${m.id}" style="--neon:${m.color || '#FF3D8A'}">
+              <canvas class="stand-thumb" data-thumb="${m.id}"></canvas>
+              <span class="stand-name">${m.emoji} ${esc(m.name)}</span>
+              <span class="stand-tag">${esc(m.tagline || '')}</span>
+            </button>`).join('')}
+        </div>
+        <p class="hint">${t('home.standsHint')}</p>
+      </section>` : ''}
       <footer class="home-footer">
         <button class="btn-ghost" id="btn-mute">${sfx.isMuted() ? '🔇' : '🔊'}</button>
         <span>fait maison, zéro asset, 100 % WebSocket</span>
@@ -140,6 +201,11 @@ export function renderHome(el, { profile, prefillCode, onCreate, onJoin, onProfi
   el.querySelector('#btn-mute').addEventListener('click', (e) => {
     e.target.textContent = sfx.toggleMute() ? '🔇' : '🔊';
   });
+  el.querySelectorAll('[data-stand]').forEach((b) => b.addEventListener('click', () => {
+    const meta = manifest.find((m) => m.id === b.dataset.stand);
+    if (meta) { sfx.play('click'); openRules(meta); }
+  }));
+  paintThumbs(el, manifest);
   if (prefillCode) codeInput.focus();
 }
 
@@ -177,8 +243,8 @@ export function renderLobby(el, room, { myPid, manifest, net, onLeave }) {
   const gameCards = manifest.map((m) => `
     <button class="game-card ${m.id === room.gameId ? 'sel' : ''}" data-game="${m.id}"
             style="--neon:${m.color || '#FF3D8A'}" ${isHost ? '' : 'disabled'}>
-      <span class="game-emoji">${m.emoji}</span>
-      <span class="game-name">${esc(m.name)}</span>
+      <canvas class="game-thumb" data-thumb="${m.id}"></canvas>
+      <span class="game-title"><span class="game-emoji">${m.emoji}</span><span class="game-name">${esc(m.name)}</span></span>
       <span class="game-pitch">${esc(m.tagline || '')}</span>
     </button>`).join('');
 
@@ -308,6 +374,7 @@ export function renderLobby(el, room, { myPid, manifest, net, onLeave }) {
       if (p && !p.spectator) { sfx.play('click'); net.send({ t: 'setTeam', pid: p.pid }); }
     }));
   }
+  paintThumbs(el, manifest);
 }
 
 function fmtSettingValue(v, spec) {

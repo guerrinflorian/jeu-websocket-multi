@@ -50,6 +50,7 @@ function goHome() {
   renderHome($('scr-home'), {
     profile: net.profile,
     prefillCode: pendingJoin,
+    manifest,
     onProfile: (name, face) => net.setProfile(name || null, face),
     onCreate: () => { sfx.boot(); sfx.play('click'); net.send({ t: 'create' }); },
     onJoin: (code) => { sfx.boot(); sfx.play('click'); net.send({ t: 'join', code }); },

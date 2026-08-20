@@ -9,6 +9,8 @@ export default {
   pitch: 'Trace ton serpentin lumineux et coupe la route des autres. Les traînées de tes coéquipiers sont des portes pour toi, et des murs pour eux.',
   minPlayers: 2,
   maxPlayers: 8,
+  // Temps reel : un joueur inactif est remplace par un forain apres 20 s.
+  idleBot: true,
   arena: { w: 1000, h: 620 },
   caps: {
     ffa: true,

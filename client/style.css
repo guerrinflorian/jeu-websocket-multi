@@ -243,9 +243,37 @@ body[data-screen="results"] #scr-results { display: block; }
   transform: translateY(-2px);
 }
 .game-card:disabled { cursor: default; }
-.game-emoji { font-size: var(--fs-6); line-height: 1; }
-.game-name { font-family: var(--display); font-size: var(--fs-3); color: var(--craie); }
+.game-title { display: flex; align-items: center; gap: 6px; }
+.game-emoji { font-size: var(--fs-4); line-height: 1; }
+.game-name { font-family: var(--display); font-size: var(--fs-2); color: var(--craie); }
 .game-pitch { font-size: var(--fs-1); color: var(--craie-2); }
+.game-thumb {
+  width: 100%; aspect-ratio: 16 / 9; border-radius: 10px;
+  background: var(--nuit); border: 1px solid var(--nuit-3);
+  pointer-events: none;
+}
+
+/* ── Galerie des stands (accueil) ───────────────────────────────────── */
+.stands { margin-top: var(--sp-2); }
+.stand-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3); }
+@media (min-width: 700px) { .stand-grid { grid-template-columns: repeat(3, 1fr); } }
+.stand {
+  display: flex; flex-direction: column; gap: 4px; text-align: left;
+  background: var(--nuit-2); border: 2px solid var(--nuit-3);
+  border-radius: var(--r-card); padding: var(--sp-2);
+  transition: border-color .15s, transform .1s, box-shadow .15s;
+}
+.stand:hover, .stand:active {
+  border-color: var(--neon);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--neon) 30%, transparent);
+}
+.stand-thumb {
+  width: 100%; aspect-ratio: 16 / 9; border-radius: 8px;
+  background: var(--nuit); border: 1px solid var(--nuit-3);
+  pointer-events: none;
+}
+.stand-name { font-family: var(--display); font-size: var(--fs-2); color: var(--craie); }
+.stand-tag { font-size: var(--fs-1); color: var(--craie-2); }
 
 .chip-row { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .chip {

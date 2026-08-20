@@ -9,6 +9,9 @@ export default {
   pitch: 'Le puissance 4 de la fête foraine : chacun son tour, lâche un jeton dans la grille lumineuse. 4 alignés = manche gagnée. La grille grandit avec le nombre de camps, et en équipe les coéquipiers alternent : un cerveau à plusieurs têtes.',
   minPlayers: 2,
   maxPlayers: 8,
+  // Tour par tour ou par phases : le jeu a ses propres chronos, aucun
+  // pilote automatique d inactivite (sinon il confisquerait les tours).
+  idleBot: false,
   arena: { w: 900, h: 640 },
   caps: {
     ffa: true,

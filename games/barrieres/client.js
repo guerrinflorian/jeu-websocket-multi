@@ -13,11 +13,34 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
   let ghost = null;         // { o, x, y }
   let rejectT = 0;
   let rejectMsg = '';
+  let endBanner = null;     // { text, color } pendant la phase 'end'
+
+  // Arène adaptée à l'orientation : plateau plein écran en portrait aussi
+  // (le serveur ne reçoit que des act 'move'/'wall', jamais de coordonnées).
+  function dims() {
+    const { w, h } = helpers.size();
+    return h > w * 1.05 ? { aw: 640, ah: 940 } : { aw: AW, ah: AH };
+  }
 
   function layout(v) {
-    const cell = Math.min(760 / v.cols, 500 / v.rows);
+    const A = dims();
+    const portrait = A.ah > A.aw;
+    const availW = portrait ? A.aw - 44 : 760;
+    const availH = portrait ? A.ah - 300 : 500;
+    const cell = Math.min(availW / v.cols, availH / v.rows);
     const bw = cell * v.cols, bh = cell * v.rows;
-    return { cell, bw, bh, bx: (AW - bw) / 2, by: 96 + (500 - bh) / 2 };
+    return {
+      A, cell, bw, bh,
+      bx: (A.aw - bw) / 2,
+      by: (portrait ? 150 : 96) + (availH - bh) / 2,
+    };
+  }
+
+  function campLabel(teamIdx, pid) {
+    const team = config.teams[teamIdx] || [];
+    if (pid && team.length <= 1) return config.players[pid]?.name || '?';
+    if (team.length === 1) return config.players[team[0]]?.name || '?';
+    return `le camp ${teamIdx + 1}`;
   }
 
   function wallsSets(v) {
@@ -121,7 +144,8 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
         sfx.play('click');
         if (wallMode && v && (v.pawns[you]?.w || 0) <= 0) {
           wallMode = false;
-          juice.floater(AW / 2, AH / 2, 'PLUS DE BARRIÈRES !', { color: '#FF4757', size: 20 });
+          const L = layout(v);
+          juice.floater(L.A.aw / 2, L.by + L.bh / 2, 'PLUS DE BARRIÈRES !', { color: '#FF4757', size: 20 });
         }
         return false; // géré côté client, rien à envoyer
       }
@@ -131,9 +155,9 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
     onTap(x, y, phase) {
       const v = lastView;
       if (!v || phase !== 'end' || v.turn !== you) return;
-      const vp = helpers.viewport(AW, AH, 10);
-      const w = vp.toWorld(x, y);
       const L = layout(v);
+      const vp = helpers.viewport(L.A.aw, L.A.ah, 10);
+      const w = vp.toWorld(x, y);
       if (wallMode) {
         const cand = wallCandidate(v, L, w.x, w.y);
         if (!cand) { ghost = null; return; }
@@ -159,11 +183,11 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
 
     onEvents(evs, view) {
       const v = view?.latest || lastView;
+      const L = v ? layout(v) : null;
       for (const ev of evs) {
         if (ev.e === 'move') {
           sfx.play(ev.jump ? 'dash' : 'pickup');
-          if (v) {
-            const L = layout(v);
+          if (L) {
             juice.burst(L.bx + (ev.x + 0.5) * L.cell, L.by + (ev.y + 0.5) * L.cell, {
               n: 6, color: config.players[ev.pid]?.color || '#FFF', speed: 70, life: 0.35, size: 2.5,
             });
@@ -172,12 +196,12 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
           sfx.play('hit');
           juice.shake(3);
         } else if (ev.e === 'turn') {
-          if (ev.pid === you) {
+          if (ev.pid === you && L) {
             sfx.play('ready');
-            juice.floater(AW / 2, 84, ev.n > 1 ? `À TOI ! (${ev.n} actions)` : 'À TOI !', { color: '#3DFF8A', size: 20 });
+            juice.floater(L.A.aw / 2, L.by - 36, ev.n > 1 ? `À TOI ! (${ev.n} actions)` : 'À TOI !', { color: '#3DFF8A', size: 20 });
           }
-        } else if (ev.e === 'again' && ev.pid === you) {
-          juice.floater(AW / 2, 84, 'ENCORE UNE ACTION !', { color: '#FFC93C', size: 18 });
+        } else if (ev.e === 'again' && ev.pid === you && L) {
+          juice.floater(L.A.aw / 2, L.by - 36, 'ENCORE UNE ACTION !', { color: '#FFC93C', size: 18 });
         } else if (ev.e === 'reject' && ev.pid === you) {
           rejectT = 1.6;
           rejectMsg = ev.why === 'block' ? 'PASSAGE OBLIGATOIRE !' : ev.why === 'stock' ? 'PLUS DE BARRIÈRES !' : 'TROP SERRÉ ICI !';
@@ -185,11 +209,17 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
           juice.shake(4);
         } else if (ev.e === 'win') {
           sfx.play('win');
-          const colors = (config.teams[ev.team] || []).map((pid) => config.players[pid]?.color || '#3DFF8A');
-          juice.confetti(AW / 2, AH / 2 - 60, colors.length ? colors : ['#3DFF8A'], 60);
+          const teamPids = config.teams[ev.team] || [];
+          const colors = teamPids.map((pid) => config.players[pid]?.color || '#3DFF8A');
+          endBanner = {
+            text: `${campLabel(ev.team, ev.pid).toUpperCase()} TOUCHE AU BUT !`,
+            color: (ev.pid && config.players[ev.pid]?.color) || colors[0] || '#3DFF8A',
+          };
+          if (L) juice.confetti(L.A.aw / 2, L.by + L.bh / 2 - 40, colors.length ? colors : ['#3DFF8A'], 60);
         } else if (ev.e === 'round') {
           ghost = null;
           wallMode = false;
+          endBanner = null;
         }
       }
     },
@@ -199,11 +229,10 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
       lastView = v;
       const { w, h } = helpers.size();
       helpers.bg(ctx);
-      const vp = helpers.viewport(AW, AH, 10);
+      const L = layout(v);
+      const vp = helpers.viewport(L.A.aw, L.A.ah, 10);
       ctx.save();
       vp.apply(ctx);
-
-      const L = layout(v);
 
       // Plateau : cadre + cases.
       rr(ctx, L.bx - 14, L.by - 14, L.bw + 28, L.bh + 28, 16);
@@ -228,6 +257,23 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
         ctx.fillStyle = SIDE_COLORS[side];
         ctx.fillRect(L.bx, L.by + y * L.cell, L.bw, L.cell);
         ctx.globalAlpha = 1;
+      }
+      // Ma ligne d'arrivée, marquée noir sur blanc (enfin, néon sur nuit).
+      const mySide = v.pawns[you]?.s;
+      if (mySide !== undefined) {
+        const gy = mySide === 0 ? 0 : v.rows - 1;
+        const pulse = 0.5 + 0.3 * Math.sin(performance.now() / 300);
+        ctx.globalAlpha = pulse;
+        ctx.setLineDash([L.cell * 0.4, L.cell * 0.25]);
+        ctx.strokeStyle = '#3DFF8A';
+        ctx.lineWidth = 2.4;
+        ctx.strokeRect(L.bx + 2, L.by + gy * L.cell + 2, L.bw - 4, L.cell - 4);
+        ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
+        ctx.font = `800 ${Math.max(9, L.cell * 0.3)}px Rubik, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillStyle = `rgba(61,255,138,${0.5 + pulse * 0.4})`;
+        ctx.fillText('TON ARRIVÉE', L.bx + L.bw / 2, L.by + gy * L.cell + (gy === 0 ? -6 : L.cell + 13));
       }
 
       // Cases jouables (mon tour, hors mode barrière).
@@ -314,6 +360,19 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
         ctx.font = 'bold 34px Bungee, sans-serif';
         ctx.fillStyle = meta.color;
         ctx.fillText('AUX BARRIÈRES !', w / 2, h / 2 - 30);
+      }
+      if (v.phase === 'end' && endBanner) {
+        const pulse = 1 + 0.03 * Math.sin(performance.now() / 140);
+        ctx.save();
+        ctx.translate(w / 2, h / 2 - 40);
+        ctx.scale(pulse, pulse);
+        ctx.font = `bold ${Math.min(24, w / 20)}px Bungee, sans-serif`;
+        ctx.strokeStyle = 'rgba(20,10,38,.85)';
+        ctx.lineWidth = 6;
+        ctx.strokeText(endBanner.text, 0, 0);
+        ctx.fillStyle = endBanner.color;
+        ctx.fillText(endBanner.text, 0, 0);
+        ctx.restore();
       }
       if (rejectT > 0) {
         rejectT -= dt;

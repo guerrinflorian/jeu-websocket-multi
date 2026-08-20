@@ -3,7 +3,7 @@
 ## Le principe
 Des auto-tamponneuses sur une piste ronde. Percute les autres pour les **éjecter de la piste** : tombé = éliminé. Après 12 secondes, la piste **rétrécit**, ça finit toujours mal pour quelqu'un.
 
-Dernière équipe sur la piste remporte la manche. Partie en 3, 5 ou 7 manches.
+Dernière équipe sur la piste remporte la manche (tous tombés en même temps : double K.O., personne ne marque). Partie en 3, 5 ou 7 manches ; le plus de manches gagne. Une alerte sonne quand la piste commence à rétrécir : regarde le bord clignoter.
 
 ## Le dash
 Un coup de bélier dans la direction de ton joystick (recharge 3 s). Pendant le dash, tes collisions frappent **beaucoup plus fort**. Mais un dash raté t'envoie toi-même vers le vide : l'élan, ça ne pardonne pas.

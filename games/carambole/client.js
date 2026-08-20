@@ -12,6 +12,9 @@ export function createClient({ ctx, helpers, config, you, controls }) {
   const isAsym = config.format.kind === 'asym';
   const bullPid = isAsym ? config.teams[0][0] : null;
   const falls = [];   // animations de chute {x, y, color, t}
+  let goAt = 0;              // instant du dernier « go » (aide TOI)
+  let lastWinner = null;     // équipe gagnante de la dernière manche
+  let shrinkWarned = false;  // alerte « la piste rétrécit » (1 fois/manche)
 
   function interpPlayers(view) {
     const out = {};
@@ -51,9 +54,13 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           juice.floater(ev.x, ev.y, BONUS_EMOJI[ev.k] || '🎁', { size: 24 });
         } else if (ev.e === 'go') {
           sfx.play('go');
+          goAt = performance.now();
+          shrinkWarned = false;
+          juice.floater(CX, CY - 80, 'GO !', { color: '#FFC93C', size: 34 });
         } else if (ev.e === 'spawn') {
           sfx.play('pickup');
         } else if (ev.e === 'roundEnd') {
+          lastWinner = ev.team;
           sfx.play(ev.team === null ? 'klaxon' : 'ready');
           if (ev.team !== null) {
             const colors = (config.teams[ev.team] || []).map((pid) => config.players[pid]?.color || '#FFC93C');
@@ -113,6 +120,12 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       ctx.globalAlpha = shrinking ? 0.7 + 0.3 * Math.sin(performance.now() / 90) : 1;
       ctx.stroke();
       ctx.globalAlpha = 1;
+      if (shrinking && !shrinkWarned && state.phase === 'run') {
+        shrinkWarned = true;
+        sfx.play('klaxon');
+        juice.floater(CX, CY - 60, '⚠️ LA PISTE RÉTRÉCIT !', { color: '#FF4757', size: 22 });
+        juice.shake(3);
+      }
 
       // Bonus au sol.
       for (const b of view.b.bonuses || []) {
@@ -194,6 +207,16 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           ctx.textAlign = 'center';
           ctx.fillText('❤️'.repeat(Math.max(0, p.lv)), p.x, p.y - R - 16);
         }
+        // Aide au départ : « TOI » bien visible.
+        if (pid === you && (state.phase === 'pre' || (goAt && performance.now() - goAt < 1600))) {
+          ctx.font = '800 13px Rubik, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.strokeStyle = 'rgba(20,10,38,.85)';
+          ctx.lineWidth = 3;
+          ctx.fillStyle = '#F5EFE6';
+          ctx.strokeText('TOI ▼', p.x, p.y - R - 30);
+          ctx.fillText('TOI ▼', p.x, p.y - R - 30);
+        }
         helpers.nameTag(ctx, p.x, p.y - R - 6, config.players[pid]?.name || '', color);
       }
 
@@ -225,7 +248,25 @@ export function createClient({ ctx, helpers, config, you, controls }) {
       if (state.phase === 'pre') {
         ctx.font = 'bold 42px Bungee, sans-serif';
         ctx.fillStyle = '#FFC93C';
-        ctx.fillText('EN PISTE !', w / 2, h / 2 - 40);
+        ctx.fillText('EN PISTE !', w / 2, h / 2 - 52);
+        ctx.font = '600 16px Rubik, sans-serif';
+        ctx.fillStyle = '#B9A8D0';
+        ctx.fillText(`Manche ${state.round}/${state.rounds}`, w / 2, h / 2 - 22);
+      } else if (state.phase === 'end') {
+        ctx.font = 'bold 32px Bungee, sans-serif';
+        if (lastWinner === null) {
+          ctx.fillStyle = '#FF4757';
+          ctx.fillText('DOUBLE K.O. !', w / 2, h / 2 - 40);
+        } else {
+          const tm = config.teams[lastWinner] || [];
+          const color = config.teams.length > 4 ? (config.players[tm[0]]?.color || '#3DFF8A') : TEAM_COLORS[lastWinner];
+          const label = isAsym
+            ? (lastWinner === 0 ? (config.format.roles?.solo?.toUpperCase() || 'SOLO') : 'LE TROUPEAU')
+            : tm.length === 1 ? (config.players[tm[0]]?.name || '?').toUpperCase()
+              : `L'ÉQUIPE ${['●', '▲', '■', '◆'][lastWinner] || lastWinner + 1}`;
+          ctx.fillStyle = color;
+          ctx.fillText(`MANCHE À ${label} !`, w / 2, h / 2 - 40);
+        }
       }
       const meP = state.players[you];
       if (meP && !meP.al && state.phase === 'run') {

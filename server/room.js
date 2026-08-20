@@ -506,11 +506,16 @@ export class Room {
   }
 
   runBots() {
-    const { srv } = this.gameDef;
+    const { srv, meta } = this.gameDef;
+    // Pilote automatique d inactivite : reserve aux jeux temps reel. Dans un
+    // jeu au tour par tour, attendre son tour n est PAS etre absent (le jeu a
+    // deja son propre chrono de tour), sinon le bot confisque la partie.
+    const idleBot = meta.idleBot !== false;
     for (const pid of this.gamePids) {
       const m = this.members.get(pid);
       const isBot = !m || m.bot;
-      const isAway = m && !m.bot && (!m.conn || this.tickNo - m.lastInputTick > CFG.AFK_TICKS);
+      const idle = idleBot && this.tickNo - m?.lastInputTick > CFG.AFK_TICKS;
+      const isAway = m && !m.bot && (!m.conn || idle);
       if (!isBot && !isAway) continue;
       let entry = this.minds.get(pid);
       if (!entry) {
@@ -528,7 +533,7 @@ export class Room {
     // Un humain revenu d'AFK reprend la main : on jette l'esprit d'autopilote.
     for (const [pid, _] of this.minds) {
       const m = this.members.get(pid);
-      if (m && !m.bot && m.conn && this.tickNo - m.lastInputTick <= CFG.AFK_TICKS) this.minds.delete(pid);
+      if (m && !m.bot && m.conn && (!idleBot || this.tickNo - m.lastInputTick <= CFG.AFK_TICKS)) this.minds.delete(pid);
     }
   }
 

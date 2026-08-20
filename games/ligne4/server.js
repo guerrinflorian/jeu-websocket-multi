@@ -321,6 +321,8 @@ export function results(state) {
   if (videur.s.blocks >= 2) titles.push({ pid: videur.pid, emoji: '🚪', text: `Le Videur : ${videur.s.blocks} alignements bouchés` });
   const dodo = top((s) => s.timeouts);
   if (dodo.s.timeouts >= 2) titles.push({ pid: dodo.pid, emoji: '😴', text: `Endormi sur la grille : ${dodo.s.timeouts} tours au chrono` });
+  const central = top((s) => s.center);
+  if (central.s.center >= 6) titles.push({ pid: central.pid, emoji: '🎪', text: `Squatteur du centre : ${central.s.center} jetons au milieu` });
   if (!titles.length) {
     const ouvrier = top((s) => s.drops);
     titles.push({ pid: ouvrier.pid, emoji: '🧱', text: `Ouvrier du jeton : ${ouvrier.s.drops} jetons posés` });

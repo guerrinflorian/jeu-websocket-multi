@@ -9,6 +9,8 @@ export default {
   pitch: 'Un tas de jetons au centre, ta caisse au coin. Plus tu portes, plus tu es lent, et tout le monde a le droit de te tacler.',
   minPlayers: 2,
   maxPlayers: 8,
+  // Temps reel : un joueur inactif est remplace par un forain apres 20 s.
+  idleBot: true,
   arena: { w: 900, h: 560 },
   caps: {
     ffa: true,

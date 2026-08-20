@@ -10,7 +10,9 @@ export function createClient({ ctx, helpers, config, you, controls }) {
   const CX = AW / 2, CY = AH / 2;
   const isAsym = config.format.kind === 'asym';
   const dragonPid = isAsym ? config.teams[0][0] : null;
+  const myTeam = config.teams.findIndex((tm) => tm.includes(you));
   let lastCarry = 0;
+  let goAt = 0; // instant du « go » (aide TOI)
 
   const teamColor = (team) => {
     const tm = config.teams[team];
@@ -74,6 +76,8 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           sfx.play('mission');
         } else if (ev.e === 'go') {
           sfx.play('go');
+          goAt = performance.now();
+          juice.floater(AW / 2, AH / 2 - 90, 'GO !', { color: '#FFC93C', size: 34 });
         } else if (ev.e === 'end') {
           sfx.play('whistle');
         }
@@ -237,7 +241,39 @@ export function createClient({ ctx, helpers, config, you, controls }) {
           ctx.strokeText(`×${p.c}`, p.x + R + 10, p.y + 4);
           ctx.fillText(`×${p.c}`, p.x + R + 10, p.y + 4);
         }
+        // Aide au départ : « TOI » bien visible.
+        if (pid === you && (state.phase === 'pre' || (goAt && performance.now() - goAt < 1600))) {
+          ctx.font = '800 13px Rubik, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.strokeStyle = 'rgba(20,10,38,.85)';
+          ctx.lineWidth = 3;
+          ctx.fillStyle = '#F5EFE6';
+          ctx.strokeText('TOI ▼', p.x, p.y - R - 30);
+          ctx.fillText('TOI ▼', p.x, p.y - R - 30);
+        }
         helpers.nameTag(ctx, p.x, p.y - R - 6, config.players[pid]?.name || '', color);
+      }
+
+      // Porteur : chevron discret qui pointe vers MA caisse (précieux sur
+      // petit écran, quand la caisse est hors du champ de l'attention).
+      const meW = ps[you];
+      const myCaisse = (view.b.caisses || []).find((c) => c.team === myTeam);
+      if (meW && myCaisse && (view.b.players?.[you]?.c || 0) > 0) {
+        const dx = myCaisse.x - meW.x, dy = myCaisse.y - meW.y;
+        const d = Math.hypot(dx, dy);
+        if (d > 130) {
+          const ang = Math.atan2(dy, dx);
+          const bx = meW.x + Math.cos(ang) * 36, by = meW.y + Math.sin(ang) * 36;
+          ctx.globalAlpha = 0.55 + 0.3 * Math.sin(performance.now() / 220);
+          ctx.beginPath();
+          ctx.moveTo(bx + Math.cos(ang) * 11, by + Math.sin(ang) * 11);
+          ctx.lineTo(bx + Math.cos(ang + 2.4) * 8, by + Math.sin(ang + 2.4) * 8);
+          ctx.lineTo(bx + Math.cos(ang - 2.4) * 8, by + Math.sin(ang - 2.4) * 8);
+          ctx.closePath();
+          ctx.fillStyle = teamColor(myTeam);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
       }
 
       juice.drawWorld(ctx);
@@ -295,6 +331,33 @@ export function createClient({ ctx, helpers, config, you, controls }) {
         ctx.font = 'bold 40px Bungee, sans-serif';
         ctx.fillStyle = '#FFC93C';
         ctx.fillText('À L\'OR !', w / 2, h / 2 - 40);
+      } else if (state.phase === 'end') {
+        ctx.font = 'bold 30px Bungee, sans-serif';
+        ctx.fillStyle = '#FFC93C';
+        ctx.fillText('FIN DU MARCHÉ !', w / 2, h / 2 - 66);
+        const caisses2 = view.b.caisses || [];
+        let text = '', color2 = '#FFC93C';
+        if (state.asym) {
+          const crowd = caisses2.reduce((s, c) => s + c.banked, 0);
+          const half = Math.ceil((state.pileMax || 44) / 2);
+          if (crowd >= half) { text = `LES PILLARDS EMPORTENT ${crowd} 🪙 !`; color2 = '#3DFF8A'; }
+          else { text = 'LE DRAGON GARDE SON TRÉSOR !'; color2 = '#FF4757'; }
+        } else if (caisses2.length) {
+          const bestB = Math.max(...caisses2.map((c) => c.banked));
+          const bests = caisses2.filter((c) => c.banked === bestB);
+          if (bests.length !== 1) text = 'ÉGALITÉ PARFAITE !';
+          else {
+            const tm = config.teams[bests[0].team] || [];
+            const nm = tm.length === 1
+              ? (config.players[tm[0]]?.name || '?').toUpperCase()
+              : `L'ÉQUIPE ${['●', '▲', '■', '◆'][bests[0].team] || bests[0].team + 1}`;
+            text = `${nm} RAFLE ${bestB} 🪙 !`;
+            color2 = teamColor(bests[0].team);
+          }
+        }
+        ctx.font = 'bold 22px Bungee, sans-serif';
+        ctx.fillStyle = color2;
+        ctx.fillText(text, w / 2, h / 2 - 30);
       }
       if (meP) controls.setCooldown('tackle', meP.cd);
     },

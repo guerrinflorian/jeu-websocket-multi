@@ -13,6 +13,8 @@ const STR = {
   'home.yourName': 'Ton blaze',
   'home.pickFace': 'Ta tête',
   'home.namePlaceholder': 'Pseudo…',
+  'home.stands': 'Les stands',
+  'home.standsHint': 'Touche un stand pour découvrir ses règles, puis ouvre un stand pour jouer !',
 
   // Connexion
   'net.connecting': 'Connexion à la fête…',

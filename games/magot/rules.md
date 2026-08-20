@@ -7,7 +7,7 @@ Un tas de jetons trône au centre de la fête, et il est **FINI** (9 jetons par 
 - **Porter** : chaque jeton porté te **ralentit** (jusqu'à −60 %).
 - **Sécuriser** : dépose à ta caisse. Seuls les jetons **en caisse** comptent à la fin.
 
-Quand le tas est vide, il ne reste que ce que les autres portent… ou ce qu'ils ont cru mettre à l'abri. L'équipe la plus riche au coup de sifflet gagne. Durée : 2 à 3 minutes.
+Quand le tas est vide, il ne reste que ce que les autres portent… ou ce qu'ils ont cru mettre à l'abri. L'équipe la plus riche au coup de sifflet gagne (égalité parfaite : tout le monde a perdu, ou gagné, au choix). Les jetons encore portés au sifflet final ne comptent PAS. Durée : 2 à 3 minutes. Quand tu portes, un petit chevron te montre la direction de ta caisse.
 
 ## Le tacle
 Fonce dans un porteur ennemi : il **lâche tout** en éventail serré et reste sonné. Les jetons au sol sont à qui les ramasse, y compris à lui, s'il se réveille vite. Recharge 2,2 s. (Pas de tacle entre coéquipiers. Dommage, hein ?)

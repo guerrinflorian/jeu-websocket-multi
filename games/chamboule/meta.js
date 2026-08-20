@@ -9,6 +9,9 @@ export default {
   pitch: 'Billard humain au-dessus du vide : chacun choisit en secret sa direction et sa puissance (10 s max), puis tout le monde part EN MÊME TEMPS. Ça carambole, ça propulse, ça tombe.',
   minPlayers: 2,
   maxPlayers: 8,
+  // Tour par tour ou par phases : le jeu a ses propres chronos, aucun
+  // pilote automatique d inactivite (sinon il confisquerait les tours).
+  idleBot: false,
   arena: { w: 640, h: 640 },
   caps: {
     ffa: true,

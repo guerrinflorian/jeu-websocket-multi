@@ -1,8 +1,11 @@
 // YAMS : simulation serveur. Tours simultanés : chacun lance ses 5 dés
 // (3 relances, 4 pour le Flambeur), garde, relance, puis case son score.
-// Le tour avance quand tout le monde a casé (ou au chrono).
+// Le tour avance quand tout le monde a casé (ou au chrono). Feuille
+// complète (13 lignes, bonus de section haute) ou express (7 lignes).
 
-import { SHEET_EXPRESS, SHEET_FULL, scoreCat, sheetTotal } from '../../shared/dice.js';
+import {
+  CATS, SHEET_EXPRESS, SHEET_FULL, scoreCat, sheetTotal, upperTotal, UPPER_TARGET,
+} from '../../shared/dice.js';
 import meta from './meta.js';
 
 const PRE_T = 1.4;
@@ -13,7 +16,7 @@ const END_T = 2.2;
 export function createState(cfg) {
   const asym = cfg.format.kind === 'asym';
   const solo = asym ? cfg.teams[0][0] : null;
-  const cats = (cfg.settings.sheet || 'express') === 'complet' ? SHEET_FULL : SHEET_EXPRESS;
+  const cats = (cfg.settings.sheet || 'complet') === 'complet' ? SHEET_FULL : SHEET_EXPRESS;
   const state = {
     cfg,
     rng: cfg.rng,
@@ -21,6 +24,7 @@ export function createState(cfg) {
     pids: cfg.teams.flat(),
     teamOf: {},
     cats,
+    hasUpper: cats.includes('un'),
     round: 1,
     phase: 'pre',
     phaseT: PRE_T,
@@ -40,7 +44,7 @@ export function createState(cfg) {
         rollsMax: pid === solo ? 4 : 3,
         done: false,
         sheet: {},
-        stats: { yams: 0, rerolls: 0, zeros: 0, timeouts: 0 },
+        stats: { yams: 0, rerolls: 0, zeros: 0, timeouts: 0, gsuites: 0, bonus: 0 },
       };
     }
   });
@@ -78,6 +82,7 @@ function pickCat(state, pid, cat, auto = false) {
   const p = state.players[pid];
   if (state.phase !== 'play' || p.done || state.done) return false;
   if (!state.cats.includes(cat) || p.sheet[cat] !== undefined) return false;
+  const beforeUpper = upperTotal(p.sheet);
   const sc = scoreCat(cat, p.dice);
   p.sheet[cat] = sc;
   p.done = true;
@@ -88,12 +93,25 @@ function pickCat(state, pid, cat, auto = false) {
     p.stats.yams++;
     state.evq.push({ e: 'yams', pid });
   }
+  if (cat === 'gsuite' && sc >= 40) p.stats.gsuites++;
+  // Bonus de section haute qui vient d'être décroché : on le fête.
+  if (state.hasUpper && beforeUpper < UPPER_TARGET && upperTotal(p.sheet) >= UPPER_TARGET) {
+    p.stats.bonus = 1;
+    state.evq.push({ e: 'bonus', pid });
+  }
   if (state.pids.every((id) => state.players[id].done)) {
     state.phase = 'show';
     state.phaseT = SHOW_T;
   }
   return true;
 }
+
+// Pénalité quand on sacrifie (met 0 dans) une catégorie : plus la ligne
+// est précieuse, plus on évite.
+const SACRIFICE = {
+  yams: 18, carre: 12, gsuite: 10, psuite: 8, full: 7, chance: 6, brelan: 5,
+  six: 5, cinq: 4, quatre: 3, trois: 2, deux: 1, un: 0.5,
+};
 
 // Meilleure case libre pour les dés actuels (chrono et bots).
 function bestCat(state, pid) {
@@ -102,8 +120,19 @@ function bestCat(state, pid) {
   let best = free[0], bestVal = -Infinity;
   for (const cat of free) {
     const sc = scoreCat(cat, p.dice);
-    // Sacrifier une petite ligne plutôt que le yams ou le carré.
-    const value = sc - (sc === 0 ? (cat === 'yams' ? 18 : cat === 'carre' ? 10 : cat === 'suite' ? 8 : 0) : 0);
+    let value = sc;
+    if (sc === 0) {
+      value -= SACRIFICE[cat] || 0;
+    } else if (CATS[cat].upper) {
+      // Encourager le bonus : 3 dés et plus de la valeur, c'est le rythme
+      // (63 = trois de chaque). Le boost croît avec la valeur : trois 6
+      // dans « Les 6 » vaut mieux qu'un brelan moyen.
+      const v = CATS[cat].upper;
+      if (sc >= v * 3) value += 6 + v;
+      else value -= 2;
+    } else if (cat === 'chance' && sc < 20) {
+      value -= 4; // garder la chance pour un gros tirage
+    }
     if (value > bestVal) { bestVal = value; best = cat; }
   }
   return best;
@@ -191,6 +220,8 @@ export function view(state) {
       done: p.done ? 1 : 0,
       sheet: p.sheet,
       total: sheetTotal(p.sheet, state.cats),
+      upper: state.hasUpper ? upperTotal(p.sheet) : 0,
+      bonus: state.hasUpper && upperTotal(p.sheet) >= UPPER_TARGET ? 1 : 0,
     };
   }
   state._view = {
@@ -199,6 +230,7 @@ export function view(state) {
     round: state.round,
     roundN: state.cats.length,
     cats: state.cats,
+    hasUpper: state.hasUpper ? 1 : 0,
     players,
   };
   state._viewTick = state.tick;
@@ -225,19 +257,37 @@ export function results(state) {
   const top = (fn) => all.slice().sort((a, b) => fn(b.s) - fn(a.s))[0];
   const star = top((s) => s.yams);
   if (star.s.yams >= 1) titles.push({ pid: star.pid, emoji: '⭐', text: `YAMS ! ${star.s.yams} fois cinq dés identiques` });
+  const bonus = all.filter((x) => x.s.bonus);
+  if (bonus.length) {
+    const bestBonus = bonus.sort((a, b) => totalOf(b.pid) - totalOf(a.pid))[0];
+    titles.push({ pid: bestBonus.pid, emoji: '🎯', text: 'Chasseur de bonus : section haute à 63 et plus (+35)' });
+  }
+  const grande = top((s) => s.gsuites);
+  if (grande.s.gsuites >= 1 && titles.length < 4) titles.push({ pid: grande.pid, emoji: '📶', text: 'Grande suite : cinq dés à la queue leu leu' });
   const poisse = top((s) => s.zeros);
   if (poisse.s.zeros >= 2) titles.push({ pid: poisse.pid, emoji: '🕳️', text: `La Poisse : ${poisse.s.zeros} lignes à zéro` });
   const nerveux = top((s) => s.rerolls);
-  if (nerveux.s.rerolls >= 8) titles.push({ pid: nerveux.pid, emoji: '♻️', text: `Poignet nerveux : ${nerveux.s.rerolls} relances` });
+  if (nerveux.s.rerolls >= 10 && titles.length < 4) titles.push({ pid: nerveux.pid, emoji: '♻️', text: `Poignet nerveux : ${nerveux.s.rerolls} relances` });
   const dodo = top((s) => s.timeouts);
-  if (dodo.s.timeouts >= 2) titles.push({ pid: dodo.pid, emoji: '😴', text: `Endormi sur les dés : ${dodo.s.timeouts} cases au chrono` });
+  if (dodo.s.timeouts >= 2 && titles.length < 4) titles.push({ pid: dodo.pid, emoji: '😴', text: `Endormi sur les dés : ${dodo.s.timeouts} cases au chrono` });
   if (!titles.length) {
     titles.push({ pid: ranking[0].pid, emoji: '🎲', text: 'Main la plus chaude de la tablée' });
   }
-  return { ranking, winners, titles };
+  return { ranking, winners, titles: titles.slice(0, 4) };
 }
 
-// ── Bot : garde la meilleure combinaison, case intelligemment ──────────
+// ── Bot : vise le bonus, chasse les suites, sacrifie au moins pire ──────
+
+// Meilleure fenêtre de suite ([1..5] ou [2..6]) : valeurs présentes.
+function suiteWindow(counts) {
+  let best = null, bestN = 0;
+  for (const lo of [1, 2]) {
+    const vals = [];
+    for (let v = lo; v < lo + 5; v++) if (counts[v] > 0) vals.push(v);
+    if (vals.length > bestN) { bestN = vals.length; best = vals; }
+  }
+  return best || [];
+}
 
 export function botAct(state, pid, mind, api) {
   const p = state.players[pid];
@@ -247,7 +297,7 @@ export function botAct(state, pid, mind, api) {
   const key = `${state.round}-${p.rolls}`;
   if (mem.k !== key) {
     mem.k = key;
-    mem.delay = 1 + rng.next() * 3 * pers.pace;
+    mem.delay = 1 + rng.next() * 2.5 * pers.pace;
     mem.at = state.simT;
   }
   if (state.simT - mem.at < mem.delay) return;
@@ -258,27 +308,54 @@ export function botAct(state, pid, mind, api) {
   const free = freeCats(state, pid);
   const bestNow = bestCat(state, pid);
   const bestScore = scoreCat(bestNow, p.dice);
+  const wantGsuite = free.includes('gsuite');
+  const wantPsuite = free.includes('psuite');
+  const run = suiteWindow(counts);
 
-  // Assez bon, ou plus de relances : on case.
-  const satisfied = bestScore >= 25 && rng.chance(0.5 + pers.skill * 0.3);
-  if (p.rolls >= p.rollsMax || satisfied || rng.chance(pers.chaos * 0.1)) {
+  // Content de son sort, ou plus de relances : on case.
+  const threshold = 22 + pers.skill * 8;
+  const satisfied = bestScore >= threshold && rng.chance(0.55 + pers.skill * 0.3);
+  if (p.rolls >= p.rollsMax || satisfied || rng.chance(pers.chaos * 0.08)) {
     api.act('pick', { cat: bestNow });
     return;
   }
 
-  // Choisir quoi garder : la valeur la plus fréquente, ou une suite.
-  let keepVal = 1, bestCount = 0;
-  for (let v = 1; v <= 6; v++) {
-    if (counts[v] >= bestCount) { bestCount = counts[v]; keepVal = v; }
-  }
-  const wantSuite = free.includes('suite') && bestCount <= 2 && rng.chance(0.5);
-  for (let i = 0; i < 5; i++) {
-    let keep;
-    if (wantSuite) {
-      keep = p.dice.indexOf(p.dice[i]) === i; // garder une occurrence de chaque valeur
-    } else {
-      keep = p.dice[i] === keepVal;
+  // Stratégie de garde.
+  let keepIdx = new Set();
+  const maxCount = Math.max(...counts);
+  const wantFull = free.includes('full');
+  const pairs = [];
+  for (let v = 6; v >= 1; v--) if (counts[v] >= 2) pairs.push(v);
+
+  if ((wantGsuite || wantPsuite) && maxCount <= 2 && run.length >= 3 && rng.chance(0.65 + pers.skill * 0.2)) {
+    // Chasser la suite : garder une occurrence de chaque valeur de la fenêtre.
+    const seen = new Set();
+    p.dice.forEach((d, i) => {
+      if (run.includes(d) && !seen.has(d)) { seen.add(d); keepIdx.add(i); }
+    });
+  } else if (wantFull && pairs.length >= 2 && maxCount < 4) {
+    // Deux paires (ou brelan + paire) : garder les deux groupes pour le full.
+    const [a, b] = pairs;
+    let kept = { [a]: 0, [b]: 0 };
+    p.dice.forEach((d, i) => {
+      if ((d === a && kept[a] < 3) || (d === b && kept[b] < 2)) { kept[d]++; keepIdx.add(i); }
+    });
+  } else {
+    // Garder la valeur la plus prometteuse : fréquence, puis hauteur, avec
+    // un faible pour les valeurs dont la ligne haute est encore libre.
+    let keepVal = 1, bestW = -1;
+    const upperName = ['', 'un', 'deux', 'trois', 'quatre', 'cinq', 'six'];
+    for (let v = 1; v <= 6; v++) {
+      if (!counts[v]) continue;
+      let wgt = counts[v] * 6 + v;
+      if (state.hasUpper && free.includes(upperName[v]) && counts[v] >= 2) wgt += 3 + v * 0.5;
+      if (wgt > bestW) { bestW = wgt; keepVal = v; }
     }
+    p.dice.forEach((d, i) => { if (d === keepVal) keepIdx.add(i); });
+  }
+
+  for (let i = 0; i < 5; i++) {
+    const keep = keepIdx.has(i);
     if (p.locked[i] !== keep) api.act('lock', { i, on: keep });
   }
   api.act('roll');

@@ -5,6 +5,10 @@ import meta from './meta.js';
 
 const TEAM_COLORS = ['#FF3D8A', '#29D9FF', '#FFC93C', '#3DFF8A'];
 const DRAG_MAX = 140; // px de drag = puissance 100 %
+// Miroir des constantes physiques serveur (pour le point d'arrivée estimé).
+const MAX_V = 520;
+const FRICTION_C = 1.35;
+const QUILL_POW = 1.35;
 
 export function createClient({ ctx, helpers, config, you, send }) {
   const { t, juice, sfx, lerp, TAU } = helpers;
@@ -18,6 +22,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
   let lastVolleyKey = '';
   let lastPhase = '';
   let lastCeil = -1;
+  let lastWinner = null;     // équipe gagnante de la dernière manche
 
   function interpPlayers(view) {
     const out = {};
@@ -74,6 +79,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           sfx.play('steal');
           juice.shake(4);
         } else if (ev.e === 'roundEnd') {
+          lastWinner = ev.team;
           sfx.play(ev.team === null ? 'klaxon' : 'ready');
           if (ev.team !== null) {
             const colors = (config.teams[ev.team] || []).map((pid) => config.players[pid]?.color || '#3DFF8A');
@@ -175,6 +181,16 @@ export function createClient({ ctx, helpers, config, you, send }) {
           ctx.fillStyle = '#3DFF8A';
           ctx.fillText('✔', p.x + R + 8, p.y - R - 2);
         }
+        // Aide au départ : « TOI » sur la première salve.
+        if (pid === you && (state.phase === 'pre' || (state.phase === 'aim' && state.volley === 1 && state.pt > 7.5))) {
+          ctx.font = '800 13px Rubik, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.strokeStyle = 'rgba(20,10,38,.85)';
+          ctx.lineWidth = 3;
+          ctx.fillStyle = '#F5EFE6';
+          ctx.strokeText('TOI ▼', p.x, p.y - R - 28);
+          ctx.fillText('TOI ▼', p.x, p.y - R - 28);
+        }
         helpers.nameTag(ctx, p.x, p.y - R - 6, config.players[pid]?.name || '', color);
       }
 
@@ -217,6 +233,23 @@ export function createClient({ ctx, helpers, config, you, send }) {
           ctx.textAlign = 'center';
           ctx.fillStyle = col;
           ctx.fillText(`${Math.round(pow * 100)} %`, ex + ax * 22, ey + ay * 22 + 5);
+          // Point d'arrivée estimé (hors collisions) : fantôme en pointillés.
+          const dist = (pow * MAX_V * (you === quillPid ? QUILL_POW : 1)) / FRICTION_C;
+          const gx = meP.x + ax * dist, gy = meP.y + ay * dist;
+          const offPlat = Math.hypot(gx - CX, gy - CY) > state.platR;
+          ctx.globalAlpha = live ? 0.55 : 0.35;
+          ctx.setLineDash([5, 5]);
+          ctx.beginPath();
+          ctx.arc(gx, gy, 15, 0, TAU);
+          ctx.strokeStyle = offPlat ? '#FF4757' : col;
+          ctx.lineWidth = 2.2;
+          ctx.stroke();
+          ctx.setLineDash([]);
+          if (offPlat) {
+            ctx.font = '800 12px Rubik, sans-serif';
+            ctx.fillStyle = '#FF4757';
+            ctx.fillText('LE VIDE !', gx, gy - 20);
+          }
           ctx.globalAlpha = 1;
         }
       }
@@ -276,7 +309,25 @@ export function createClient({ ctx, helpers, config, you, send }) {
       if (state.phase === 'pre') {
         ctx.font = 'bold 38px Bungee, sans-serif';
         ctx.fillStyle = '#3DFF8A';
-        ctx.fillText('CHAMBOULE-TOUT !', w / 2, h / 2 - 40);
+        ctx.fillText('CHAMBOULE-TOUT !', w / 2, h / 2 - 52);
+        ctx.font = '600 16px Rubik, sans-serif';
+        ctx.fillStyle = '#B9A8D0';
+        ctx.fillText(`Manche ${state.round}/${state.rounds}`, w / 2, h / 2 - 22);
+      } else if (state.phase === 'end') {
+        ctx.font = 'bold 30px Bungee, sans-serif';
+        if (lastWinner === null) {
+          ctx.fillStyle = '#FF4757';
+          ctx.fillText('TOUT LE MONDE AU TAPIS !', w / 2, h / 2 - 40);
+        } else {
+          const tm = config.teams[lastWinner] || [];
+          const color = config.teams.length > 4 ? (config.players[tm[0]]?.color || '#3DFF8A') : TEAM_COLORS[lastWinner];
+          const label = isAsym
+            ? (lastWinner === 0 ? (config.format.roles?.solo?.toUpperCase() || 'SOLO') : 'LES QUILLES')
+            : tm.length === 1 ? (config.players[tm[0]]?.name || '?').toUpperCase()
+              : `L'ÉQUIPE ${['●', '▲', '■', '◆'][lastWinner] || lastWinner + 1}`;
+          ctx.fillStyle = color;
+          ctx.fillText(`MANCHE À ${label} !`, w / 2, h / 2 - 40);
+        }
       }
       const me = state.players[you];
       if (me && !me.al && state.phase !== 'end') {

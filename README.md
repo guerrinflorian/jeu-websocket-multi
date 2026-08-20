@@ -2,10 +2,11 @@
 
 **La fête foraine multijoueur dans ton navigateur.** 1 à 8 joueurs, en équipes
 libres (FFA, 1v1, 2v2, 4v4, 3v5, 1 contre tous…), des bots forains pour combler
-les places, jouable au doigt sur téléphone. Un seul process Node, zéro base de
-données, zéro asset sous licence (cartes, dés et canards dessinés au Canvas).
+les places, jouable au doigt sur téléphone comme au clavier. Un seul process
+Node, zéro base de données, zéro asset sous licence (cartes, dés et boules
+dessinés au Canvas).
 
-**Les stands (10) :**
+**Les stands (11) :**
 
 | Jeu | Genre | Le twist |
 |---|---|---|
@@ -14,11 +15,12 @@ données, zéro asset sous licence (cartes, dés et canards dessinés au Canvas)
 | 💰 **MAGOT** | Butin & tacles (original) | Plus tu portes, plus tu es lent. Tacle = tout tombe. Asym : « Le Dragon » |
 | 🥫 **CHAMBOULE** | Billard humain (original) | Visée SECRÈTE simultanée (10 s), envol général, plateforme qui rétrécit. Asym : « Le Quilleur » |
 | 🔴 **LIGNE 4** | Puissance 4 | La grille grandit avec les camps ; en équipe on joue la même couleur en alternance. Asym : « Le Cerveau » |
-| 🃏 **BLACKJACK** | 21 contre la banque | Décisions SIMULTANÉES (zéro attente), blackjack 3:2, prêt du forain. Asym : « Le Croupier » (tu es la banque) |
-| 👪 **7 FAMILLES** | Jeu des 7 familles | Familles-stands de la Kermesse, demandes publiques : la mémoire fait tout. Asym : « Le Collectionneur » |
-| 🎲 **YAMS** | Yams / dés | Tout le monde lance EN MÊME TEMPS, les dés des autres tremblent en direct. Asym : « Le Flambeur » (4 lancers) |
+| 🃏 **BLACKJACK** | Le vrai 21 | Mise LIBRE, SPLIT (4 mains), double, abandon, assurance, sabot 6 jeux, décisions SIMULTANÉES. Asym : « Le Croupier » (tu es la banque) |
+| 🎲 **YAMS** | Le vrai Yam's | Feuille complète 13 lignes, bonus 63/+35, et tout le monde lance EN MÊME TEMPS. Asym : « Le Flambeur » (4 lancers) |
 | 🚧 **BARRIÈRES** | Course & murs (original) | Camp bas vs camp haut, 15 barrières chacun, passage TOUJOURS garanti (BFS). Asym : « Le Contremaître » (2 actions) |
-| 🦆 **CANARDS** | Pêche aux canards (original) | Valeur des canards CACHÉE, bluff de démarche, splash qui fait tout lâcher. Asym : « Le Héron » |
+| 🐴 **PETITS CHEVAUX** | Ludo / petits chevaux | Piste circulaire qui s'adapte à 2-8 camps, un 6 pour sortir, captures cruelles. Asym : « Le Jockey » (relance son dé) |
+| 🥌 **PÉTANQUE** | Pointer & tirer | Physique de boules, carreaux, mesure au cochonnet, vraie règle du point. Asym : « Le Tireur » (bras de mule) |
+| 🚢 **BATAILLE NAVALE** | Touché-coulé | Salves SIMULTANÉES : tout le monde arme son tir, tout explose en même temps. Asym : « L'Amiral » (armada géante) |
 
 ## Lancer en local
 
@@ -70,6 +72,7 @@ games/mon-jeu/
   server.js    → la simulation, autoritaire, 20 ticks/s
   client.js    → le rendu Canvas + contrôles
   rules.md     → les règles affichées en jeu (bouton « ? »)
+  preview.js   → (optionnel) vignette du stand dessinée au Canvas (menus)
 ```
 
 ### 1. `meta.js`

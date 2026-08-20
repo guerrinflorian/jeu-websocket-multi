@@ -49,11 +49,58 @@
 - [x] `shared/cards.js` + `shared/dice.js` (données isomorphes)
 - [x] LIGNE 4 (puissance 4 à 2-8 camps, grille adaptative, menaces)
 - [x] BLACKJACK (mains simultanées, banque jouable en asym)
-- [x] 7 FAMILLES (mains secrètes, demandes publiques, anti-enlisement)
+- [x] ~~7 FAMILLES~~ : retiré en Phase 7 à la demande
 - [x] YAMS (tours simultanés, feuille express/complète, aperçu des points)
 - [x] BARRIÈRES (Quoridor par camps, passage garanti BFS, 15 murs/joueur,
       1v1 2v2 3v3 5v3 1v2… ; Contremaître à 2 actions)
-- [x] CANARDS (pêche temps réel, valeurs cachées, splash, Héron)
+- [x] ~~CANARDS~~ : remplacé par la PÉTANQUE en Phase 7
 - [x] Simulation headless 8 bots (FFA/asym/équipes) sur les 6 jeux
 - [x] Smoke test Playwright par jeu : zéro erreur console + captures
 - [x] Docs à jour (README, GAMES.md, ARCHITECTURE inchangée : même contrat)
+
+## Phase 7 : Complétude, beauté, 3 nouveaux stands (août 2026)
+- [x] `client/cardkit.js` v2 : cartes réalistes (enseignes vectorielles,
+      index fins, pips inversés, figures à double tête, as de pique orné)
+- [x] Système d'aperçus : `games/<id>/preview.js` (vignette Canvas), galerie
+      « Les stands » sur l'accueil (vignette + nom + règles au tap),
+      vignettes dans le sélecteur de jeu du lobby
+- [x] YAMS refondu : vraie feuille 13 lignes (section haute + bonus 63/+35,
+      petite/grande suite), layouts portrait/paysage, confirmation de zéro,
+      bot stratège (bonus, full, suites)
+- [x] BLACKJACK refondu : mise en jetons (5/10/25/50), SPLIT, double après
+      split, assurance contre l'as, table redessinée portrait/paysage,
+      bot stratégie de base
+- [x] Retrait de CANARDS (remplacé) et de 7 FAMILLES (à la demande)
+- [x] PÉTANQUE (nouveau stand : physique de boules, vraie règle du point,
+      carreau, mènes ; asym « Le Tireur »)
+- [x] PETITS CHEVAUX (nouveau stand : piste circulaire 2-8 camps, 6 pour
+      sortir, captures, échelles ; asym « Le Jockey » qui relance)
+- [x] BATAILLE NAVALE (nouveau stand : salves simultanées, grilles secrètes
+      par vue, flottes d'équipe ; asym « L'Amiral » multi-tirs)
+- [x] Polish des 7 stands existants (lisibilité, juice, HUD, mobile,
+      règles complètes, vignettes)
+- [x] Simulation headless : 11 jeux × 3 formats (FFA, équipes, asym) verts
+- [x] Harnais `npm test` complet vert
+- [x] Smoke test Playwright (zéro erreur console) + captures par jeu
+
+## Phase 8 : Blackjack de casino et correctifs (août 2026)
+- [x] BLACKJACK refondu de fond en comble : mise LIBRE (jetons 1/5/25/100/500,
+      réglette, MIN/×2/RELANCE/TAPIS), SPLIT jusqu'à 4 mains (as splittés à une
+      carte, pas de resplit), DOUBLE y compris après split, ABANDON tardif,
+      ASSURANCE et argent comptant, peek du croupier, sabot 1/2/6 jeux avec
+      carte de coupe, banque à 17 ou 17 souple, blackjack 3:2 ou 6:5
+- [x] 7 réglages de table (mains 3 à 30 pour les soirées, tapis, sabot, banque,
+      paiement, abandon, rythme)
+- [x] Client refait : table de casino (feutre, rail, mention dorée en arc),
+      cartes en volume avec tranche et retournement de la carte cachée,
+      jetons cylindriques empilés, barres contextuelles, portrait et paysage,
+      raccourcis clavier
+- [x] Bot à vraie stratégie de base (splits, doubles, abandons, assurance rare)
+- [x] 130 vérifications dédiées (règles, paiements, secret des vues, invariants
+      de tapis, tous les réglages, fuzz)
+- [x] Correctif : le pilote automatique d'inactivité confisquait les tours dans
+      les jeux au tour par tour (un joueur qui attendait son tour était pris
+      pour un absent). Réservé désormais aux jeux temps réel via meta.idleBot ;
+      un joueur déconnecté reste remplacé par un forain partout
+- [x] Correctif : la pétanque dépassait le budget de temps du harnais
+      (convergence deux fois plus rapide, sous-pas de physique, garde-fous durs)

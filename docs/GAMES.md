@@ -1,7 +1,7 @@
 # Les jeux : LA KERMESSE
 
-Dix stands de fête foraine : quatre jeux d'arcade (dont deux originaux), quatre classiques de société revisités (Ligne 4, Blackjack, 7 Familles, Yams) et deux originaux au tour par tour / temps réel (Barrières, Canards).
-Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, manches courtes, règles en jeu, titres rigolos en fin de partie.
+Onze stands de fête foraine : quatre jeux d'arcade (dont deux originaux), six classiques de société revisités (Ligne 4, Blackjack, Yams, Petits Chevaux, Pétanque, Bataille Navale) et un original au tour par tour (Barrières).
+Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, manches courtes, règles en jeu (`rules.md` + mini-tuto), vignette d'aperçu (`preview.js`) dans les menus, titres rigolos en fin de partie.
 
 ---
 
@@ -10,45 +10,34 @@ Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, ma
 **Pitch** : trace ton serpentin lumineux, coupe la route des autres, mais les traînées de TES coéquipiers sont des portes pour toi et des murs pour eux.
 
 - **Boucle** : mouvement continu qui s'incurve (2 contrôles : gauche/droite). La traînée reste toute la manche, avec des trous périodiques. Toucher un mur ou une traînée ennemie = mort. Dernière équipe en vie gagne la manche ; première à N manches gagne.
-- **Le twist** : les traînées **alliées sont traversables**. À 4v4 ça change tout : on tisse des filets pour son équipe, on enferme les ennemis dans SA toile, on hurle « passe par moi ! ». + **Boost** (bouton) : accélération brève, cooldown, pour percer un encerclement ou couper une trajectoire.
-- **Asymétrique : « L'Anguille »** : 1 (ou 2) contre tous. L'Anguille est plus rapide et sa traînée est plus courte ; elle gagne la manche en survivant 45 s, les chasseurs en l'éliminant. Le cerf-volant humain contre la meute.
-- **Formats** : FFA (2-8), équipes 2-4 (équilibrées ou non : 2v2, 4v4, 2v3, 3v5…), asym 1vN / 2vN.
-- **Pourquoi c'est drôle** : les trahisons de trajectoire, le « pardon pardon PARDON », les encerclements à deux, l'Anguille qui survit 44 secondes.
-- **Contrôles** : moitié gauche / moitié droite de l'écran (mobile), ←/→ (clavier). Boost = bouton / espace.
+- **Le twist** : les traînées **alliées sont traversables**. À 4v4 on tisse des filets pour son équipe, on enferme les ennemis dans SA toile. + **Boost** (bouton) : accélération brève, cooldown.
+- **Asymétrique : « L'Anguille »** : 1 (ou 2) contre tous. Plus rapide, traînée plus courte ; elle gagne la manche en survivant 45 s, les chasseurs en l'éliminant.
+- **Contrôles** : moitié gauche / moitié droite de l'écran (mobile), flèches (clavier). Boost = bouton / espace.
 
 ## 🎪 CARAMBOLE : classique revisité (sumo × auto-tamponneuses)
 
 **Pitch** : des auto-tamponneuses sur une piste ronde qui rétrécit. Éjecte tout le monde, reste dessus.
 
-- **Boucle** : physique de palets (masse, rebond, friction). Joystick pour pousser, **Dash** (gros coup de bélier, cooldown 3 s). La piste rétrécit par paliers. Tombé = éliminé (et spectateur-emoteur). Dernière équipe sur la piste gagne la manche.
-- **Le twist** : des **bonus forains** tombent du ciel : 🧲 Aimant (attire les ennemis proches : piège !), 🐘 Enclume (masse ×2, 6 s), 🧼 Savon (ta zone devient glissante derrière toi). Les collisions transfèrent l'élan : un dash raté te propulse toi.
-- **Asymétrique : « Le Taureau »** : 1 contre tous. Le Taureau : masse ×2,2 ; dash plus fort ; 3 vies. Le troupeau doit coopérer pour le faire basculer : chaque mort du Taureau fait rétrécir la piste.
-- **Formats** : FFA, équipes 2-4 (2v2 … 4v4, 3v5…), asym 1vN.
-- **Pourquoi c'est drôle** : le dash raté qui t'éjecte tout seul, les sandwichs à deux, l'aimant qui aspire un pote au bord.
-- **Contrôles** : joystick + bouton Dash. WASD/flèches + espace au clavier.
+- **Boucle** : physique de palets (masse, rebond, friction). Joystick pour pousser, **Dash** (cooldown 3 s). La piste rétrécit par paliers. Tombé = éliminé (et spectateur-emoteur). Dernière équipe sur la piste gagne la manche.
+- **Le twist** : des **bonus forains** tombent du ciel : aimant (piège), enclume (masse ×2), gant doré. Les collisions transfèrent l'élan : un dash raté te propulse toi.
+- **Asymétrique : « Le Taureau »** : masse ×2,2, dash renforcé, 3 vies ; chaque mort du Taureau fait rétrécir la piste.
+- **Contrôles** : joystick + bouton Dash. Flèches/WASD + espace au clavier.
 
 ## 💰 MAGOT : original (avarice & tacles)
 
 **Pitch** : un tas de jetons au centre, ta caisse au coin. Plus tu portes, plus tu es lent, et tout le monde a le droit de te tacler.
 
-- **Boucle (150 s)** : le tas central est **FINI** (9 jetons/joueur) : premier arrivé, premier servi. Rapporte à ta caisse pour sécuriser ; **chaque jeton porté te ralentit** (jusqu'à −60 %). **Tacle** : un porteur percuté lâche TOUT en éventail serré (mêlée générale au sol). **Siphon** des caisses ennemies (1 jeton/0,8 s, l'équipe volée est alertée). Des **pluies d'or** tombent dans des zones annoncées 2,5 s à l'avance → ruée. Les **20 dernières secondes** sont l'**heure dorée** : dépôts ×2, les retournements sont permanents. Le plus riche à la fin gagne.
-- **Le dilemme qui fait le jeu** : rentrer avec 4 jetons en sécurité, ou pousser à 12 en tortue géante ? Chaque trajet est un pari, chaque tacle une tragédie publique.
-- **Asymétrique : « Le Dragon »** : 1 contre tous. Le trésor central appartient au Dragon (40 jetons). Les pillards doivent le vider vers leurs caisses ; le Dragon (plus rapide, tacle renforcé, voit les porteurs surlignés) récupère ce qu'il fait lâcher. Dragon vainqueur s'il garde ≥ la moitié.
-- **Formats** : FFA (caisse chacun), équipes 2-4 (caisse commune, 2v2 … 3v5), asym 1vN.
-- **Pourquoi c'est drôle** : le pote qui tombe à 2 m de la caisse avec 15 jetons, le vol de caisse en douce, l'alliance tacite contre le premier, puis la trahison.
+- **Boucle (150 s)** : tas central FINI (premier arrivé, premier servi), dépôt en caisse pour sécuriser, **chaque jeton porté ralentit** (jusqu'à -60 %). **Tacle** : le porteur percuté lâche tout. **Siphon** des caisses ennemies, **pluies d'or** annoncées, **heure dorée** (20 dernières secondes : dépôts ×2).
+- **Asymétrique : « Le Dragon »** : le trésor central lui appartient ; il gagne s'il en garde au moins la moitié.
 - **Contrôles** : joystick + bouton Tacle.
 
----
-
-## 🥫 CHAMBOULE : original n°2 (visée secrète & carambolages)
+## 🥫 CHAMBOULE : original (visée secrète & carambolages)
 
 **Pitch** : billard humain au-dessus du vide. Chacun vise en secret, tout le monde part en même temps.
 
-- **Boucle (par salve)** : tous les joueurs sont posés sur une plateforme ronde, positions visibles de tous. **10 secondes** pour choisir en secret direction + puissance (glisser = fronde). Les autres voient seulement ta coche « prêt », jamais ta visée. Puis **envol simultané** : physique de palets, les chocs transfèrent l'énergie, tombé = éliminé. La plateforme **rétrécit à chaque salve**.
-- **Ce qui fait rire** : la lecture dans les pensées (« il va viser là… »), le double bluff, le bourrin qui se jette tout seul dans le vide à pleine puissance, le sandwich coordonné, la statue qui ne bouge jamais et gagne.
-- **Asymétrique : « Le Quilleur »** : 1 contre tous. Masse ×2,5, lancer surpuissant, 2 vies (retour au centre). Strike ou ridicule.
-- **Formats** : FFA, équipes 2-4 (équilibrées ou non), asym 1vN.
-- **Contrôles** : glisser depuis n'importe où (direction + longueur = puissance), re-visée autorisée tant que le chrono tourne. Clavier : flèches (puissance fixe).
+- **Boucle (par salve)** : 10 s pour choisir en secret direction + puissance (glisser = fronde), puis **envol simultané** : physique de palets, tombé = éliminé, la plateforme rétrécit à chaque salve.
+- **Asymétrique : « Le Quilleur »** : masse ×2,5, lancer surpuissant, 2 vies.
+- **Contrôles** : glisser (direction + longueur = puissance), re-visée autorisée tant que le chrono tourne. Clavier : flèches.
 
 ---
 
@@ -56,64 +45,79 @@ Tous : 1-8 joueurs (bots en complément), ≥ 3 formats dont un asymétrique, ma
 
 **Pitch** : la grille lumineuse du stand forain. Chacun son tour, lâche un jeton ; 4 alignés = manche gagnée.
 
-- **Boucle** : tour par tour strict entre camps, 10 s par tour (sinon la grille joue un coup propre à ta place). La grille **grandit avec le nombre de camps** : 7×6 en duel, jusqu'à 15×10 à 8 couleurs. Grille pleine : la manche va au camp qui a le plus d'alignements de 3 (« menaces »).
-- **Le twist** : en équipe, les coéquipiers jouent la **même couleur en alternance**. Le puissance 4 devient un jeu de communication (et d'engueulades).
-- **Asymétrique : « Le Cerveau »** : 1 contre tous. Un joueur seul contre une Commission qui doit se coordonner sur une seule couleur.
+- **Boucle** : tour par tour strict entre camps, 10 s par tour (sinon la grille joue un coup propre). La grille **grandit avec le nombre de camps** : 7×6 en duel, jusqu'à 15×10 à 8 couleurs. Grille pleine : la manche va au camp qui a le plus d'alignements de 3.
+- **Le twist** : en équipe, les coéquipiers jouent la **même couleur en alternance** : le puissance 4 devient un jeu de communication.
+- **Asymétrique : « Le Cerveau »** : un joueur seul contre une Commission qui doit se coordonner.
 - **Contrôles** : tap sur une colonne, ghost de visée.
 
-## 🃏 BLACKJACK : classique revisité (21 contre la banque)
+## 🃏 BLACKJACK : classique revisité (le vrai 21, sans attente)
 
-**Pitch** : le 21 du tripot forain, mais tout le monde décide en même temps : zéro attente.
+**Pitch** : le vrai blackjack de casino, mise libre comprise, mais tout le monde décide en même temps : zéro attente.
 
-- **Boucle (par main)** : mise auto de 10 jetons (100 au départ), 2 cartes chacun, 2 pour la banque dont une cachée. 15 s de décisions **simultanées** : TIRER / RESTER / ×2 (double la mise, une seule carte). La banque tire jusqu'à 17. Blackjack payé 3 pour 2. Ruiné : le forain prête 20 jetons (et le titre de fin s'en souvient).
-- **Le twist** : cartes procédurales dessinées au Canvas (index V/D/R à la française), distribution animée depuis le sabot.
-- **Asymétrique : « Le Croupier »** : 1 contre tous. Le joueur solo EST la banque : il encaisse les pertes, paie les gains, et choisit lui-même de tirer ou rester (obligé sous 14).
-- **Contrôles** : 3 boutons. C'est un jeu de nerfs, pas de doigts.
+- **Boucle (par main)** : **mise libre** (jetons 1/5/25/100/500, réglette, MIN, ×2, RELANCE, TAPIS : de 1 jeton à tout le tapis), donne, puis décisions **simultanées** : TIRER / RESTER / **DOUBLER** (une seule carte, aussi après split) / **SPLIT** (jusqu à 4 mains ; as splittés : une carte, pas de resplit) / **ABANDON** (moitié de la mise rendue). **Assurance** et **argent comptant** quand la banque montre un as, avec peek du croupier : blackjack de la banque = main réglée aussitôt. La banque tire jusqu à 17. Blackjack payé 3:2 (ou 6:5).
+- **Le twist** : cartes réalistes dessinées au Canvas (enseignes vectorielles, figures à double tête, tranche), jetons cylindriques empilés, sabot de 1 à 6 jeux avec carte de coupe visible (comptage possible en sabot simple), table portrait et paysage.
+- **Réglages** : mains (3 à 30, pour une vraie soirée), tapis (100/500/2000), sabot (1/2/6 jeux), banque à 17 ou 17 souple, blackjack 3:2 ou 6:5, abandon autorisé ou non, rythme (12/18/30 s).
+- **Asymétrique : « Le Croupier »** : le joueur solo EST la banque : il encaisse les pertes, paie les gains, et choisit lui-même de tirer ou rester (libre dès 14). Sa caisse est son score.
+- **Contrôles** : tout au doigt sur la table (mise, actions), raccourcis clavier sur PC (Espace tirer, R rester, D doubler, P split, A abandon).
 
-## 👪 7 FAMILLES : classique revisité (mémoire publique)
+## 🎲 YAMS : classique revisité (le vrai Yam's, simultané)
 
-**Pitch** : le jeu des 7 familles, version stands de la Kermesse (Barbe à Papa, Churros, Train Fantôme…).
+**Pitch** : le vrai Yam's, feuille complète, mais tout le monde lance en même temps et on voit les dés des autres trembler en direct.
 
-- **Boucle** : à ton tour, demande un membre manquant d'une famille que tu possèdes à un joueur de ton choix. Il l'a : il donne et tu rejoues. Sinon : pioche (« bonne pioche » = tu rejoues aussi). 6 membres réunis = famille posée. Toutes les demandes sont **publiques** : la mémoire fait tout.
-- **Le twist** : mains secrètes par joueur (view serveur par pid), mais en équipe tu vois les mains de tes coéquipiers.
-- **Asymétrique : « Le Collectionneur »** : 1 contre tous, il joue un tour sur deux, mais chacune de ses demandes renseigne toute la Ribambelle.
-- **Contrôles** : 3 taps (famille → membre → joueur).
-
-## 🎲 YAMS : classique revisité (dés simultanés)
-
-**Pitch** : le yams de comptoir, mais tout le monde lance en même temps et on voit les dés des autres trembler en direct.
-
-- **Boucle (par tour, 25 s)** : 3 lancers max, touche un dé pour le garder, puis case ton score dans une ligne libre (brelan, full, carré, suite, YAMS 50 pts, chance ; feuille complète = + les 1-6 et le bonus 63/+35). Feuille pleine = fin.
-- **Le twist** : zéro attente entre joueurs, les mini-panneaux des autres tremblent à chaque relance, l'aperçu des points s'affiche sur chaque ligne libre.
-- **Asymétrique : « Le Flambeur »** : 4 lancers au lieu de 3 ; en équipe, on compare les **moyennes** (équipes inégales comparables).
+- **Boucle (par tour, 25 s)** : 3 lancers max, touche un dé pour le garder, puis case ton score dans une ligne libre. **Feuille complète (13 tours)** : les 1 à 6 (**bonus +35** à 63 points), brelan, carré, full 25, petite suite 30, grande suite 40, YAMS 50, chance. Feuille express (7 tours) pour les parties rapides.
+- **Le twist** : zéro attente, aperçu des points sur chaque ligne libre, jauge de bonus, confirmation avant de caser un zéro, les mini-panneaux des autres tremblent à chaque relance.
+- **Asymétrique : « Le Flambeur »** : 4 lancers au lieu de 3. En équipe, on compare les **moyennes** (équipes inégales comparables).
 - **Contrôles** : tap sur les dés, bouton LANCER, tap sur la feuille.
 
-## 🚧 BARRIÈRES : original n°3 (course et murs, façon Quoridor)
+## 🚧 BARRIÈRES : original (course et murs, façon Quoridor)
 
-**Pitch** : deux camps face à face (bas et haut). Avance d'une case, ou pose une barrière pour faire faire le grand tour à l'ennemi. Interdit d'emmurer : il reste TOUJOURS un passage.
+**Pitch** : deux camps face à face. Avance d'une case, ou pose une barrière pour faire faire le grand tour à l'ennemi. Interdit d'emmurer : il reste TOUJOURS un passage.
 
-- **Boucle** : tour par tour entre camps (12 s). Une action : avancer d'1 case (pas de diagonale, saut par-dessus un pion collé), ou poser une barrière de 2 cases (**15 max par joueur**). Chaque pose est validée par un **BFS serveur** : si elle coupe le dernier chemin d'un pion vers son but, elle est refusée (« PASSAGE OBLIGATOIRE ! »). Premier pion sur la ligne adverse = camp gagnant.
-- **Le twist** : la grille s'adapte au monde (9×9 en 1v1, plus large avec plus de pions par camp), et tous les formats passent : 1v1, 2v2, 3v3, 5v3, 1v2…
-- **Asymétrique : « Le Contremaître »** : 1 (ou 2, 3) contre tous : il joue **2 actions par tour**.
-- **Contrôles** : tap sur une case surlignée pour avancer ; bouton BARRIÈRE puis tap sur une rainure, retap pour valider.
+- **Boucle** : tour par tour entre camps (12 s). Une action : avancer d'1 case (saut par-dessus un pion collé), ou poser une barrière de 2 cases (15 max par joueur). Chaque pose est validée par un **BFS serveur**. Premier pion sur la ligne adverse = camp gagnant.
+- **Asymétrique : « Le Contremaître »** : il joue **2 actions par tour**.
+- **Contrôles** : tap sur une case surlignée ; bouton BARRIÈRE puis tap sur une rainure, retap pour valider.
 
-## 🦆 CANARDS : original n°4 (pêche, bluff et splash)
+## 🐴 PETITS CHEVAUX : classique (Ludo de la Kermesse)
 
-**Pitch** : la pêche aux canards, mais la valeur d'un canard est cachée sous le ventre, et seul le pêcheur la découvre.
+**Pitch** : sors tes chevaux avec un 6, fais le tour de la piste lumineuse, capture tout ce qui traîne, monte ton échelle vers le centre.
 
-- **Boucle (120 s)** : les canards défilent dans le courant. PLONGER : tu pêches (raté = épuisette qui tremble), et TOI SEUL vois la valeur (1/2/3/5, bombe -2, doré ⭐ 10 annoncé au klaxon). Ramène au comptoir pour encaisser, ou rejette les minables (valeur révélée, assume). **SPLASH** : les porteurs proches lâchent tout, valeur révélée à tous. Rush final : le courant s'emballe.
-- **Le twist** : le push-your-luck est public (tout le monde voit que tu portes) mais l'information est privée (personne ne sait si ça vaut 1 ou 10). Le bluff de démarche fait le sel du jeu.
-- **Asymétrique : « Le Héron »** : il gobe sur place (pas de comptoir), plus rapide, mais les canards le fuient ; les Pêcheurs comparent leur moyenne à son total.
-- **Contrôles** : joystick + PLONGER + SPLASH.
+- **Boucle** : tour par tour entre camps (10 s) : lance le dé, touche le cheval surligné à jouer. Premier cheval déjà en piste (départ rapide), **6 pour sortir** les suivants, un 6 fait **rejouer** (2 fois max), atterrir sur un ennemi le **capture** (retour à l'écurie), interdit d'atterrir sur soi. Après un tour complet : échelle d'arrivée de 4 cases (les points en trop sont perdus). Premier camp avec tous ses chevaux arrivés gagne.
+- **Le twist** : la piste circulaire **s'adapte à 2-8 camps** ; 2 à 4 chevaux par camp au choix du stand.
+- **Asymétrique : « Le Jockey »** : à chaque lancer, il peut GARDER son dé ou le RELANCER une fois.
+- **Contrôles** : bouton LANCER (ou tap sur le dé), tap sur le cheval à jouer.
 
-## Idée en réserve pour un 11ᵉ stand
+## 🥌 PÉTANQUE : classique (pointer, tirer, mesurer)
 
-**🎭 INCOGNITO** (bluff & paranoïa) : fonds-toi dans une foule de figurants PNJ pendant que des tireurs au réticule (5 balles) essaient de te démasquer ; 3 missions discrètes à accomplir ; toucher un innocent = klaxon de la honte. Formats 1v7/2v6/3v5 + FFA armé. Conçu, non implémenté : le contrat de jeu permet de l'ajouter en créant simplement `games/incognito/`.
+**Pitch** : le boulodrome sous les lampions. Lance tes boules au plus près du cochonnet, ou dégomme celles des autres d'un tir sec.
+
+- **Boucle (par mène)** : cochonnet en haut du terrain, lancers depuis le cercle. **Glisse pour viser** (direction + longueur = puissance), relâche pour lancer (12 s). Physique complète : roulement, chocs, **carreau**, cochonnet bousculable, boule sortie = morte. C'est toujours le camp qui **n'a pas le point** qui rejoue. Fin de mène : **1 point par boule mieux placée que la meilleure boule adverse**.
+- **Le twist** : 3 boules chacun en petit comité, 2 à 4+, 6 par équipe ; cercles de mesure animés au décompte ; la **Fanny** (zéro point) est consignée dans les titres.
+- **Asymétrique : « Le Tireur »** : 4 boules et un bras 25 % plus puissant contre la meute des Pointeurs (8 boules).
+- **Contrôles** : glisser + bouton LANCER. Flèches + espace au clavier.
+
+## 🚢 BATAILLE NAVALE : classique (salves simultanées)
+
+**Pitch** : chaque camp cache une flotte ; tout le monde arme son tir en secret, tout part en même temps.
+
+- **Boucle** : placement 15 s (auto + bouton MÉLANGER), puis **salves simultanées de 8 s** : touche la mini-grille d'un ennemi, puis une case pour armer ton tir. Au signal, tous les tirs partent : touché / manqué / coulé annoncés. Flotte coulée = camp éliminé (ses joueurs voient alors toutes les flottes). Dernier camp à flot gagne (36 salves max, sinon le moins abîmé).
+- **Le twist** : **secret par vue serveur** (chaque joueur ne voit des grilles ennemies que les cases tirées) ; en équipe, une grille commune mais **chaque coéquipier tire une case par salve** ; score individuel aux touches et navires coulés.
+- **Asymétrique : « L'Amiral »** : grille 10×10, flotte double, plusieurs tirs par salve.
+- **Contrôles** : tap (grille, puis case). Tir auto intelligent au chrono.
+
+## Stands retirés
+
+- **7 FAMILLES** : retiré à la demande (le dossier peut revenir via le contrat de jeu).
+- **CANARDS** : remplacé par la PÉTANQUE (même esprit forain, gameplay plus lisible et plus drôle).
+
+## Idée en réserve pour un 12ᵉ stand
+
+**🎭 INCOGNITO** (bluff & paranoïa) : fonds-toi dans une foule de figurants PNJ pendant que des tireurs au réticule essaient de te démasquer. Conçu, non implémenté : le contrat de jeu permet de l'ajouter en créant simplement `games/incognito/`.
 
 ## Commun aux jeux
 
 - **Bots** : les forains de la Kermesse (Jacky Churros, Mamie Pétard, Gégé Tirelire…), personnalités différentes (agressivité, précision, temps de réaction), corrects mais faillibles, difficulté réglable dans le lobby.
-- **Fin de partie** : classement + stats rigolotes + **titres** décernés (« Le Plus Lâche », « Mort en premier, comme d'habitude », « Serial taquineur », « A tiré sur 3 innocents », « N'a strictement rien fait »).
-- **Règles en jeu** : bouton « ? » → mini-tuto en 3-4 cartes illustrées (icônes + une phrase), issu de `meta.howto`, + règles complètes (`rules.md`).
-- **Spectateurs** : les morts voient tout, peuvent lancer des emotes qui s'affichent à l'écran (et dans INCOGNITO, ils voient les identités, c'est leur récompense).
-- **Réglages rapides lobby** : nombre de manches / durée, difficulté des bots.
+- **Fin de partie** : classement + stats rigolotes + **titres** décernés (« Le Carreau d'or », « Trop gourmand », « Endormi en selle », « Chair à canon »…).
+- **Règles en jeu** : bouton « ? » : mini-tuto illustré (`meta.howto`) + règles complètes (`rules.md`). Les mêmes règles s'ouvrent depuis la galerie de l'accueil.
+- **Aperçus** : chaque stand fournit `preview.js` (vignette Canvas 16:9) affichée dans la galerie de l'accueil et le sélecteur du lobby.
+- **Spectateurs** : les morts et les arrivants en cours de partie voient tout et peuvent lancer des emotes.
+- **Réglages rapides lobby** : durée / manches / variantes par jeu, difficulté des bots.

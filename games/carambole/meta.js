@@ -9,6 +9,8 @@ export default {
   pitch: 'Des auto-tamponneuses sur une piste qui rétrécit. Percute, éjecte, survis, et méfie-toi des bonus qui tombent du ciel.',
   minPlayers: 2,
   maxPlayers: 8,
+  // Temps reel : un joueur inactif est remplace par un forain apres 20 s.
+  idleBot: true,
   arena: { w: 640, h: 640 },
   caps: {
     ffa: true,

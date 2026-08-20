@@ -10,6 +10,7 @@ Tous les joueurs sont posés sur une plateforme ronde, au-dessus du **vide**. To
 Dernière équipe debout remporte la manche. Partie en 3, 5 ou 7 manches.
 
 ## L'art de la visée
+- Pendant que tu vises, un **cercle en pointillés** montre ton point d'arrivée estimé (hors collisions). S'il est rouge et marqué « LE VIDE ! », tu sais ce qui t'attend.
 - **Pleine puissance** : tu traverses la plateforme comme un boulet… et tu risques de finir dans le vide tout seul.
 - **Petit coup doux** : tu te replaces, tu laisses les bourrins s'entre-détruire.
 - **Ne rien faire** est permis : tu restes planté. Statue mystérieuse ou cible facile ?
