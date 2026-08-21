@@ -146,7 +146,10 @@ export class Input {
       return;
     }
     if (this.scheme === 'joystick' && !this.joy) {
-      this.joy = { id: e.pointerId, ox: e.clientX, oy: e.clientY };
+      // Tant que le doigt (ou la souris) n'a pas vraiment bouge, le joystick
+      // reste inerte : un simple clic pour tirer ne doit pas couper la
+      // marche au clavier.
+      this.joy = { id: e.pointerId, ox: e.clientX, oy: e.clientY, actif: false };
       this.makeJoyVisual(e.clientX, e.clientY);
     }
   }
@@ -160,6 +163,8 @@ export class Input {
     if (this.scheme === 'joystick' && this.joy && e.pointerId === this.joy.id) {
       const dx = e.clientX - this.joy.ox, dy = e.clientY - this.joy.oy;
       const len = Math.hypot(dx, dy);
+      if (!this.joy.actif && len < 9) return;
+      this.joy.actif = true;
       const max = 52;
       const k = len > max ? max / len : 1;
       this.moveVec = { x: (dx * k) / max, y: (dy * k) / max };
@@ -178,6 +183,8 @@ export class Input {
       this.joy = null;
       this.moveVec = { x: 0, y: 0 };
       this.removeJoyVisual();
+      // Les touches encore enfoncees reprennent la main tout de suite.
+      this.computeKeys();
       this.emitMove();
     }
     if (this.steerTouches.delete(e.pointerId)) this.computeSteer();
@@ -223,7 +230,7 @@ export class Input {
       this.turn = (right ? 1 : 0) - (left ? 1 : 0);
       this.emitMove();
     } else if (this.scheme === 'joystick' || this.scheme === 'tap') {
-      if (!this.joy) {
+      if (!this.joy || !this.joy.actif) {
         const x = (right ? 1 : 0) - (left ? 1 : 0);
         const y = (down ? 1 : 0) - (up ? 1 : 0);
         const len = Math.hypot(x, y) || 1;

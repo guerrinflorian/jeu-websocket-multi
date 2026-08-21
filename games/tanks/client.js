@@ -49,16 +49,16 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
     visee = a;
     viseeT = performance.now();
     const now = performance.now();
-    if (now - dernierAim > 90) {
+    if (now - dernierAim > 110) {
       dernierAim = now;
-      send.act('aim', { a: Math.round(a * 100) / 100 });
+      send.input({ aim: Math.round(a * 100) / 100 });
     }
   }
   function onDown(e) {
     if (e.pointerType === 'touch') return;
     if (e.target.closest('.ctl-btn, .hud, .emote-bar, .modal')) return;
     const a = angleVersSouris(e);
-    if (a != null) { visee = a; viseeT = performance.now(); send.act('aim', { a: Math.round(a * 100) / 100 }); }
+    if (a != null) { visee = a; viseeT = performance.now(); send.input({ aim: Math.round(a * 100) / 100 }); }
     send.act('fire');
     sfx.play('click');
   }

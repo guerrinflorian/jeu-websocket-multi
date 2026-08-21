@@ -261,6 +261,13 @@ export function onInput(state, pid, d) {
   const c = state.chars[pid];
   if (!c || state.done) return;
   if (!d || typeof d !== 'object') return;
+  // Visee a la souris sur PC : elle arrive avec le flux d'inputs, pas en
+  // action, sinon la cadence de la souris sature le quota de messages.
+  if (Number.isFinite(Number(d.aim))) {
+    c.viseur = norm(Number(d.aim));
+    c.viseurT = state.simT;
+    return;
+  }
   // Le harnais de test envoie parfois des taps : on s'en sert comme cap.
   if (typeof d.tx === 'number' && Number.isFinite(d.tx)) {
     const a = ((d.tx % 360) / 360) * Math.PI * 2;
@@ -283,7 +290,7 @@ export function onAction(state, pid, a, d) {
     if (state.phase === 'jeu') tirer(state, c);
     return;
   }
-  // Visee a la souris sur PC : le client envoie l'angle voulu.
+  // Ancienne route de visee, gardee pour un client pas encore rafraichi.
   if (a === 'aim' && d && Number.isFinite(Number(d.a))) {
     c.viseur = norm(Number(d.a));
     c.viseurT = state.simT;
