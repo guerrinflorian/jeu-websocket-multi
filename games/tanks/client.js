@@ -347,56 +347,30 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
     ctx.fill();
   }
 
-  // Trajet exact de l'obus, rebonds compris : c'est ce qui rend le tir
-  // au mur jouable au lieu d'etre de la devinette.
-  function drawVisee(moi) {
-    if (!grille || !moi || moi.alive < 0.5) return;
-    const pas = 9;
-    let x = moi.x + Math.cos(moi.ta) * 26;
-    let y = moi.y + Math.sin(moi.ta) * 26;
-    let vx = Math.cos(moi.ta), vy = Math.sin(moi.ta);
-    let reb = 0;
-    const pts = [{ x, y }];
-    const chocs = [];
-    for (let i = 0; i < 170 && reb <= v.rebonds; i++) {
-      const nx = x + vx * pas, ny = y + vy * pas;
-      let tape = false;
-      if (estMur(grille, Math.floor(nx / CASE), Math.floor(y / CASE))) { vx = -vx; tape = true; }
-      if (estMur(grille, Math.floor(x / CASE), Math.floor(ny / CASE))) { vy = -vy; tape = true; }
-      if (tape) { reb++; chocs.push({ x, y }); pts.push({ x, y }); continue; }
-      x = nx; y = ny;
-      pts.push({ x, y });
-      // Le trait s'arrete sur le premier char touchable.
-      let stop = false;
-      for (const c of v.chars) {
-        if (c.alive < 0.5 || c.out > 0.5) continue;
-        if (c.id === moi.id && reb === 0) continue;
-        if (c.camp === moi.camp && c.id !== moi.id) continue;
-        if (Math.hypot(c.x - x, c.y - y) < 19) { stop = true; break; }
-      }
-      if (stop) break;
-    }
+  // Une simple fleche devant le canon : on voit ou l'on pointe, pas ou
+  // l'obus va finir. Les rebonds, c'est a toi de les calculer.
+  function drawMire(moi) {
+    if (!moi || moi.alive < 0.5) return;
+    const R = moi.solo ? 21 : 17;
+    const d0 = R + 12;
+    const d1 = R + 30;
+    const cx = Math.cos(moi.ta), cy = Math.sin(moi.ta);
     ctx.save();
-    ctx.setLineDash([7, 7]);
-    ctx.lineDashOffset = -(performance.now() / 26) % 14;
-    ctx.strokeStyle = 'rgba(255,201,60,.55)';
+    ctx.globalAlpha = 0.75;
+    ctx.strokeStyle = 'rgba(255,201,60,.85)';
     ctx.lineWidth = 2;
     ctx.beginPath();
-    pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+    ctx.moveTo(moi.x + cx * d0, moi.y - 3 + cy * d0);
+    ctx.lineTo(moi.x + cx * d1, moi.y - 3 + cy * d1);
     ctx.stroke();
-    ctx.setLineDash([]);
-    for (const c of chocs) {
-      ctx.beginPath();
-      ctx.arc(c.x, c.y, 4, 0, TAU);
-      ctx.fillStyle = 'rgba(255,201,60,.8)';
-      ctx.fill();
-    }
-    const bout = pts[pts.length - 1];
+    // Pointe de fleche.
     ctx.beginPath();
-    ctx.arc(bout.x, bout.y, 5, 0, TAU);
-    ctx.strokeStyle = GOLD;
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    ctx.moveTo(moi.x + cx * (d1 + 7), moi.y - 3 + cy * (d1 + 7));
+    ctx.lineTo(moi.x + cx * d1 - cy * 5, moi.y - 3 + cy * d1 + cx * 5);
+    ctx.lineTo(moi.x + cx * d1 + cy * 5, moi.y - 3 + cy * d1 - cx * 5);
+    ctx.closePath();
+    ctx.fillStyle = GOLD;
+    ctx.fill();
     ctx.restore();
   }
 
@@ -549,7 +523,7 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
       const chars = helpers.ix(view, 'chars', ['a', 'ta']);
       const obus = helpers.ix(view, 'obus', ['a']);
       const moi = chars.find((c) => c.id === you);
-      if (moi && moi.alive > 0.5 && moi.out < 0.5 && v.phase === 'jeu') drawVisee(moi);
+      if (moi && moi.out < 0.5 && v.phase === 'jeu') drawMire(moi);
 
       for (const c of chars) {
         if (c.out > 0.5) continue;

@@ -560,88 +560,188 @@ function simuleTir(state, c, a, portee) {
   return null;
 }
 
+// Un obus menace-t-il ce char dans la seconde qui vient ? On avance l'obus
+// sans rebond : ce qui compte, c'est la menace immediate.
+function menace(state, c) {
+  for (const o of state.obus) {
+    if (o.camp === c.camp && o.pid !== c.pid) continue;
+    if (o.pid === c.pid && !o.reb) continue;
+    const dx = c.x - o.x, dy = c.y - o.y;
+    const d = Math.hypot(dx, dy);
+    if (d > 260) continue;
+    const v = Math.hypot(o.vx, o.vy) || 1;
+    const t = (dx * o.vx + dy * o.vy) / (v * v);       // instant du plus proche
+    if (t < 0 || t > 1) continue;
+    const ex = o.x + o.vx * t - c.x;
+    const ey = o.y + o.vy * t - c.y;
+    if (Math.hypot(ex, ey) < R_CHAR + 22) return { o, t };
+  }
+  return null;
+}
+
+// Ou vise-t-on une cible qui bouge ? On anticipe son deplacement.
+function viseAvance(c, e, avance) {
+  const d = Math.hypot(e.x - c.x, e.y - c.y);
+  const t = (d / V_OBUS) * avance;
+  return Math.atan2(e.y + e.my * V_CHAR * t - c.y, e.x + e.mx * V_CHAR * t - c.x);
+}
+
+// Trois façons de jouer, tirées au sort selon le tempérament : le chasseur
+// fonce, le rôdeur tourne autour à distance, l'embusqué garde son coin et
+// attend qu'on passe devant. Ça suffit à ce que deux forains sur le même
+// terrain ne fassent pas exactement la même chose.
+const ROLES = ['chasseur', 'rodeur', 'embusque'];
+
 export function botAct(state, pid, mind, api) {
   const c = state.chars[pid];
   if (!c || state.done || state.phase !== 'jeu' || !c.alive || c.out) return;
   const pers = mind.p, rng = mind.rng, mem = mind.mem;
 
-  // Cible : l'adversaire vivant le plus proche.
-  let cible = null, dmin = 1e9;
-  for (const p of state.pids) {
-    const e = state.chars[p];
-    if (!e.alive || e.out || e.camp === c.camp) continue;
-    const d = Math.hypot(e.x - c.x, e.y - c.y);
-    if (d < dmin) { dmin = d; cible = e; }
+  if (!mem.role) {
+    const r = rng.next();
+    mem.role = pers.aggro > 0.72 && r < 0.75 ? 'chasseur'
+      : pers.aggro < 0.4 && r < 0.6 ? 'embusque'
+        : ROLES[rng.int(0, 2)];
+    mem.biais = (rng.next() - 0.5) * 0.14;         // sa petite erreur de visee
+    mem.sens = rng.chance(0.5) ? 1 : -1;           // son sens de contournement
+    mem.humeur = state.simT;
   }
-  if (!cible) { api.input({ mx: 0, my: 0 }); return; }
+  // Un forain change d'avis de temps en temps : il ne joue pas le meme
+  // disque pendant toute la partie.
+  if (state.simT - mem.humeur > 9 + rng.next() * 12) {
+    mem.humeur = state.simT;
+    mem.sens = -mem.sens;
+    if (rng.chance(0.4)) mem.role = ROLES[rng.int(0, 2)];
+    mem.cible = null;
+  }
 
-  // Navigation : on recalcule la carte de distances de temps en temps.
+  const vivants = state.pids
+    .map((p) => state.chars[p])
+    .filter((e) => e.alive && !e.out && e.camp !== c.camp);
+  if (!vivants.length) { api.input({ mx: 0, my: 0 }); return; }
+
+  // ── Cible : on s'accroche a la sienne un moment ──
+  let cible = mem.cible ? state.chars[mem.cible] : null;
+  if (!cible || !cible.alive || cible.out || cible.camp === c.camp
+      || state.simT - (mem.cibleT || 0) > 4 + rng.next() * 5) {
+    // Le chasseur prend le plus proche, le rodeur le plus faible, l'embusque
+    // celui qui lui tourne autour.
+    const note = (e) => {
+      const d = Math.hypot(e.x - c.x, e.y - c.y);
+      if (mem.role === 'rodeur') return -(e.vies * 200 + d * 0.2);
+      if (mem.role === 'embusque') return -d * (vue(state, c.x, c.y, e.x, e.y) ? 0.4 : 1.4);
+      return -d;
+    };
+    cible = vivants.slice().sort((a, b) => note(b) - note(a))[0];
+    mem.cible = cible.pid;
+    mem.cibleT = state.simT;
+  }
+
+  const dcible = Math.hypot(cible.x - c.x, cible.y - c.y);
+  const clair = vue(state, c.x, c.y, cible.x, cible.y);
+
+  // ── Esquive : un obus arrive, on sort de sa trajectoire ──
+  const peril = menace(state, c);
+  if (peril && rng.chance(0.55 + pers.skill * 0.4)) {
+    const a = Math.atan2(peril.o.vy, peril.o.vx) + (Math.PI / 2) * mem.sens;
+    api.input({ mx: Math.round(Math.cos(a) * 100) / 100, my: Math.round(Math.sin(a) * 100) / 100 });
+    mem.esquive = state.simT;
+  } else {
+    api.input(deplacement(state, c, cible, mem, pers, rng, dcible, clair));
+  }
+
+  // ── Tir ──
+  if (c.recharge > 0) return;
+  if (mem.pause && state.simT < mem.pause) return;
+  const tolerance = 0.1 + (1 - pers.skill) * 0.2;
+  const vise = viseAvance(c, cible, 0.6 + pers.skill * 0.5) + mem.biais;
+
+  if (clair && Math.abs(norm(vise - c.ta)) < tolerance) {
+    // Il vise juste : reste a savoir s'il est du genre a tirer quand meme
+    // quand le coup n'est pas sur.
+    const r = simuleTir(state, c, c.ta, 90);
+    const bon = r && !r.ami && r.pid !== c.pid;
+    if (bon || rng.chance(0.1 + pers.chaos * 0.3)) {
+      api.act('fire');
+      mem.pause = state.simT + 0.1 + rng.next() * (0.3 + (1 - pers.skill) * 0.8);
+      return;
+    }
+  }
+
+  // Tir au rebond : reserve aux bons, et jamais deux fois de suite.
+  const doue = pers.skill > 0.55 && !clair;
+  if (!doue || !rng.chance(0.18 + pers.skill * 0.35)) return;
+  const dep = rng.next() * Math.PI * 2;
+  for (let i = 0; i < 18; i++) {
+    const a = dep + (i / 18) * Math.PI * 2;
+    if (Math.abs(norm(a - c.ta)) > tolerance * 1.6) continue;
+    const r = simuleTir(state, c, a, 100);
+    if (r && !r.ami && r.pid !== c.pid) {
+      api.act('fire');
+      mem.pause = state.simT + 0.6 + rng.next() * 1.4;
+      return;
+    }
+  }
+}
+
+// Ou va le char ce tick : chaque role a sa maniere d'occuper le terrain,
+// et tous zigzaguent un peu au lieu d'aller tout droit.
+function deplacement(state, c, cible, mem, pers, rng, dcible, clair) {
   const cx = Math.floor(c.x / CASE), cy = Math.floor(c.y / CASE);
   const tx = Math.floor(cible.x / CASE), ty = Math.floor(cible.y / CASE);
-  if (!mem.d || mem.tx !== tx || mem.ty !== ty || state.simT - (mem.at || 0) > 0.7) {
-    mem.d = vague(state, tx, ty);
+
+  // Distance de combat propre a chaque role.
+  const ideal = mem.role === 'chasseur' ? 90 + pers.aggro * 40
+    : mem.role === 'rodeur' ? 200 + (1 - pers.aggro) * 90
+      : 240;
+
+  // L'embusque reste ou il est tant qu'il n'a pas ete deloge.
+  if (mem.role === 'embusque' && clair && dcible < 330 && state.simT - (mem.esquive || -9) > 2.5) {
+    const a = state.simT * 1.6 + (mem.biais * 40);
+    return { mx: Math.round(Math.cos(a) * 45) / 100, my: Math.round(Math.sin(a) * 45) / 100 };
+  }
+
+  if (!mem.flux || mem.tx !== tx || mem.ty !== ty || state.simT - (mem.at || 0) > 0.6) {
+    mem.flux = vague(state, tx, ty);
     mem.tx = tx;
     mem.ty = ty;
     mem.at = state.simT;
   }
-  const dist = mem.d;
+  const dist = mem.flux;
   const ici = dist[cy * COLS + cx];
-  let mx = 0, my = 0;
-  // Distance de combat : on garde ses distances, on ne colle pas.
-  const idealMin = 110 + (1 - pers.aggro) * 140;
+  let gx = 0, gy = 0;
   if (ici >= 0) {
+    const veutApprocher = dcible > ideal;
     let best = ici, bx = 0, by = 0;
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
       const nx = cx + dx, ny = cy + dy;
       if (nx < 0 || ny < 0 || nx >= COLS || ny >= LIGNES) continue;
       const nd = dist[ny * COLS + nx];
       if (nd < 0) continue;
-      if (dmin < idealMin ? nd > best : nd < best) { best = nd; bx = dx; by = dy; }
+      if (veutApprocher ? nd < best : nd > best) { best = nd; bx = dx; by = dy; }
     }
     if (bx || by) {
-      // On vise le centre de la case voisine : pas de frottement aux angles.
-      const gx = (cx + bx) * CASE + CASE / 2 - c.x;
-      const gy = (cy + by) * CASE + CASE / 2 - c.y;
+      gx = (cx + bx) * CASE + CASE / 2 - c.x;
+      gy = (cy + by) * CASE + CASE / 2 - c.y;
       const l = Math.hypot(gx, gy) || 1;
-      mx = gx / l;
-      my = gy / l;
+      gx /= l;
+      gy /= l;
     }
   }
-  // Un peu de vie : les bots frileux zigzaguent en recharge.
-  if (c.recharge > 0.2 && rng.chance(pers.chaos * 0.25)) {
-    const t = state.simT * 2 + (mind.seedA || 0);
-    mx += Math.cos(t) * 0.5;
-    my += Math.sin(t) * 0.5;
-  }
-  api.input({ mx: Math.round(mx * 100) / 100, my: Math.round(my * 100) / 100 });
 
-  // Tir : direct d'abord, puis par rebond si le bot sait viser.
-  if (c.recharge > 0) return;
-  if (mem.pause && state.simT < mem.pause) return;
-  const direct = Math.atan2(cible.y - c.y, cible.x - c.x);
-  const clair = vue(state, c.x, c.y, cible.x, cible.y);
-  const ecart = Math.abs(norm(direct - c.ta));
-  const tolerance = 0.12 + (1 - pers.skill) * 0.22;
+  // Le rodeur tourne autour de sa cible plutot que de foncer dessus.
+  if (mem.role === 'rodeur' && dcible < ideal * 1.5) {
+    const a = Math.atan2(cible.y - c.y, cible.x - c.x) + (Math.PI / 2) * mem.sens;
+    gx = gx * 0.4 + Math.cos(a) * 0.9;
+    gy = gy * 0.4 + Math.sin(a) * 0.9;
+  }
 
-  if (clair && ecart < tolerance) {
-    const r = simuleTir(state, c, c.ta, 110);
-    if (r && !r.ami && r.pid !== c.pid) {
-      api.act('fire');
-      mem.pause = state.simT + 0.12 + (1 - pers.skill) * 0.6;
-      return;
-    }
-  }
-  // Tir par rebond : on balaie quelques angles et on garde le premier bon.
-  if (!rng.chance(0.25 + pers.skill * 0.6)) return;
-  const dep = rng.next() * Math.PI * 2;
-  for (let i = 0; i < 24; i++) {
-    const a = dep + (i / 24) * Math.PI * 2;
-    if (Math.abs(norm(a - c.ta)) > tolerance) continue;
-    const r = simuleTir(state, c, a, 110);
-    if (r && !r.ami && r.pid !== c.pid) {
-      api.act('fire');
-      mem.pause = state.simT + 0.3 + (1 - pers.skill) * 1.2;
-      return;
-    }
-  }
+  // Zigzag : personne ne roule en ligne droite sous le feu.
+  const amplitude = 0.25 + pers.chaos * 0.4 + (c.recharge > 0 ? 0.25 : 0);
+  const t = state.simT * (1.4 + pers.chaos) + mem.biais * 30;
+  gx += -gy * Math.sin(t) * amplitude;
+  gy += gx * 0 + Math.cos(t) * amplitude * mem.sens * 0.35;
+
+  const l = Math.hypot(gx, gy) || 1;
+  return { mx: Math.round((gx / l) * 100) / 100, my: Math.round((gy / l) * 100) / 100 };
 }

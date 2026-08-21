@@ -7,7 +7,7 @@ export default {
   color: '#3DFF8A',
   tagline: 'Vise le mur. Le mur fait le reste.',
   genre: 'arcade',
-  pitch: 'Des blindés vus du dessus dans une arène à murs. Les obus REBONDISSENT : le tir qui gagne la partie est celui que personne n\'a vu venir. Trois vies, un obus toutes les deux secondes, et une ligne de visée qui te montre où ta bille va rebondir. En équipe, tes obus traversent tes coéquipiers. Trois terrains au choix, plus un tiré au sort.',
+  pitch: "Des blindés vus du dessus dans une arène à murs. Les obus REBONDISSENT : le tir qui gagne la partie est celui que personne n'a vu venir. Une flèche montre où pointe ton canon, et c'est tout : les rebonds, tu les calcules de tête. Trois vies, une seconde de recharge, et en équipe tes obus traversent tes coéquipiers. Quatre terrains, dont un tiré au sort.",
   minPlayers: 2,
   maxPlayers: 8,
   arena: { w: 704, h: 576 },
@@ -55,7 +55,7 @@ export default {
   howto: [
     { icon: '🕹️', text: 'Le joystick déplace le char. La tourelle regarde toujours là où tu vas. Au clavier : ZQSD ou les flèches.' },
     { icon: '💥', text: 'TIRER envoie un obus (Espace au clavier). Une recharge entre deux tirs : chaque obus compte.' },
-    { icon: '🪞', text: 'Les obus rebondissent sur les murs. La ligne de visée te montre le trajet et les rebonds.' },
+    { icon: '🪞', text: 'Les obus rebondissent sur les murs. Une petite flèche montre où tu pointes, à toi de calculer le reste.' },
     { icon: '❤️', text: 'Trois vies, en haut à droite. Trois obus reçus et tu quittes le terrain.' },
     { icon: '🤝', text: 'En équipe, tes obus traversent tes coéquipiers. Mais ton propre obus qui a rebondi peut te revenir dessus.' },
   ],

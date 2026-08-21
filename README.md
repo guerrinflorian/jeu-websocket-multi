@@ -26,7 +26,7 @@ dessinés au Canvas).
 | 💣 **BOMBER** | Mot à la bombe | Une syllabe, un mot français, vite : la mèche brûle pendant que la bombe circule. Dico de 3595 mots. Asym : « L'Artificier » |
 | ♠️ **POKER** | Texas Hold'em | Les uns contre les autres : blindes, flop, turn, river, relance libre, tapis, pots secondaires. Asym : « Le Requin » qui jette un coup d'oeil |
 | 🎰 **ROULETTE** | Roulette française | Le vrai tapis : pleins, chevaux, carrés, sixains, douzaines, chances simples. Maximums de table, règle du zéro, REJOUER. Asym : « Le Chef de Table » |
-| 🚜 **TANKS** | Blindés à rebonds | Vue de dessus, obus rapides qui ricochent sur les murs, ligne de visée qui montre le trajet, trois vies, quatre terrains. Asym : « Le Char Lourd » |
+| 🚜 **TANKS** | Blindés à rebonds | Vue de dessus, obus rapides qui ricochent sur les murs, simple flèche de visée, trois vies, quatre terrains. Asym : « Le Char Lourd » |
 
 ## Lancer en local
 

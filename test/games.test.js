@@ -26,7 +26,7 @@ function drive(sim, meta, i) {
   if (i % 13 === 0) sim.send({ t: 'act', a: 'inexistant' });
 }
 
-async function playGame(srv, meta, { formatKind = null, label = '' } = {}) {
+export async function playGame(srv, meta, { formatKind = null, label = '' } = {}) {
   section(`${meta.id}${label} : partie complète`);
   const a = new Sim(srv.url, 'Anna');
   const b = new Sim(srv.url, 'Bilal');
@@ -82,7 +82,7 @@ async function playGame(srv, meta, { formatKind = null, label = '' } = {}) {
   await sleep(150);
 }
 
-async function testMidGame(srv, meta) {
+export async function testMidGame(srv, meta) {
   section(`${meta.id} : reconnexion & spectateur en pleine partie`);
   const a = new Sim(srv.url, 'Momo');
   const b = new Sim(srv.url, 'Lina');

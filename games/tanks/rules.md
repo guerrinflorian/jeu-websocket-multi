@@ -9,7 +9,7 @@ Des blindés vus du dessus dans une arène fermée. Tu tires, l'obus part, et **
 - Le **joystick** (ou **ZQSD** / les **flèches**) déplace le char.
 - La **tourelle regarde toujours dans la direction où tu roules**. Sur ordinateur, la **souris** vise et le **clic** tire.
 - **TIRER** (ou **Espace**) envoie un obus, vite et loin. Ensuite il faut **recharger** : environ une seconde par défaut, réglable de 0,7 à 1,8 seconde. Cinq obus maximum en l'air à la fois.
-- La **ligne pointillée** part de ton canon et montre le trajet exact de l'obus, **rebonds compris**, jusqu'à sa cible. C'est ton meilleur outil : oriente-toi jusqu'à ce que le bout de la ligne touche un adversaire.
+- Une **petite flèche** devant le canon montre la direction du tir. Rien de plus : **aucun aperçu du rebond**. Le mur, l'angle et l'endroit où l'obus va ressortir, c'est à toi de les voir. C'est tout l'intérêt du jeu.
 
 ## Les vies
 
