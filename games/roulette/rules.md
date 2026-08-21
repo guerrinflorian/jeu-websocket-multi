@@ -69,7 +69,7 @@ Toutes les autres mises (pleins, chevaux, douzaines…) perdent normalement, sau
 
 ## Le tableau d'affichage
 
-Les derniers numéros sortis restent affichés sur le côté, avec leur couleur. À toi de voir si tu crois aux séries.
+Les derniers numéros sortis restent affichés dans un panneau, avec leur couleur : en haut de l'écran sur téléphone, dans la barre de mise sur ordinateur. Le dernier tombé est cerclé d'or, et le panneau compte les rouges, les noirs, les zéros, les pairs et les impairs sur les dix-huit derniers tours. À toi de voir si tu crois aux séries.
 
 ## 1 contre tous : Le Chef de Table
 
