@@ -507,7 +507,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
         if (ev.e === 'round') {
           shakeDice = 0.7;
           syncKey = '';
-          sfx.play('dash');
+          sfx.play('deshake');
         } else if (ev.e === 'roll') {
           shakeDice = 0.7;
         } else if (ev.e === 'turn') {

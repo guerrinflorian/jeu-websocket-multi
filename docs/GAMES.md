@@ -155,7 +155,7 @@ Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, man
 **Pitch** : le tir qui gagne la partie est celui que personne n'a vu venir.
 
 - **Boucle** : des chars vus du dessus dans une arène à murs. Le joystick (ou ZQSD) déplace, la tourelle suit la direction de marche, TIRER envoie un obus. Une recharge entre deux tirs, cinq obus maximum en l'air.
-- **Le twist** : **les obus rebondissent** sur les murs, 1, 3 ou 5 fois selon le réglage. Une **ligne pointillée** part du canon et montre le trajet exact, rebonds compris, jusqu'à la cible : viser un mur devient un vrai calcul et non de la devinette. Les obus traversent les coéquipiers, mais **ton propre obus peut te revenir dessus** une fois qu'il a rebondi.
+- **Le twist** : **les obus rebondissent** sur les murs, une fois par défaut (2 ou 4 au choix de l'hôte). Une **ligne pointillée** part du canon et montre le trajet exact, rebonds compris, jusqu'à la cible : viser un mur devient un vrai calcul et non de la devinette. Les obus traversent les coéquipiers, mais **ton propre obus peut te revenir dessus** une fois qu'il a rebondi.
 - **Trois vies** affichées en haut à droite, réapparition 2,6 secondes plus tard au point le plus éloigné des adversaires, avec une seconde et demie d'invulnérabilité. Plus de vies, tu sors du terrain.
 - **Les terrains** : L'Arène (ouverte), Le Labyrinthe (des couloirs partout), Le Bastion (cour centrale et anneau), plus un plan **tiré au sort** symétrique et toujours praticable.
 - **Asymétrique : « Le Char Lourd »** : deux vies de plus, un obus plus gros et plus rapide qui **transperce un char et continue**, mais il roule moins vite.

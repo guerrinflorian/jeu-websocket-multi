@@ -31,6 +31,7 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
   let viseeT = 0;
   let dernierAim = 0;
   const trainees = new Map(); // id d'obus -> points recents
+  const etiquettes = [];      // noms et vies, dessines par-dessus les murs
 
   // ── Souris : on vise ou l'on regarde, on tire au clic ────────────────
   function angleVersSouris(e) {
@@ -262,16 +263,25 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
       ctx.fill();
     }
 
-    // Nom + vies.
-    const nom = config.players[c.id]?.name || '?';
-    helpers.nameTag(ctx, c.x, c.y + R + 17, moi ? 'TOI' : nom, moi ? CREAM : col, 11);
-    for (let i = 0; i < c.vies; i++) {
-      const w = c.vies * 9;
-      ctx.beginPath();
-      ctx.arc(c.x - w / 2 + i * 9 + 4, c.y - R - 12, 3, 0, TAU);
-      ctx.fillStyle = RED;
-      ctx.fill();
+    // Nom et vies : mis de cote, ils seront dessines apres les murs.
+    etiquettes.push({
+      x: c.x, y: c.y, R, col: moi ? CREAM : col, vies: Math.round(c.vies),
+      nom: moi ? 'TOI' : (config.players[c.id]?.name || '?'),
+    });
+  }
+
+  function drawEtiquettes() {
+    for (const e of etiquettes) {
+      helpers.nameTag(ctx, e.x, e.y + e.R + 17, e.nom, e.col, 11);
+      const w = e.vies * 9;
+      for (let i = 0; i < e.vies; i++) {
+        ctx.beginPath();
+        ctx.arc(e.x - w / 2 + i * 9 + 4, e.y - e.R - 12, 3, 0, TAU);
+        ctx.fillStyle = RED;
+        ctx.fill();
+      }
     }
+    etiquettes.length = 0;
   }
 
   function drawFantome(c, now) {
@@ -341,14 +351,14 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
   // au mur jouable au lieu d'etre de la devinette.
   function drawVisee(moi) {
     if (!grille || !moi || moi.alive < 0.5) return;
-    const pas = 7;
+    const pas = 9;
     let x = moi.x + Math.cos(moi.ta) * 26;
     let y = moi.y + Math.sin(moi.ta) * 26;
     let vx = Math.cos(moi.ta), vy = Math.sin(moi.ta);
     let reb = 0;
     const pts = [{ x, y }];
     const chocs = [];
-    for (let i = 0; i < 150 && reb <= v.rebonds; i++) {
+    for (let i = 0; i < 170 && reb <= v.rebonds; i++) {
       const nx = x + vx * pas, ny = y + vy * pas;
       let tape = false;
       if (estMur(grille, Math.floor(nx / CASE), Math.floor(y / CASE))) { vx = -vx; tape = true; }
@@ -492,15 +502,15 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
     onEvents(evs) {
       for (const ev of evs) {
         if (ev.e === 'tir') {
-          sfx.play('click');
+          sfx.play('shot');
           juice.burst(ev.x, ev.y, { n: 6, color: GOLD, speed: 90, life: 0.2 });
         } else if (ev.e === 'reb') {
-          sfx.play('tickup');
+          sfx.play('ricochet');
           juice.burst(ev.x, ev.y, { n: 4, color: CREAM, speed: 70, life: 0.18 });
         } else if (ev.e === 'boum') {
           juice.burst(ev.x, ev.y, { n: 26, color: '#FF7A3D', speed: 210, life: 0.55 });
           juice.burst(ev.x, ev.y, { n: 14, color: GOLD, speed: 120, life: 0.4 });
-          sfx.play('death');
+          sfx.play('boum');
           if (ev.pid === you) { juice.shake(9); juice.flash(RED, 0.22); }
           else juice.shake(3);
           if (ev.reb > 0) juice.floater(ev.x, ev.y - 26, 'PAR REBOND !', { color: GOLD, size: 14 });
@@ -558,6 +568,7 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
 
       // Dessus des murs : masque ce qui est derriere eux.
       ctx.drawImage(toitCache, 0, -H, MONDE_W, MONDE_H + H);
+      drawEtiquettes();
 
       juice.drawWorld(ctx);
       ctx.restore();
@@ -571,6 +582,7 @@ export function createClient({ ctx, helpers, config, you, send, controls, canvas
       removeEventListener('pointermove', onMove);
       removeEventListener('pointerdown', onDown);
       trainees.clear();
+      etiquettes.length = 0;
       solCache = null;
       toitCache = null;
     },

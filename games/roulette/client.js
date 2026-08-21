@@ -681,8 +681,20 @@ export function createClient({ ctx, helpers, config, you, send }) {
       label('LE CHEF DE TABLE', 40, top + 24, { size: 13, weight: 800, color: GOLD, align: 'left', display: true });
       label(`BANQUE : ${fmt(v.banque)} 🪙`, L.AW - 40, top + 24, { size: 15, weight: 800, color: CREAM, align: 'right' });
       const dispo = v.nudge > 0 && v.phase === 'rien' && !v.nudged;
+
+      // Ce que la table lui doit ou lui rapporte, en clair.
+      const surTapis = Object.values(v.players).reduce((n, p) => n + p.engage, 0);
+      const bilan = -Object.values(v.players).reduce((n, p) => n + p.delta, 0);
+      if (v.phase === 'paie' && bilan !== 0) {
+        label(bilan > 0 ? `LA BANQUE ENCAISSE +${fmt(bilan)}` : `LA BANQUE PAIE ${fmt(bilan)}`,
+          L.AW / 2, top + 52, { size: 15, weight: 800, color: bilan > 0 ? GREEN : RED, display: true });
+      } else {
+        label(`${fmt(surTapis)} jetons sur le tapis`, L.AW / 2, top + 52, {
+          size: 13, weight: 700, color: surTapis > 0 ? CREAM : MAUVE,
+        });
+      }
       label(dispo ? 'La bille tourne : un coup de poignet ?' : `Coups de poignet restants : ${v.nudge}`,
-        L.AW / 2, top + 52, { size: 12, weight: 600, color: dispo ? CREAM : MAUVE });
+        L.AW / 2, top + 74, { size: 12, weight: 600, color: dispo ? GOLD : MAUVE });
       const bw = Math.min(190, (L.AW - 120) / 2);
       const by = top + H - (L.portrait ? 74 : 58);
       button(L.AW / 2 - bw - 10, by, bw, 46, '◀ UNE CASE', {
@@ -870,10 +882,13 @@ export function createClient({ ctx, helpers, config, you, send }) {
           sfx.play('join');
         } else if (ev.e === 'rien') {
           sfx.play('whistle');
+          sfx.startRoue();
           juice.floater(L.rx, L.ry - L.rr - 16, 'RIEN NE VA PLUS', { color: RED, size: 18 });
         } else if (ev.e === 'bille') {
           flash = 1;
-          sfx.play(ev.n === 0 ? 'klaxon' : 'tickup');
+          sfx.stopRoue();
+          sfx.play('bille');
+          if (ev.n === 0) sfx.play('klaxon');
           juice.floater(L.rx, L.ry - L.rr * 0.5, `${ev.n}`, { color: GOLD, size: 30 });
         } else if (ev.e === 'poignet') {
           juice.shake(6);
@@ -885,6 +900,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           sfx.play('death');
           juice.floater(L.AW / 2, L.barY - 20, 'MAXIMUM DE LA TABLE', { color: RED, size: 14 });
         } else if (ev.e === 'rejoue' && ev.pid === you) {
+          sfx.play('jetons');
           juice.floater(L.AW / 2, L.barY - 20, 'MÊMES MISES', { color: GOLD, size: 14 });
         } else if (ev.e === 'paie' && ev.pid === you) {
           sfx.play(ev.d > 0 ? 'bank' : 'steal');
@@ -932,6 +948,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
     },
 
     destroy() {
+      sfx.stopRoue();
       removeEventListener('keydown', onKey);
       zones.length = 0;
       feutreCache = null;

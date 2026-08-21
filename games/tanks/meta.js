@@ -41,15 +41,15 @@ export default {
     },
     recharge: {
       label: 'Recharge',
-      values: [1.2, 2, 3],
-      labels: ['Rapide (1,2 s)', 'Normale (2 s)', 'Lourde (3 s)'],
-      def: 2,
+      values: [0.7, 1.1, 1.8],
+      labels: ['Mitraille (0,7 s)', 'Nerveuse (1,1 s)', 'Lourde (1,8 s)'],
+      def: 1.1,
     },
     rebonds: {
       label: 'Rebonds',
-      values: [1, 3, 5],
-      labels: ['1 rebond', '3 rebonds', '5 rebonds'],
-      def: 3,
+      values: [1, 2, 4],
+      labels: ['1 rebond', '2 rebonds', '4 rebonds'],
+      def: 1,
     },
   },
   howto: [

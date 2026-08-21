@@ -895,7 +895,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           const key = ev.to === 'D' ? 'D' : `${ev.to}|${ev.h || 0}`;
           pops.set(key, performance.now());
           flights.push({ to: ev.to, h: ev.h || 0, t: 0, dur: 0.3 });
-          sfx.play('click');
+          sfx.play('carte');
         } else if (ev.e === 'hand') {
           flights.length = 0;
           pops.clear();
@@ -951,7 +951,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           sfx.play('coin');
         } else if (ev.e === 'shuffle') {
           juice.floater(L.AW - 140, 96, 'NOUVEAU SABOT', { color: MAUVE, size: 13 });
-          sfx.play('dash');
+          sfx.play('melange');
         }
       }
     },

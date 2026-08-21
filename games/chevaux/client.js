@@ -115,7 +115,7 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
       for (const ev of evs) {
         if (ev.e === 'roll') {
           rollAnim = 0.45;
-          sfx.play(ev.pid === you ? 'dash' : 'tickup');
+          sfx.play(ev.pid === you ? 'des' : 'tickup');
         } else if (ev.e === 'turn') {
           if (ev.pid === you) {
             juice.floater(CX, CY - 96, 'À TOI !', { color: '#3DFF8A', size: 26 });

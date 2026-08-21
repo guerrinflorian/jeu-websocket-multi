@@ -8,7 +8,7 @@ Des blindés vus du dessus dans une arène fermée. Tu tires, l'obus part, et **
 
 - Le **joystick** (ou **ZQSD** / les **flèches**) déplace le char.
 - La **tourelle regarde toujours dans la direction où tu roules**. Sur ordinateur, la **souris** vise et le **clic** tire.
-- **TIRER** (ou **Espace**) envoie un obus. Ensuite il faut **recharger** : c'est réglé par l'hôte, de 1,2 à 3 secondes. Cinq obus maximum en l'air à la fois.
+- **TIRER** (ou **Espace**) envoie un obus, vite et loin. Ensuite il faut **recharger** : environ une seconde par défaut, réglable de 0,7 à 1,8 seconde. Cinq obus maximum en l'air à la fois.
 - La **ligne pointillée** part de ton canon et montre le trajet exact de l'obus, **rebonds compris**, jusqu'à sa cible. C'est ton meilleur outil : oriente-toi jusqu'à ce que le bout de la ligne touche un adversaire.
 
 ## Les vies
@@ -19,7 +19,7 @@ Plus de vies, tu quittes le terrain. Tu restes spectateur jusqu'à la fin du mat
 
 ## Les obus
 
-- Ils rebondissent **1, 3 ou 5 fois** selon le réglage, puis s'éteignent.
+- Ils rebondissent **une fois** par défaut, avant de s'éteindre. L'hôte peut monter à 2 ou 4 rebonds pour les amateurs de billard, mais à un seul rebond le tir reste lisible : on voit d'où il vient et où il va.
 - Ils **traversent tes coéquipiers** : impossible de tuer un ami.
 - **Ton propre obus peut te revenir dessus**, mais seulement après avoir rebondi au moins une fois. Un tir mal calculé dans un couloir étroit, et tu t'élimines tout seul.
 

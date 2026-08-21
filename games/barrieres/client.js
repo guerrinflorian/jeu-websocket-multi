@@ -186,14 +186,14 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
       const L = v ? layout(v) : null;
       for (const ev of evs) {
         if (ev.e === 'move') {
-          sfx.play(ev.jump ? 'dash' : 'pickup');
+          sfx.play(ev.jump ? 'dash' : 'pion');
           if (L) {
             juice.burst(L.bx + (ev.x + 0.5) * L.cell, L.by + (ev.y + 0.5) * L.cell, {
               n: 6, color: config.players[ev.pid]?.color || '#FFF', speed: 70, life: 0.35, size: 2.5,
             });
           }
         } else if (ev.e === 'wall') {
-          sfx.play('hit');
+          sfx.play('pion');
           juice.shake(3);
         } else if (ev.e === 'turn') {
           if (ev.pid === you && L) {

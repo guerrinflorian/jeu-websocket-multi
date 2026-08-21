@@ -3,7 +3,7 @@
 **La fête foraine multijoueur dans ton navigateur.** 1 à 8 joueurs, en équipes
 libres (FFA, 1v1, 2v2, 4v4, 3v5, 1 contre tous…), des bots forains pour combler
 les places, jouable au doigt sur téléphone comme au clavier. Un seul process
-Node, zéro base de données, zéro asset sous licence (cartes, dés et boules
+Node, zéro base de données, zéro image (cartes, dés et boules
 dessinés au Canvas).
 
 **Les stands (17) :**
@@ -26,7 +26,7 @@ dessinés au Canvas).
 | 💣 **BOMBER** | Mot à la bombe | Une syllabe, un mot français, vite : la mèche brûle pendant que la bombe circule. Dico de 3595 mots. Asym : « L'Artificier » |
 | ♠️ **POKER** | Texas Hold'em | Les uns contre les autres : blindes, flop, turn, river, relance libre, tapis, pots secondaires. Asym : « Le Requin » qui jette un coup d'oeil |
 | 🎰 **ROULETTE** | Roulette française | Le vrai tapis : pleins, chevaux, carrés, sixains, douzaines, chances simples. Maximums de table, règle du zéro, REJOUER. Asym : « Le Chef de Table » |
-| 🚜 **TANKS** | Blindés à rebonds | Vue de dessus, obus qui ricochent sur les murs, trois vies, trois terrains au choix. Asym : « Le Char Lourd »   |
+| 🚜 **TANKS** | Blindés à rebonds | Vue de dessus, obus rapides qui ricochent sur les murs, ligne de visée qui montre le trajet, trois vies, quatre terrains. Asym : « Le Char Lourd » |
 
 ## Lancer en local
 

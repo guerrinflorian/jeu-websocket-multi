@@ -64,7 +64,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           juice.burst(ev.x, ev.y, { n: Math.round(6 + ev.s * 16), color: '#FFC93C', speed: 100 + ev.s * 200, life: 0.45, size: 3 });
           if (ev.s > 0.35) juice.ring(ev.x, ev.y, { color: '#F5EFE6', maxR: 30 + ev.s * 55, life: 0.4 });
           juice.shake(2 + ev.s * 7);
-          sfx.play('hit');
+          sfx.play('boite');
         } else if (ev.e === 'fall') {
           const color = config.players[ev.pid]?.color || '#FFF';
           falls.push({ x: ev.x, y: ev.y, color, t: 0 });

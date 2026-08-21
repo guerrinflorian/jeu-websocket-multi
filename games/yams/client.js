@@ -226,7 +226,7 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
       for (const ev of evs) {
         if (ev.e === 'roll') {
           tumble[ev.pid] = 0.45;
-          if (ev.pid === you || ev.first) sfx.play('dash');
+          if (ev.pid === you || ev.first) sfx.play('des');
         } else if (ev.e === 'pick') {
           const p2 = at(ev.pid);
           juice.floater(p2.x, p2.y, `${ev.sc > 0 ? '+' + ev.sc : '0'} ${CATS[ev.cat]?.label || ev.cat}`, {

@@ -112,7 +112,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           if (L) {
             anims.push({ c: ev.c, r: ev.r, seat: ev.seat, y: L.by - L.cell * 0.8, v: 260, t: 0, bounced: false });
           }
-          sfx.play('pickup');
+          sfx.play('pion');
         } else if (ev.e === 'turn') {
           lastTurnPid = ev.pid;
           if (ev.pid === you && L) {

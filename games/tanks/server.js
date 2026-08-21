@@ -9,8 +9,8 @@ import {
 const R_CHAR = 17;          // rayon du char
 const R_OBUS = 5;
 const V_CHAR = 132;         // unites par seconde
-const V_OBUS = 300;
-const VIE_OBUS = 5.5;       // secondes avant que l'obus s'eteigne
+const V_OBUS = 430;
+const VIE_OBUS = 3.2;       // secondes avant que l'obus s'eteigne
 const MAX_OBUS = 5;         // obus simultanes par char
 const RESPAWN = 2.6;
 const INVUL = 1.4;          // secondes d'invulnerabilite a la reapparition
@@ -37,8 +37,8 @@ export function createState(cfg) {
     carte: carteId,
     vies: pick(st.vies, [1, 3, 5], 3),
     duree: pick(st.duree, [90, 150, 240], 150),
-    recharge: pick(st.recharge, [1.2, 2, 3], 2),
-    rebonds: pick(st.rebonds, [1, 3, 5], 3),
+    recharge: pick(st.recharge, [0.7, 1.1, 1.8], 1.1),
+    rebonds: pick(st.rebonds, [1, 2, 4], 1),
   };
 
   const state = {
@@ -624,10 +624,10 @@ export function botAct(state, pid, mind, api) {
   const tolerance = 0.12 + (1 - pers.skill) * 0.22;
 
   if (clair && ecart < tolerance) {
-    const r = simuleTir(state, c, c.ta, 90);
+    const r = simuleTir(state, c, c.ta, 110);
     if (r && !r.ami && r.pid !== c.pid) {
       api.act('fire');
-      mem.pause = state.simT + 0.15 + (1 - pers.skill) * 0.9;
+      mem.pause = state.simT + 0.12 + (1 - pers.skill) * 0.6;
       return;
     }
   }

@@ -511,7 +511,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
           flights.push({
             id: ev.c, x0: from.x, y0: from.y, x1: L.AW / 2, y1: L.tableY, t: 0, dur: 0.26, spin: 0.9,
           });
-          sfx.play('click');
+          sfx.play('carte');
           if (rankOf(ev.c) === 8) sfx.play('boost');
         } else if (ev.e === 'draw') {
           const to = posOf(ev.pid);
@@ -520,7 +520,8 @@ export function createClient({ ctx, helpers, config, you, send }) {
               id: -1, x0: L.AW / 2 - 130, y0: L.tableY, x1: to.x, y1: to.y, t: -k * 0.06, dur: 0.28, spin: -0.6,
             });
           }
-          sfx.play(ev.forced ? 'steal' : 'pickup');
+          sfx.play('carte');
+          if (ev.forced) sfx.play('steal');
           if (ev.forced && ev.k >= 4) {
             juice.floater(posOf(ev.pid).x, posOf(ev.pid).y - 40, `+${ev.k} !`, { color: RED, size: 22 });
             juice.shake(5);

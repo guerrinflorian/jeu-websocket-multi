@@ -203,11 +203,12 @@ export function createClient({ ctx, helpers, config, you, send, controls }) {
       for (const ev of evs) {
         if (ev.e === 'shot') {
           anims.push({ g: ev.g, c: ev.c, r: ev.r, pid: ev.pid, t: -(shotIdx++) * 0.12, dur: 0.3, done: false });
+          if (shotIdx <= 3) sfx.play('shot');
         } else if (ev.e === 'sunk') {
           const pn = panels[ev.g];
           if (pn) juice.floater(pn.x + pn.s / 2, pn.y + pn.s / 2, 'COULÉ !', { color: HIT, size: 24 });
           juice.shake(ev.g === myCamp ? 8 : 4);
-          sfx.play('death');
+          sfx.play('boum');
         } else if (ev.e === 'dead') {
           const pn = panels[ev.g];
           if (pn) juice.floater(pn.x + pn.s / 2, pn.y + pn.s / 2 - 30, 'FLOTTE ANÉANTIE !', { color: '#FF4757', size: 22 });

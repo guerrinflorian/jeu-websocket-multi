@@ -636,7 +636,7 @@ export function createClient({ ctx, helpers, config, you, send }) {
         } else if (ev.e === 'board') {
           const from = ev.street === 1 ? 0 : ev.street === 2 ? 3 : 4;
           for (let i = 0; i < ev.cards.length; i++) pops.set(`b${from + i}`, performance.now());
-          sfx.play('click');
+          sfx.play('carte');
           juice.floater(L.cx, L.cy - 78, STREETS[ev.street] || '', { color: GOLD, size: 15 });
         } else if (ev.e === 'win') {
           if (!v) continue;
