@@ -6,6 +6,7 @@ export default {
   emoji: '🎲',
   color: '#4D7CFF',
   tagline: 'Cinq dés, trois lancers, zéro pitié.',
+  genre: 'des',
   pitch: 'Le vrai Yam\'s, feuille complète : section haute avec bonus, brelan, carré, full, suites, et le YAMS qui fait hurler la table. Tout le monde lance EN MÊME TEMPS : garde tes dés, relance le reste, case ton score au bon endroit. Tu vois les dés des autres trembler en direct.',
   minPlayers: 2,
   maxPlayers: 8,

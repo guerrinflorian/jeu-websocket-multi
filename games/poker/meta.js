@@ -6,6 +6,7 @@ export default {
   emoji: '♠️',
   color: '#2FA95F',
   tagline: 'Texas Hold\'em. Les uns contre les autres.',
+  genre: 'cartes',
   pitch: 'Le vrai Texas Hold\'em du tripot forain : deux cartes fermées, cinq cartes communes, quatre tours d\'enchères. Ici on ne joue pas contre la banque, on joue contre les autres. Suivre, relancer, coucher, TAPIS. Le bluff coûte cher et rapporte gros. En 1 contre tous, Le Requin a le tapis double et un coup d\'oeil dans ton jeu.',
   minPlayers: 2,
   maxPlayers: 8,

@@ -6,6 +6,7 @@ export default {
   emoji: '🚢',
   color: '#29D9FF',
   tagline: 'Touché. Coulé. En même temps.',
+  genre: 'plateau',
   pitch: 'La bataille navale du bassin forain : chacun arme son tir en secret, et tout part EN MÊME TEMPS. Zéro attente, que des klaxons. Touché, coulé, flotte anéantie : dernier camp à flot rafle la mise. En 1 contre tous, l\'Amiral aligne une armada géante et tire en rafale.',
   minPlayers: 2,
   maxPlayers: 8,

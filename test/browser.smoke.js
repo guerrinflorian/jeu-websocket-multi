@@ -27,7 +27,7 @@ try {
   const code = await page.textContent('.ticket-code');
   console.log('room:', code.trim());
   const game = process.env.SMOKE_GAME;
-  if (game) { await page.click(`.game-card[data-game="${game}"]`); await sleep(200); }
+  if (game) { await page.click(`[data-game="${game}"]`); await sleep(200); }
   for (let i = 0; i < 3; i++) { await page.click('#btn-addbot'); await sleep(150); }
   await page.screenshot({ path: path.join(OUT, '2-lobby.png') });
 

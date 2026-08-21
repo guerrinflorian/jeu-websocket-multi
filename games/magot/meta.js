@@ -6,6 +6,7 @@ export default {
   emoji: '💰',
   color: '#FFC93C',
   tagline: 'Ramasse. Porte. Trahis.',
+  genre: 'arcade',
   pitch: 'Un tas de jetons au centre, ta caisse au coin. Plus tu portes, plus tu es lent, et tout le monde a le droit de te tacler.',
   minPlayers: 2,
   maxPlayers: 8,

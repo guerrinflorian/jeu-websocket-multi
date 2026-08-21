@@ -52,6 +52,9 @@ function makeConn(ws) {
     strikes: 0,
     send(obj) { this.sendRaw(JSON.stringify(obj)); },
     sendRaw(json) { if (ws.readyState === ws.OPEN) ws.send(json); },
+    // Octets en attente d'envoi : sert a sauter les snapshots quand le
+    // reseau du joueur decroche (sinon la file grossit et la latence explose).
+    buffered() { return ws.bufferedAmount || 0; },
     close(code, reason) { try { ws.close(code, reason); } catch { /* déjà fermé */ } },
   };
   ws.kermesse = conn;

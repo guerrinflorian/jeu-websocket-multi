@@ -6,6 +6,7 @@ export default {
   emoji: '🤥',
   color: '#FF6B9D',
   tagline: 'Bluffe, compte, et ne cligne pas.',
+  genre: 'des',
   pitch: 'Le bluff aux dés du bistrot forain : cinq dés chacun, cachés sous ton gobelet. On enchérit sur ce que cache TOUTE la table (« quatre 3 ! »), les 1 comptent comme des jokers. Tu penses qu\'il exagère ? MENTEUR ! On lève les gobelets, on compte, et le perdant jette un dé. Plus de dés, plus de joueur.',
   minPlayers: 2,
   maxPlayers: 8,

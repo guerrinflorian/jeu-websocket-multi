@@ -498,10 +498,12 @@ export class Room {
       const ev = this.gameDef.srv.tick(this.gs, dt) || [];
       if (this.pendingEvs.length) { ev.push(...this.pendingEvs); this.pendingEvs = []; }
       this.broadcastSnap(ev);
+      this.strikes = 0;
       if (this.gameDef.srv.isOver(this.gs)) this.finish();
     } catch (err) {
-      console.error(`[room ${this.code}] crash du jeu ${this.gameId} :`, err);
-      this.abortGame();
+      // Un hoquet isole ne doit pas faire tomber la table : on laisse trois
+      // chances au jeu de se remettre d'aplomb avant de rendre la main.
+      this.gameStrike(err);
     }
   }
 
@@ -527,7 +529,13 @@ export class Room {
         input: (d) => srv.onInput(this.gs, pid, d),
         act: (a, d) => srv.onAction(this.gs, pid, a, d),
       };
-      srv.botAct(this.gs, pid, entry.mind, api);
+      // Isole : un forain qui bugue ne fait pas tomber la table entiere.
+      try {
+        srv.botAct(this.gs, pid, entry.mind, api);
+      } catch (err) {
+        console.error(`[room ${this.code}] forain ${pid} en panne sur ${this.gameId} :`, err);
+        this.minds.delete(pid);
+      }
       entry.next = this.tickNo + Math.max(1, Math.round((2 + entry.mind.rng.next() * 2) * entry.mind.p.pace));
     }
     // Un humain revenu d'AFK reprend la main : on jette l'esprit d'autopilote.
@@ -541,8 +549,16 @@ export class Room {
     const { srv } = this.gameDef;
     const cache = new Map();
     const now = Date.now();
+    const hasEv = ev.length > 0;
     for (const m of this.members.values()) {
       if (!m.conn) continue;
+      // Reseau bouche : on saute ce snapshot plutot que d'empiler du retard.
+      // Les snapshots porteurs d'evenements passent toujours (sons, effets).
+      if (!hasEv && m.conn.buffered && m.conn.buffered() > CFG.MAX_BACKLOG_BYTES) {
+        m.skipped = (m.skipped || 0) + 1;
+        if (m.skipped < 20) continue;   // au-dela, on force : mieux vaut tard
+      }
+      m.skipped = 0;
       const pid = this.gamePids.includes(m.pid) ? m.pid : null;
       const view = srv.view(this.gs, pid);
       let json = cache.get(view);
@@ -558,6 +574,14 @@ export class Room {
     try { fn(); } catch (err) {
       console.error(`[room ${this.code}] erreur input ${this.gameId} :`, err);
     }
+  }
+
+  // Compte les erreurs de jeu : trois de suite et on rend la main au lobby
+  // plutot que de diffuser un etat casse a huit personnes.
+  gameStrike(err) {
+    console.error(`[room ${this.code}] ${this.gameId} :`, err);
+    this.strikes = (this.strikes || 0) + 1;
+    if (this.strikes >= 3) this.abortGame();
   }
 
   finish() {

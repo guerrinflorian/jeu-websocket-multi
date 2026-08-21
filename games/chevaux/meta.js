@@ -6,6 +6,7 @@ export default {
   emoji: '🐴',
   color: '#FF9F43',
   tagline: 'Un 6 pour sortir, zéro pitié sur la piste.',
+  genre: 'plateau',
   pitch: 'Les petits chevaux de la Kermesse : sors tes chevaux avec un 6, fais le tour de la piste lumineuse, capture tout ce qui traîne et monte ton échelle vers le centre. Le premier camp qui rentre tous ses chevaux gagne (et le droit de parader).',
   minPlayers: 2,
   maxPlayers: 8,

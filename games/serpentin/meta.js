@@ -6,6 +6,7 @@ export default {
   emoji: '🎗️',
   color: '#29D9FF',
   tagline: 'Trace, coupe, survis.',
+  genre: 'arcade',
   pitch: 'Trace ton serpentin lumineux et coupe la route des autres. Les traînées de tes coéquipiers sont des portes pour toi, et des murs pour eux.',
   minPlayers: 2,
   maxPlayers: 8,

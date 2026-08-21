@@ -86,8 +86,11 @@ function mdLite(md) {
 // ── Aperçus des jeux ───────────────────────────────────────────────────
 // Chaque jeu peut fournir games/<id>/preview.js exportant drawPreview(ctx,
 // w, h) : une vignette illustrée dessinée au Canvas. Sinon : fond + emoji.
+// Les vignettes sont dessinées une fois puis recopiées : le lobby se
+// rafraîchit souvent, hors de question de tout revectoriser à chaque fois.
 
 const previewMods = new Map(); // id → Promise<module|null>
+const thumbCache = new Map();  // id|w|h → canvas hors écran
 
 function previewMod(id) {
   if (!previewMods.has(id)) {
@@ -96,39 +99,185 @@ function previewMod(id) {
   return previewMods.get(id);
 }
 
+function fallbackThumb(ctx, w, h, emoji) {
+  const g = ctx.createLinearGradient(0, 0, 0, h);
+  g.addColorStop(0, '#241245');
+  g.addColorStop(1, '#140A26');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, w, h);
+  ctx.font = `${Math.round(h * 0.48)}px system-ui, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji || '🎪', w / 2, h / 2 + 2);
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+}
+
+async function thumbFor(meta, w, h, dpr) {
+  const key = `${meta.id}|${w}|${h}|${dpr}`;
+  const hit = thumbCache.get(key);
+  if (hit) return hit;
+  const c = document.createElement('canvas');
+  c.width = Math.round(w * dpr);
+  c.height = Math.round(h * dpr);
+  const g = c.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  fallbackThumb(g, w, h, meta.emoji);
+  const mod = await previewMod(meta.id);
+  if (mod?.drawPreview) {
+    try {
+      g.save();
+      mod.drawPreview(g, w, h);
+      g.restore();
+    } catch {
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      fallbackThumb(g, w, h, meta.emoji);
+    }
+  }
+  thumbCache.set(key, c);
+  if (thumbCache.size > 90) thumbCache.delete(thumbCache.keys().next().value);
+  return c;
+}
+
 export function paintThumbs(root, manifest) {
   root.querySelectorAll('canvas[data-thumb]').forEach(async (cv) => {
     const id = cv.dataset.thumb;
-    const meta = manifest.find((m) => m.id === id);
+    const meta = manifest.find((m) => m.id === id) || { id, emoji: '🎪' };
     const rect = cv.getBoundingClientRect();
     const dpr = Math.min(2, devicePixelRatio || 1);
     const w = Math.max(120, Math.round(rect.width));
-    const h = Math.max(68, Math.round(rect.height) || Math.round(w * 9 / 16));
+    const h = Math.max(68, Math.round(rect.height) || Math.round((w * 9) / 16));
+    if (cv.dataset.painted === `${w}|${h}`) return;
     cv.width = Math.round(w * dpr);
     cv.height = Math.round(h * dpr);
     const ctx = cv.getContext('2d');
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    const fallback = () => {
-      const g = ctx.createLinearGradient(0, 0, 0, h);
-      g.addColorStop(0, '#241245');
-      g.addColorStop(1, '#140A26');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, w, h);
-      ctx.font = `${Math.round(h * 0.48)}px system-ui, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(meta?.emoji || '🎪', w / 2, h / 2 + 2);
-      ctx.textBaseline = 'alphabetic';
-    };
-    fallback();
-    const mod = await previewMod(id);
-    if (!mod?.drawPreview || !cv.isConnected) return;
-    try {
-      ctx.save();
-      mod.drawPreview(ctx, w, h);
-      ctx.restore();
-    } catch { fallback(); }
+    fallbackThumb(ctx, w, h, meta.emoji);
+    const spr = await thumbFor(meta, w, h, dpr);
+    if (!cv.isConnected) return;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(spr, 0, 0);
+    cv.dataset.painted = `${w}|${h}`;
   });
+}
+
+// ── Sélecteur de stands : recherche + familles ─────────────────────────
+// Un seul composant, utilisé par l'accueil (galerie) et par le lobby
+// (choix du jeu). Le filtrage se fait sur place, sans reconstruire le DOM :
+// on tape, ça filtre, rien ne saute et rien ne perd le focus.
+
+export const GENRES = [
+  { id: 'tous', label: 'Tous', emoji: '🎪' },
+  { id: 'plateau', label: 'Plateau', emoji: '🎯' },
+  { id: 'cartes', label: 'Cartes', emoji: '🃏' },
+  { id: 'des', label: 'Dés', emoji: '🎲' },
+  { id: 'casino', label: 'Casino', emoji: '🎰' },
+  { id: 'arcade', label: 'Arcade', emoji: '🕹️' },
+  { id: 'adresse', label: 'Adresse', emoji: '🎳' },
+  { id: 'mots', label: 'Mots', emoji: '🔤' },
+];
+
+// État des filtres, conservé entre deux rendus (accueil et lobby séparés).
+export const picker = { home: { q: '', genre: 'tous' }, lobby: { q: '', genre: 'tous' } };
+
+const norm = (s) => String(s ?? '').toLowerCase()
+  .normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+function matches(meta, q, genre) {
+  if (genre !== 'tous' && (meta.genre || 'plateau') !== genre) return false;
+  if (!q) return true;
+  const hay = norm(`${meta.name} ${meta.tagline} ${meta.pitch} ${meta.genre || ''}`);
+  return q.split(/\s+/).filter(Boolean).every((mot) => hay.includes(mot));
+}
+
+// Barre recherche + familles présentes dans le manifest.
+export function pickerBar(manifest, scope, placeholder) {
+  const st = picker[scope];
+  const presents = new Set(manifest.map((m) => m.genre || 'plateau'));
+  const chips = GENRES.filter((g) => g.id === 'tous' || presents.has(g.id)).map((g) => `
+    <button class="chip chip-genre ${g.id === st.genre ? 'sel' : ''}" data-genre="${g.id}">
+      ${g.emoji} ${g.label}</button>`).join('');
+  return `
+    <div class="picker-bar">
+      <div class="search-wrap">
+        <span class="search-icon" aria-hidden="true">🔎</span>
+        <input class="input input-search" type="search" data-search="${scope}"
+               placeholder="${esc(placeholder)}" value="${esc(st.q)}"
+               autocomplete="off" autocorrect="off" spellcheck="false">
+        <button class="search-clear" data-clear="${scope}" aria-label="Effacer">✕</button>
+      </div>
+      <div class="chip-row genre-row">${chips}</div>
+    </div>`;
+}
+
+// Applique le filtre courant aux cartes déjà présentes dans le DOM.
+export function applyPicker(root, manifest, scope) {
+  const st = picker[scope];
+  const q = norm(st.q).trim();
+  let visibles = 0;
+  root.querySelectorAll('[data-stand], [data-card]').forEach((el) => {
+    const id = el.dataset.stand || el.dataset.card;
+    const meta = manifest.find((m) => m.id === id);
+    const on = meta ? matches(meta, q, st.genre) : false;
+    el.classList.toggle('hide', !on);
+    if (on) visibles++;
+  });
+  const vide = root.querySelector('[data-empty]');
+  if (vide) vide.classList.toggle('show', visibles === 0);
+  const cnt = root.querySelector('[data-count]');
+  if (cnt) cnt.textContent = visibles === manifest.length ? String(manifest.length) : `${visibles}/${manifest.length}`;
+  const clr = root.querySelector(`[data-clear="${scope}"]`);
+  if (clr) clr.classList.toggle('show', st.q.length > 0);
+  paintThumbs(root, manifest);
+}
+
+// Branche la barre : frappe au clavier, familles, croix d'effacement.
+export function wirePicker(root, manifest, scope) {
+  const input = root.querySelector(`[data-search="${scope}"]`);
+  if (input) {
+    input.addEventListener('input', () => {
+      picker[scope].q = input.value;
+      applyPicker(root, manifest, scope);
+    });
+    input.addEventListener('keydown', (e) => {
+      e.stopPropagation();
+      if (e.key === 'Escape') { input.value = ''; picker[scope].q = ''; applyPicker(root, manifest, scope); }
+    });
+  }
+  root.querySelector(`[data-clear="${scope}"]`)?.addEventListener('click', () => {
+    picker[scope].q = '';
+    if (input) { input.value = ''; input.focus(); }
+    applyPicker(root, manifest, scope);
+  });
+  root.querySelectorAll('[data-genre]').forEach((b) => b.addEventListener('click', () => {
+    picker[scope].genre = b.dataset.genre;
+    root.querySelectorAll('[data-genre]').forEach((x) => x.classList.toggle('sel', x === b));
+    sfx.play('click');
+    applyPicker(root, manifest, scope);
+  }));
+  applyPicker(root, manifest, scope);
+}
+
+// Ligne « 2 à 8 joueurs · Cartes » sous le titre d'une carte de stand.
+function standMeta(m) {
+  const g = GENRES.find((x) => x.id === (m.genre || 'plateau'));
+  const n = m.minPlayers === m.maxPlayers ? `${m.maxPlayers}` : `${m.minPlayers} à ${m.maxPlayers}`;
+  return `${n} joueurs${g && g.id !== 'tous' ? ` · ${g.label}` : ''}`;
+}
+
+// Vignette d'un stand : image, nom, accroche, et le nombre de joueurs.
+function standCard(m) {
+  return `
+    <button class="stand" data-stand="${m.id}" style="--neon:${m.color || '#FF3D8A'}">
+      <span class="stand-shot">
+        <canvas class="stand-thumb" data-thumb="${m.id}"></canvas>
+        <span class="stand-help" aria-hidden="true">❓ règles</span>
+      </span>
+      <span class="stand-name">${m.emoji} ${esc(m.name)}</span>
+      <span class="stand-tag">${esc(m.tagline || '')}</span>
+      <span class="stand-meta">${standMeta(m)}</span>
+    </button>`;
 }
 
 // ── Écran accueil ──────────────────────────────────────────────────────
@@ -163,15 +312,10 @@ export function renderHome(el, { profile, prefillCode, manifest = [], onCreate, 
       </div>
       ${manifest.length ? `
       <section class="stands">
-        <h3 class="sec-title">${t('home.stands')} <span class="sec-count">${manifest.length}</span></h3>
-        <div class="stand-grid">
-          ${manifest.map((m) => `
-            <button class="stand" data-stand="${m.id}" style="--neon:${m.color || '#FF3D8A'}">
-              <canvas class="stand-thumb" data-thumb="${m.id}"></canvas>
-              <span class="stand-name">${m.emoji} ${esc(m.name)}</span>
-              <span class="stand-tag">${esc(m.tagline || '')}</span>
-            </button>`).join('')}
-        </div>
+        <h3 class="sec-title">${t('home.stands')} <span class="sec-count" data-count>${manifest.length}</span></h3>
+        ${pickerBar(manifest, 'home', 'Chercher un stand…')}
+        <div class="stand-grid">${manifest.map(standCard).join('')}</div>
+        <p class="empty-note" data-empty>Aucun stand sous ce nom. Essaie « cartes », « dés », « mots »…</p>
         <p class="hint">${t('home.standsHint')}</p>
       </section>` : ''}
       <footer class="home-footer">
@@ -205,13 +349,24 @@ export function renderHome(el, { profile, prefillCode, manifest = [], onCreate, 
     const meta = manifest.find((m) => m.id === b.dataset.stand);
     if (meta) { sfx.play('click'); openRules(meta); }
   }));
-  paintThumbs(el, manifest);
+  wirePicker(el, manifest, 'home');
   if (prefillCode) codeInput.focus();
 }
 
 // ── Écran lobby ────────────────────────────────────────────────────────
 
 export function renderLobby(el, room, { myPid, manifest, net, onLeave }) {
+  // Rien n'a change dans la salle ? On ne touche pas au DOM : pas de
+  // clignotement, pas de defilement perdu, pas de vignettes redessinees.
+  const sig = JSON.stringify([room, myPid, picker.lobby]);
+  if (el.dataset.sig === sig && el.childElementCount) return;
+  el.dataset.sig = sig;
+  const scroll = el.scrollTop;
+  const act = document.activeElement;
+  const focusSel = act && el.contains(act) && act.dataset.search
+    ? `[data-search="${act.dataset.search}"]` : null;
+  const caret = focusSel ? act.selectionStart : 0;
+
   const isHost = room.hostPid === myPid;
   const me = room.players.find((p) => p.pid === myPid);
   const fmt = room.formats.find((f) => f.id === room.formatId) || null;
@@ -241,12 +396,17 @@ export function renderLobby(el, room, { myPid, manifest, net, onLeave }) {
   }).join('');
 
   const gameCards = manifest.map((m) => `
-    <button class="game-card ${m.id === room.gameId ? 'sel' : ''}" data-game="${m.id}"
-            style="--neon:${m.color || '#FF3D8A'}" ${isHost ? '' : 'disabled'}>
-      <canvas class="game-thumb" data-thumb="${m.id}"></canvas>
-      <span class="game-title"><span class="game-emoji">${m.emoji}</span><span class="game-name">${esc(m.name)}</span></span>
-      <span class="game-pitch">${esc(m.tagline || '')}</span>
-    </button>`).join('');
+    <div class="game-card ${m.id === room.gameId ? 'sel' : ''}" data-card="${m.id}"
+         style="--neon:${m.color || '#FF3D8A'}">
+      <button class="game-pick" data-game="${m.id}" ${isHost ? '' : 'disabled'}>
+        <canvas class="game-thumb" data-thumb="${m.id}"></canvas>
+        <span class="game-title"><span class="game-emoji">${m.emoji}</span><span class="game-name">${esc(m.name)}</span></span>
+        <span class="game-pitch">${esc(m.tagline || '')}</span>
+        <span class="game-meta">${standMeta(m)}</span>
+      </button>
+      <button class="game-help" data-help="${m.id}" aria-label="Règles : ${esc(m.name)}">❓</button>
+      ${m.id === room.gameId ? '<span class="game-flag">AU PROGRAMME</span>' : ''}
+    </div>`).join('');
 
   const fmtChips = room.formats.map((f) => `
     <button class="chip ${f.id === room.formatId ? 'sel' : ''} ${f.kind === 'asym' ? 'chip-asym' : ''}"
@@ -285,10 +445,21 @@ export function renderLobby(el, room, { myPid, manifest, net, onLeave }) {
       </section>
 
       <section class="lobby-sec">
-        <h3 class="sec-title">${t('lobby.game')}
+        <h3 class="sec-title">${t('lobby.game')} <span class="sec-count" data-count>${manifest.length}</span>
           ${meta ? `<button class="btn-ghost btn-rules" id="btn-rules">❓ ${t('lobby.rules')}</button>` : ''}
         </h3>
-        <div class="game-row">${gameCards}</div>
+        ${meta ? `
+        <div class="game-current" style="--neon:${meta.color || '#FF3D8A'}">
+          <span class="cur-emoji">${meta.emoji}</span>
+          <span class="cur-text">
+            <span class="cur-name">${esc(meta.name)}</span>
+            <span class="cur-tag">${esc(meta.tagline || '')}</span>
+          </span>
+          <span class="cur-meta">${standMeta(meta)}</span>
+        </div>` : ''}
+        ${pickerBar(manifest, 'lobby', 'Chercher un jeu…')}
+        <div class="game-grid">${gameCards}</div>
+        <p class="empty-note" data-empty>Aucun jeu sous ce nom.</p>
       </section>
 
       <section class="lobby-sec">
@@ -347,9 +518,14 @@ export function renderLobby(el, room, { myPid, manifest, net, onLeave }) {
     e.stopPropagation();
     net.send({ t: 'removeBot', pid: b.dataset.removebot });
   }));
-  el.querySelectorAll('.game-card').forEach((b) => b.addEventListener('click', () => {
+  el.querySelectorAll('[data-game]').forEach((b) => b.addEventListener('click', () => {
     sfx.play('click');
     net.send({ t: 'setGame', gameId: b.dataset.game });
+  }));
+  el.querySelectorAll('[data-help]').forEach((b) => b.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const m = manifest.find((x) => x.id === b.dataset.help);
+    if (m) { sfx.play('click'); openRules(m); }
   }));
   el.querySelectorAll('[data-format]').forEach((b) => b.addEventListener('click', () => {
     sfx.play('click');
@@ -374,7 +550,14 @@ export function renderLobby(el, room, { myPid, manifest, net, onLeave }) {
       if (p && !p.spectator) { sfx.play('click'); net.send({ t: 'setTeam', pid: p.pid }); }
     }));
   }
-  paintThumbs(el, manifest);
+  wirePicker(el, manifest, 'lobby');
+  // Le lobby se re-rend a chaque message du serveur : on remet l'ecran la
+  // ou il etait, sinon choisir un jeu renvoie le joueur en haut de page.
+  el.scrollTop = scroll;
+  if (focusSel) {
+    const again = el.querySelector(focusSel);
+    if (again) { again.focus(); try { again.setSelectionRange(caret, caret); } catch { /* pas un champ texte */ } }
+  }
 }
 
 function fmtSettingValue(v, spec) {

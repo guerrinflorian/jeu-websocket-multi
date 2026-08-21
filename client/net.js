@@ -25,6 +25,17 @@ export class Net {
   connect() {
     this.wantOpen = true;
     this.open();
+    // Sur telephone, passer dans une autre appli tue la socket sans que
+    // « close » arrive tout de suite : au retour on verifie et on relance.
+    if (!this.boundWake) {
+      this.boundWake = () => {
+        if (!this.wantOpen || document.hidden) return;
+        if (!this.ws || this.ws.readyState > 1) { this.retry = 0; this.open(); }
+      };
+      document.addEventListener('visibilitychange', this.boundWake);
+      addEventListener('online', this.boundWake);
+      addEventListener('pageshow', this.boundWake);
+    }
   }
 
   open() {
@@ -55,8 +66,10 @@ export class Net {
       clearInterval(this.pingTimer);
       if (!this.wantOpen) return;
       this.setStatus('reconnecting');
-      const delay = Math.min(5000, 400 * Math.pow(1.6, this.retry++));
-      setTimeout(() => this.open(), delay);
+      // Gigue : si le serveur redemarre, huit clients ne reviennent pas
+      // tous a la milliseconde pres.
+      const base = Math.min(5000, 400 * Math.pow(1.6, this.retry++));
+      setTimeout(() => this.open(), base * (0.75 + Math.random() * 0.5));
     };
     ws.onerror = () => { try { ws.close(); } catch { /* déjà fermé */ } };
   }

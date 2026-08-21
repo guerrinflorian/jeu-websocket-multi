@@ -468,6 +468,368 @@ criquet crissement croisade croquette crotale croupion cruche crustace
 cueillette cuillere cuirasse culbute cultiver cuvette cyclone
 `);
 
+M.push(`
+abricotier absolument accessoire accompagner accomplir accroitre acharner achat
+acquis actualite additionner adorable aeration affaiblir affectueux affronter
+agacement agrandir agrement aiguiser ailier aimant ajourner alimentation allonge
+alpiniste amaigrir amelioration amenagement amoureux amplifier amusement analyser
+ancrage anecdote angoisser animation annoter anticiper apaisement aplatir apporter
+approbation approuver appuie aquarelle arbitrage arborer archipel ardoise argenter
+armature aromate arrondir arroseur artichaut asperger aspirateur assainir assaisonner
+assemblage assiduite assombrir assortir assouplir astronaute atelier atomique attabler
+attacher attarder attendrir atterrir attirance attraper aubaine aubergine audace
+augmenter aumone auteur autobus autocar autographe automate automne autoriser autoroute
+avaler avancer avantage avarie aventurier averse avertir aveugler aviateur avion
+aviron avocat avoine avouer azalee babiller bagage bagarre baguette baignade baigner
+bailler baisser balade balancoire balayer balcon baleine ballade ballon banane bandeau
+banderole banlieue banquet barbecue barque barrage basculer bassine bataille bateau
+batiment batterie bavarder bazar beaute bebe becane becher beignet belette belier
+benevole benir berceau bercer berger besogne betail betise beurrer biberon bibliotheque
+bicyclette bidon bijou bilan billard billet biscotte biscuit bistrot blaguer blanchir
+blesser bleuet blinder bloquer blouson bobine bocal boisson boiter bolide bonbon
+bondir bonheur bonhomme bonnet bordure borner bosse botanique botte boucher bouchon
+boucle bouder boueux bouffee bougeoir bougie bouillir boulanger boulevard bouleverser
+boulon bouquet bourdon bourgeon bourrasque boussole bouteille boutique bouton boxeur
+bracelet braise brancher brandir branler braquer brasser bravoure brebis bredouille
+brevet bricoler brigade briller brindille brioche briquet brochure broder bronzer
+brosser brouette brouillard broyer bruiner brulure brumeux brunir brusquer bruyant
+bucheron buffet buisson bulletin bureau buste butiner buvette cabane cabine cabosser
+cacahuete cachette cadavre cadeau cadenas cadran cafetiere cageot cahier caillou
+caisse calculer calendrier caleçon caliner calmer calquer cambrioler camionnette
+campagne camping canapé canard candidat caneton canicule canoter cantine caoutchouc
+capable capitaine capot caprice capturer caramel caravane carburant caresser cargaison
+caricature carnaval carotte carrefour carriere cartable cartouche cascade caserne
+casquette casserole catalogue catastrophe cathedrale cauchemar causerie cavalier caverne
+ceinture celebre celebrer celibataire cendrier centaine centrale cependant cercueil
+cerealier cerise certificat cerveau chagrin chaleur chalumeau chameau champignon
+chandelle chantier chapeau chapiteau charbon charcuterie chariot charpente charrette
+chasseur chataigne chaudiere chaussette chaussure chauffage chauffeur chauve chavirer
+chemise cheminee chenille chequier chercheur cherir chevalier cheveu chevre chiffon
+chiffre chimique chirurgien chocolat chorale chouette chuchoter cimetiere cinema
+cintre circuler ciseau citadin citerne citoyen citrouille clairiere clapoter clarinette
+classeur clavier clignoter climatiser clocher cloison clotures clouer cocotte coffret
+cogner coiffeur coincer colere colline colombe colorier colporter combattre comedie
+commerce commode commune compagnon comparer compasser complice comportement composer
+comprendre comprimer compteur concombre concours concierge condamner conduite confiance
+confiture congeler conjuguer connaissance conquerir conseiller conserve consoler
+consommer constater construire consulter conteneur contourner contrarier contribuer
+convaincre convenir copeau copier coquelicot coquillage cordage cordonnier corbeau
+corbeille cornemuse corniche corriger costume cotelette cotisation coucher coudre
+couette couleuvre coulisse couloir coupable couperet coupole courageux courgette
+couronne courrier courtiser cousin coussin couteau couturier couvercle couverture
+crabe cracher craie craquer cravate crayon creation creche creuser crevette cribler
+crinière crique crisper cristal critiquer crochet croiser croquer crotte croute
+cueillir cuillere cuisiner cuisson cuivre culotte cultiver curieux curseur cyclone
+`);
+
+M.push(`
+dactylo daigner damier danseur dauphin debarquer debarrasser debattre debiter deblayer
+deborder deboucher debout debrouiller debuter decalage decamper decevoir dechaine
+decharge dechiffrer dechirer decider declarer declencher decoiffer decoller decorer
+decouper decourager decouverte decrire decrocher dedaigner dedier deduire defaire
+defendre defiler definir deformer degager degivrer degonfler degouter degrader deguiser
+dejeuner delaisser delicat delivrer demander demarche demarrer demenager demolir
+demontrer denicher denoncer depanner departir depasser depecher dependre depenser
+deplacer deplier deposer depouiller deprimer deraper derniere derouler deranger
+derriere desaccord descendre desert desesperer deshabiller designer desirer desobeir
+desordre dessert dessiner destin detacher detailler detendre detenir deteriorer
+determiner detester detourner detruire dette deuxieme devaler devancer devenir deviner
+devisser devoiler devouer diagonale dialogue diamant dictee dieteticien difference
+difficile diffuser digerer digne diminuer diplome diriger discours discuter disparaitre
+disperser disponible disputer disquette dissiper distance distraire distribuer diviser
+docteur document dodeliner doigter domaine domestique dominer dompter donateur dorloter
+dormeur dossier douane doublure douceur douche douleur doute douzaine dragee drapeau
+dresser droguerie droiture drolerie duvet dynamique ebahir ebauche eblouir ebranler
+ecaille ecarter echafaudage echange echapper echarpe echauffer echeance echelon echouer
+eclabousser eclaircir eclater eclipse ecluse ecolier economie ecorce ecorcher ecosser
+ecouler ecraser ecrevisse ecrire ecrivain ecureuil ecurie edifice editer eduquer
+effacer effaroucher effectuer effervescent effleurer effondrer efforcer effrayer
+egaler egarer egayer eglantine egoutter elancer elargir electricien elegant elephant
+elevage elever eliminer eloigner emballer embarquer embellir emboiter embouteillage
+embrasser emerveiller emietter emigrer emission emmener emotion emousser emparer
+empecher empiler emplacement employer empoigner emporter empreinte emprisonner emprunter
+encadrer encaisser enchanter enclos encourager endommager endormir endroit endurer
+energie enerver enfermer enfiler enflammer enfoncer enfouir engager engin engloutir
+engourdir enjamber enlever ennuyer enorme enquete enraciner enregistrer enrhumer enrichir
+enrouler enseigner ensemble ensoleille entamer entasser entendre enterrer entetement
+enthousiasme entier entonnoir entourer entrainer entrepot entreprise entretenir entrevoir
+envahir enveloppe envier environ envoler envoyer epaisseur epargner eparpiller epaule
+epeler eperon epervier epicerie epinard epingle eplucher eponge epoque epouse epouvante
+eprouver epuiser equilibre equipage equiper equitation erable errer eruption escabeau
+escalade escalier escargot escarpin esclave escorte espace espadrille esperance espiegle
+esquisser essaimer essayer essence essorer essoufflé essuyer estimer estomac estrade
+etaler etaler etancher etendre eternel eternuer etinceler etiquette etirer etoffe etoile
+etonner etouffer etourdir etrange etrangler etrenner etriller etroit etude evacuer
+evader evanouir eveiller evenement eventail eventuel evidence eviter evoluer evoquer
+exagerer examiner excellent exciter exclamer excursion excuser executer exemplaire
+exercer exhiber exiger exister expedier experience expirer expliquer explorer exploser
+exporter exposer exprimer extraire fabrication fabuleux facade facette facile faciliter
+facteur facture faiblesse faience faillir faisceau falaise familier faneur fanfare
+fantaisie fantome farceur farine fatigue faucher faufiler fauteuil favorable feconder
+feliciter feminin fendiller fenouil ferique fermeture fermier ferraille fertile festin
+festival feuillage feuilleter feutre feverole ficeler fichier fideliser fierte fievre
+figurer filature filet filiale filmer filtrer financer finesse finition flacon flageolet
+flairer flamber flamant flanelle flaner flaque flatter flechir flemme fletrir fleurir
+flocon florissant flotter flouer fluide flute foisonner folie foncer fonctionner fondre
+fontaine footballeur forcer forestier forgeron formidable formuler fortifier fossette
+foudroyer fouetter fougere fouiller foulard fourchette fourmiller fourneau fournir
+fourrure foyer fracasser fraicheur framboise franchir frapper fraude fredonner freiner
+fremir frequenter fretiller friandise fringale friper friser frisson frittage froisser
+fromager froncer frotter fructifier fugitif fumee fumier funambule fureter furieux
+fuseau fusiller futile
+`);
+
+M.push(`
+gachette gadget gaffeur gagnant galerie galet galoper gambader gamelle gaminerie
+gangster garage garantir garcon gardien garnir gaspiller gateau gauffre gazelle gazon
+gazouiller geler gemir gencive gendarme generation genereux genou gentillesse geographie
+geometrie geranium gerbe gesticuler gibier gicler gifler gigoter gigantesque gilet
+girafe girouette givrer glacon glaner glisser globe gloire glouton gobelet goeland
+gommer gonfler gorgee gosier goudron gouffre goulot gourmand gousse gouter goutte
+gouvernail gracieux gradin graffiti grainer graisser grammaire grandir granit grappiller
+gratter graver gravir gravure grelot grelotter grenade grenier grenouille griffonner
+grignoter grillage grimace grimper grincer grippe griser grognon gronder grossir
+grotte grouiller grumeau guepe guerir guerrier guetter gueuler guichet guidon guirlande
+guitare gymnase habile habiller habitant habituer hachoir haleine halte hameau hamster
+hangar hanter harceler hardiesse hareng haricot harmonie harnais hasarder hausser
+hautain hebergement hectare helice hemisphere herbage herisson heriter hermine hesiter
+heurter hibou hirondelle hisser hiverner hommage honnete honorer horaire horizon
+horloge hospitalier hotelier houleux huiler humain humecter humeur humide humoriste
+hurler hutte hydrater hygiene hymne idealiser identifier ignorer illuminer illusion
+illustrer imaginer imbattable imiter immeuble immobile impatient imperial implanter
+important imposer impression imprimer improviser impulsif inattendu incendie incident
+incliner inclure inconnu incroyable indice indiquer indispensable individu industrie
+infatigable infecter infini infirmier influence informer infuser ingenieur ingredient
+inhabituel initiale injuste innocent inonder inoubliable inquieter inscrire insecte
+insister inspecter inspirer installer instant instituteur instruire instrument insulter
+intelligent intense interdire interesser interieur interroger interrompre intervenir
+intituler intriguer inventer inverser investir inviter irriter isolant itineraire
+jaillir jalonner jaloux jardinier jardiner jarret jaunir javelot jeunesse jonglerie
+jongler jonquille joueur jouissance journalier journaliste joyeux jubiler jumeau
+jumelle jurer justesse justifier kilogramme kilometre klaxonner laborieux labourer
+labyrinthe lacer lachete lacune laitier lambeau lamentable laminer lampadaire lancement
+langage languir lanterne lapider lardon largeur larguer larme lasser lavabo lavande
+lecteur legende legerete legume lendemain lentille lessive lettrine levier levraut
+liberer libraire licorne lierre lieutenant lignage limace limiter limonade linceul
+lingerie liquide lisiere lisser listage literie litige littoral livraison livrer
+locataire locomotive logement logique lointain loisir longer longueur lorgner lotion
+louange loucher louer loufoque loupe lourdeur lucarne lucide lueur luge lugubre luire
+luisant lumiere luminaire lunaire lunette lustrer lutter luxueux machinerie machoire
+maconner madeleine magasin magicien magnifique maigrir maillot maintenir mairie
+maitriser majestueux majorite maladie maladroit malchance malheur malice mallette
+malmener maltraiter mamelle manche mandarine manege manette maniere manifester manipuler
+mannequin manoeuvre manquer manteau manuel maquiller maraicher marathon marchander
+marecage margarine marguerite marinade marionnette maritime marmelade marmite marquer
+marraine marteau martyre masquer massacre masser mastiquer materiel maternelle matiere
+matinal maudire mecanicien mechant meconnaitre medaille medecin mediter mefiance
+meilleur melanger melodie melon membrane memoire menacer menage menotte mensonge
+mentonniere menuisier meprendre mepriser merveille messager mesurer meteorite methode
+metier metrage meuble meugler meunier meurtrir microbe midi mielleux mignon migrateur
+mijoter militaire millier mimique mincir mineral miniature minuit minutieux miracle
+mirage miroiter miser missile mitraille mixer mobilier moderne modifier moelleux
+moindre moineau moisir moisson moitie molaire mollet moment monastere mondial moniteur
+monotone monstrueux montagnard monter montrer monument moquer moquette morceau mordiller
+morsure mortier morue moucheron mouchoir moudre mouiller moule mouler mousseline
+moustache moustique moutarde mouvement moyenne muguet multiplier munir muraille murmure
+muscler museau musicien mutiler mystere
+`);
+
+M.push(`
+nageoire nappe narrateur naseau natation naturel naufrage navigateur naviguer navrer
+neanmoins nectar negliger negocier neigeux nerveux nettoyer neuvieme nichoir nickel
+noircir noisette nomade nombreux nommer nordique normalement notaire notion nouer
+nourrice nourrir nouveaute noyade noyau nuance nuisible numeroter nuptial obeir objecter
+obliger obscurcir observer obstacle obstiner obtenir occasion occuper ocean octobre
+odeur odorant offenser officier offrande ombrage omelette omettre ondulation opaque
+operer opinion opposer optimiste orage orange orateur orchestre ordinaire ordonner
+oreiller organiser orgueil orientation originalite ornement orphelin orteil oscar
+osciller osselet ouate oublier ouragan ourlet outillage ouvrage ouvrier ouvrir ovation
+oxygene pacifique paillasse paillette paisible paitre palace palefrenier palette palissade
+palmier paltoquet panache panaris pancarte panier panique panneau panorama pansement
+pantalon panthere pantoufle papeterie papillon paquebot paquet paradis parachute
+parapluie parasol paratonnerre parcelle parcourir pardonner pareil parenthese paresseux
+parfum parier parlement parodie parole parquet parrain parsemer partager partenaire
+particulier partisan parvenir passager passerelle passionner pastille patauger patinage
+patisserie patrimoine patrouille paturage paupiere pauvrete pavillon paysage paysan
+peage peaufiner pecher pedaler peigner peintre pelage pelerin pelican pellicule pelouse
+peluche penalite pencher pendule penetrer peniche pensee pension pente percer percevoir
+percher percuter perdrix perfection perforer periode perir perle permanence permettre
+perroquet perruche persil persister personnage persuader perturber peser pessimiste
+petiller petrir peuplade peuplier phalange phare pharmacie phenomene photographe phrase
+physique pianiste picorer piegeur pierre pietiner pieton pigeon pignon pilier piller
+pilote piment pinceau pincer pingouin pioche pionnier piquant piquer piquet piscine
+pissenlit pistolet pitie pittoresque pivoine pivoter placard placer plafond plaidoyer
+plaindre plaisanter planche plancher planer planete planquer plantation plaquer plastique
+plateau plaudir plebiscite pleurer pliage plisser plombier plonger ployer plumage
+plusieurs pochette poelon poesie poignard poignee poilu poinçon pointer poireau poirier
+poisseux poitrine poivron polaire polir politesse pollen polluer pommade pommier pompier
+poncer ponctuel pondre populaire porcelaine portail portefeuille portique portrait poser
+positif posseder possible postier potager poteau poterie potiron poubelle pouce poudrer
+poulailler poulain poulet poumon poupee poussiere poutre pouvoir prairie pratiquer
+precieux precipiter precis predire preferer prelever premier prendre prenom preparer
+presenter presque pressentir presser pretendre preter pretexte prevenir prevoir prier
+primaire principal printemps priser prisonnier priver probleme proceder prochain
+proclamer procurer prodige produire professeur profiter profond programme progresser
+projeter promenade promettre prononcer proportion proposer propriete proteger protester
+prouver provenir provision provoquer prudence prunier public publier puiser puissance
+pulpe pulveriser punaise punir purifier pyjama pyramide quadrille qualifier qualite
+quantite quartier quatorze quenelle querelle questionner queue quiconque quinzaine
+quittance quotidien rabattre raccommoder raccourcir raccrocher racheter racine raclette
+raconter radeau radiateur radieux rafale raffiner rafraichir ragout raidir railler
+raisonner rajeunir rajouter ralentir rallonger ramasser rambarde ramener ramier ramollir
+ramoner rampe rancune randonnee rangement ranimer rapace rapatrier raper rapiecer
+rappeler rapporter rapprocher raquette rarement raser rassembler rassurer ratatouille
+rateau rationner rattraper ravager ravin ravioli ravitailler rayonner reagir realiser
+rebondir recevoir rechauffer recherche reciter reclamer recolter recommander recompense
+reconnaitre recopier recouvrir recreation rectangle reculer redemarrer redescendre rediger
+redoubler redouter reduire reeducation refaire referer reflechir reflet reformer refroidir
+refuge refuser regaler regarder regime regisseur reglage regner regretter regrouper
+regulier rehausser rejoindre rejouir relacher relayer relever relier reluire remarquer
+rembobiner rembourser remede remercier remettre remonter remorque remplacer remplir
+remuer rencontrer rendement renfermer renforcer renifler renommer renoncer renouveler
+renseigner rentable renverser renvoyer repaire repandre reparer repartir repasser repeindre
+repentir repere repeter replier repliquer repondre reporter reposer repousser reprendre
+representer reproche reptile republique repugnant reputation requin reserver residence
+resister respecter respirer resplendir responsable ressembler ressentir resserrer
+ressort restaurant restituer resulter resumer retablir retarder retenir retirer retomber
+retourner retrouver reunir reussir revanche reveiller revelation revendre revenir rever
+reverence reviser revivre revolte revolution ricaner richesse ricocher rideau ridicule
+rigoler rincer riposter risquer rivage rivaliser riverain robinet robuste rocaille
+rocher rondelle ronfler ronger rossignol rotation roucouler rouille rouleau rouspeter
+routier roseau roulette royaume rubrique rudesse rugir ruisseau ruminer ruse rustique
+`);
+
+M.push(`
+sablier saccager sachet sacoche sacrifier safran sagesse saigner saisir saladier salaire
+salarie salir salopette saluer sandale sanglier sanglot sardine satisfaire saucisse
+sauterelle sauvage sauvetage savonner savoureux scandale scaphandre scenario schema
+scintiller scolaire scooter sculpter seance secheresse secouer secourir secretaire
+sectionner securite sediment seduire seigneur sejourner selectionner semaine semelle
+semer seminaire sensation sentier sentiment separer serein serpenter serrure serviette
+servir seuil severe siffloter signaler signature silence sillonner similaire simplifier
+sincere singulier sinistre sirene situer sixieme sobriete societe soigner soiree
+soixante solaire soldat soleil solide solitaire solution sombre sommeil sommet somnoler
+sondage songer sonnerie sonoriser sorcier sortilege soucieux soucoupe souder soudure
+souffler souffrance souhaiter soulager soulever souligner soumettre soupape soupconner
+soupirer souplesse sourire souscrire soustraire soutenir souterrain souvenir souverain
+spatial spectacle speleologue sportif squelette stabiliser stade stagner stationner
+statue stimuler stocker strategie strident structure studieux stupefait stupide styliste
+subir submerger substituer subtiliser succeder succomber sucrerie suffoquer suggerer
+suinter superbe superieur supplier supporter supposer supprimer surface surgeler surgir
+surligner surmonter surnommer surpasser surprendre surveiller survivre susciter suspendre
+symbole sympathique synonyme systeme tabatiere tablette tabouret tacher tacheron tailler
+talonner tambouriner tamiser tapisser taquiner tarder tartiner tasser tatonner taureau
+technique teindre teinture telecommande telephoner televiseur temoigner temperature
+tempete temporaire tenailler tendresse tenebreux tentacule tenter terminer ternir terrain
+terrasse terrible territoire testament tetard theatre theiere thermometre timbrer tirelire
+tiroir tisonnier tisser titiller titrer toboggan toilette toiture tolerer tomate tomber
+tondeuse tonnelle tonnerre topographie torchon tordre tornade torrent tortiller tortue
+totalite toucher touffe tourbillon tourelle tourner tournevis tournoi tousser toutefois
+toxique tracasser tracteur traduire trafiquer trahir traineau trainer traire traiter
+trajectoire trancher tranquille transformer transmettre transpirer transporter trapeze
+travailleur traverser trebucher trefle treillis trembler tremper trentaine tresor
+tresser treuil tribune tricher tricoter trier trimestre trinquer triomphe tripoter
+tristesse triturer troisieme trombone tromper tronconner tropical trotter troubler
+troupeau trouver truelle truffe truquer tuiler tulipe tunnel turbulent tuteur tutoyer
+tuyau tympan typique ulcerer ultime unanime unifier uniforme unique universel urgence
+usager user ustensile utiliser vacance vacarme vaccin vacher vagabond vaillant vaincre
+vaisselle valider valise valoriser valser vanille vantard vaporiser varier vaseux
+vedette vegetal vehicule veiller velours vendange vendeur venerable vengeance venteux
+ventiler verdure verifier veritable vernir verrou verser vertige veste vestiaire veteran
+veterinaire vetement vexer viaduc viande vibrer victoire vidanger vieillard vieillir
+vigilant vigneron vignoble vilain village vinaigre violemment violet violoniste virage
+virer visage viser visiter visser vitalite vitesse vitrail vitrine vivacite vocabulaire
+voguer voisinage voiturier volaille volcan voler voleur volontaire volume voter voyage
+voyageur voyelle vraiment vrombir vulgaire wagon xylophone yaourt zebre zeste zigzaguer
+`);
+
+M.push(`
+abbaye abolition abrasif abreuver accalmie accolade accroc acquit acrobatie actrice
+adhesion adjoint admirable adoucir adresser aerien affaisser affichage affluence agacer
+agenouiller agilite agrafer agriculture aigrelet aisance ajustement alarmer alerter
+alignement allegre alliance allumage alouette ambassade amenager amertume ameublement
+amoindrir amplitude amuseur ancrer anesthesie angine anglais anguille annonce anomalie
+anonyme anthracite antilope apercu aplomb apogee apostrophe appartenir apprenti
+apprivoiser approche appui aquatique arachide araignee arbuste ardent aristocrate
+armistice aromatique arpenter arrogant arrosoir artifice artisanal aspect asperite
+assistance assurance asticoter astronomie attelage attente attitude attraction aubergiste
+audience auditeur augure aurore austere autel authentique automobile autonome autruche
+avalanche avarice avenir aviculteur avis avocatier azur badinage bagatelle bagnole
+baignoire bambou banal bandit banquier baril barometre baroque barrique bascule basilic
+bassin bastion bavardage bavure bedaine belvedere benefice bequille berlingot besoin
+bestiole betterave beurre biais bicoque bidonville bienfait bienveillant bifurcation
+bigoudi bilingue bille biologie biscornu bistre bivouac blafard blaireau blancheur bleuir
+blizzard blocage blondir blottir bocage boisement bolet bombarder boniment bonsoir
+bordereau borgne bosquet bottine boucan bouchee bouclier boudin bouffer bouillon boulier
+boulot bouquin bourrelet boursier bousculer boutonner bouture braderie brancard brasier
+bravade brasserie bretelle bricolage brigand brillant brise brochet brouillon broussaille
+bruissement brulant brunette brutal bruyere bucher budget buffle bulbe bulle burin butoir
+cabas cabaret cabriolet cachemire cachot cadence cadet cafard cafeteria cagibi cagnotte
+cahot caillot cajoler calamite calcaire calice calligraphie calomnie calotte camarade
+cambouis camelot camion camouflage campement canal canaliser cancre candeur canne cannelle
+canon cantique caporal capuchon carafe carapace carbone carcasse cardinal caresse cargo
+carillon carnet carpette carreau carrelage cartilage cartonner cascadeur casier casque
+cavale cave caverneux ceder ceinturer celeri cellier cendre censure centimetre cerceau
+cercle cerclage cerf cerner certes cesser chagriner chaine chaise chalet chaloupe chamois
+championnat chandail chanson chantonner chaparder chapelet chapelle charade charge charisme
+charite charme charnier charognard charrue chataignier chaton chaumiere chaussee chef
+chemin chenal chene chetif chevalet chevelure chevet cheville chevreuil chicoree chien
+chiffonner chimie chiot chocolatier choeur choisir chomage chope choquer chose chou
+chronique chuchotement chute cible cidre ciel cierge cigale cigarette cigogne cil cime
+ciment cinquante cintrer circuit cire cirque ciseler citation cite citron civet civil
+clairon clameur clan claque clarte classe clause clavicule clef clemence clerc cliche
+client clignotant climat clinique clip cloche clochette cloitre clopiner cloque cloture
+clown coalition cobaye cocher cochon cocon code coffre cohue coiffe coin coincidence colis
+collaborer collant colle collecte college collier colombier colonie colonne colorant
+colosse combat combien comble comedien comete comique commande commencer commentaire
+commissaire commotion communaute compact compagnie complet complexe compliment comploter
+composte compote compresse compromis comptable compter comptoir concentrer concept concert
+conclure concret concurrent condition conducteur confection conference confesser confiant
+confier confins confirmer conflit confondre confort confus congre conjoint connecter
+conquete consacrer conscience conseil consentir consequence conservatoire considerer
+consigne console constant constellation constituer consulat contact conte contempler
+contenir contenu contester continent continuer contraire contraste contrat contredire
+contree controle convaincu convenance convention converser convertir convier convoi
+convoquer copain coquet coquille corail cordial corne cornet corolle corporel corpulent
+correct correspondre corridor cortege cosmos costaud cote coteau coton couche coude
+coulee couleur coupe couplet cour courant courbe couronner cours course court cousu
+couvee couvent couvrir crampe crampon crane crapaud craquement cratere cravache crayeux
+credit creme creneau crepe crepuscule cresson crete creux crevasse crever cri cric crime
+crise crissement critere crocodile croisade croissant croix croquis crustace crypte cube
+cueillette cuir cuisine cuivrer culasse culminer culte cumul cuve cyclable cygne cymbale
+`);
+
+M.push(`
+national international culturel economique special royal legal moral vital fatal ideal
+medical musical familial commercial industriel officiel virtuel mensuel visuel sexuel
+individuel exceptionnel traditionnel professionnel personnel rationnel sensationnel
+tragique classique fantastique romantique minuscule souple malheureux facheux grossier
+audacieux peureux colore probable social politique naturel general principal local total
+normal central rural brutal genial banal loyal amical mondial actuel manuel annuel
+essentiel logique magique enorme immense geant epais etroit profond leger doux ferme
+rigide tiede humide propre neuf ancien moderne rapide bruyant silencieux joyeux triste
+heureux content serieux gentil mechant aimable grave poli honnete sincere franc timide
+courageux fier modeste complique clair sombre brillant terne riche pauvre gratuit utile
+inutile possible impossible certain dangereux ordinaire extraordinaire habituel curieux
+etrange bizarre normal parfait imparfait excellent mediocre superbe magnifique splendide
+horrible affreux epouvantable terrible atroce merveilleux formidable genereux avare
+gourmand paresseux travailleur adroit maladroit intelligent stupide savant ignorant
+prudent imprudent patient impatient nerveux detendu tendu craintif hardi solide fragile
+robuste faible puissant vigoureux vaillant costaud musclé maigre mince obese rond carre
+triangulaire ovale pointu arrondi droit tordu courbe plat bombe creux plein vide serre
+ecarte proche lointain voisin distant present absent visible invisible cache decouvert
+ouvert ferme verrouille libre occupe disponible pris vendu achete perdu trouve gagne
+volatil liquide solide gazeux glace bouillant brulant gele frais tiedi refroidi rechauffe
+sucre sale amer acide fade epice pimente savoureux delicieux degoutant infect appetissant
+nourrissant leger copieux abondant rare frequent quotidien hebdomadaire annuel eternel
+temporaire provisoire definitif immediat lointain futur passe present recent ancien
+nouveau vieux usé neuf abime casse repare intact entier morcele complet incomplet total
+partiel unique multiple double triple quadruple simple compose melange pur naturel
+artificiel authentique faux vrai reel imaginaire fictif concret abstrait theorique
+pratique utile pratique efficace inefficace rapide lent immobile mobile fixe amovible
+portable transportable maniable encombrant leger pesant volumineux compact serre
+`);
+
 // ── Normalisation ──────────────────────────────────────────────────────
 // Le joueur tape avec ou sans accents : les deux cotes passent par ici.
 
@@ -552,21 +914,145 @@ export function contient(mot, syl) {
   return typeof mot === 'string' && typeof syl === 'string' && mot.includes(syl);
 }
 
-// Le mot est-il au dictionnaire ? On tolere les pluriels et les
-// conjugaisons courantes : « chats », « grandes », « mangent »...
+// ── Morphologie : les formes fléchies comptent ─────────────────────────
+// Le dictionnaire ne garde que des formes de base. Un joueur, lui, tape
+// « mangeons », « chevaux », « heureuse » ou « rapidement ». On défait donc
+// les terminaisons françaises courantes pour retomber sur une entrée du
+// dico. Une réduction ne vaut que si elle atterrit sur un vrai mot :
+// « trazzzent » ne devient jamais valide pour autant.
+
+const VOYELLES = 'aeiouy';
+
+// Infinitifs possibles pour un radical (les trois groupes).
+const INF = ['er', 'ir', 're', 'r', 'e', 'oir', 'ire'];
+
+// Terminaisons verbales, les plus longues d'abord.
+const FIN_V = [
+  'eraient', 'assions', 'assiez', 'iraient', 'issaient', 'issions', 'issiez',
+  'erions', 'assent', 'issons', 'issent', 'issant', 'issais', 'issait',
+  'eriez', 'erent', 'erais', 'erait', 'erons', 'eront', 'asses', 'irions',
+  'iriez', 'irais', 'irait', 'irons', 'iront', 'aient', 'irent',
+  'erai', 'eras', 'erez', 'asse', 'ames', 'ates', 'ions', 'irai', 'iras',
+  'irez', 'imes', 'ites', 'ees', 'era', 'ira',
+  'ons', 'ent', 'ais', 'ait', 'ant', 'iez',
+  'ez', 'es', 'ee', 'ai', 'as', 'is', 'it', 'ie', 'us', 'ut', 'ue',
+  'e', 's',
+];
+
+// Terminaisons nominales : suffixe trouvé → formes de base à tester.
+const FIN_N = [
+  ['eaux', ['eau']], ['aux', ['al', 'ail', 'au']],
+  ['euses', ['eux', 'eur']], ['euse', ['eux', 'eur']],
+  ['trices', ['teur']], ['trice', ['teur']],
+  ['ieres', ['ier']], ['iere', ['ier']],
+  ['eres', ['er']], ['ere', ['er']],
+  ['ives', ['if']], ['ive', ['if']],
+  ['elles', ['el']], ['elle', ['el']],
+  ['ennes', ['en']], ['enne', ['en']],
+  ['onnes', ['on']], ['onne', ['on']],
+  ['ettes', ['et']], ['ette', ['et']],
+  ['ements', ['ement', '']], ['ement', ['']],
+  ['ations', ['ation', '']], ['ation', ['']],
+  ['eurs', ['eur', '']], ['eur', ['']],
+  ['ages', ['age', '']], ['age', ['']],
+  ['ables', ['able', '']], ['able', ['']],
+  ['ibles', ['ible', '']], ['ible', ['']],
+  ['aires', ['aire', '']], ['aire', ['']],
+  ['es', ['', 'e']], ['s', ['']], ['x', ['']], ['e', ['']],
+];
+
+// Suffixes de dérivation : « travailleur » vient de « travailler ».
+const DERIVE = new Set([
+  'eur', 'eurs', 'euse', 'euses', 'age', 'ages', 'able', 'ables',
+  'ible', 'ibles', 'ement', 'ements', 'ation', 'ations',
+]);
+
+// Les verbes du 3e groupe changent de radical : aucune regle ne rattrape
+// « buvons » ou « faisons ». Table des radicaux forts les plus courants.
+const IRREG = new Map(Object.entries({
+  buv: 'boire', boiv: 'boire', bu: 'boire',
+  pren: 'prendre', prenn: 'prendre', pri: 'prendre', prendr: 'prendre',
+  fais: 'faire', fait: 'faire', fass: 'faire', fer: 'faire',
+  ecriv: 'ecrire', ecrit: 'ecrire',
+  lis: 'lire', lu: 'lire',
+  dis: 'dire', dit: 'dire', dir: 'dire',
+  met: 'mettre', mett: 'mettre', mis: 'mettre',
+  viv: 'vivre', vec: 'vivre',
+  suiv: 'suivre',
+  connaiss: 'connaitre', connu: 'connaitre',
+  paraiss: 'paraitre', naiss: 'naitre',
+  croi: 'croire', croy: 'croire', cru: 'croire',
+  sav: 'savoir', sach: 'savoir', su: 'savoir', saur: 'savoir',
+  pouv: 'pouvoir', peuv: 'pouvoir', pu: 'pouvoir', pourr: 'pouvoir',
+  voul: 'vouloir', veul: 'vouloir', voudr: 'vouloir',
+  dev: 'devoir', doiv: 'devoir', devr: 'devoir',
+  voy: 'voir', verr: 'voir', vu: 'voir',
+  recev: 'recevoir', recoiv: 'recevoir', recu: 'recevoir',
+  tien: 'tenir', tienn: 'tenir', tiendr: 'tenir', tenu: 'tenir',
+  vien: 'venir', vienn: 'venir', viendr: 'venir', venu: 'venir',
+  all: 'aller', ir: 'aller',
+  conduis: 'conduire', produis: 'produire', traduis: 'traduire',
+  construis: 'construire', detruis: 'detruire', reduis: 'reduire',
+  plais: 'plaire', tais: 'taire',
+  peign: 'peindre', craign: 'craindre', joign: 'joindre',
+  atteign: 'atteindre', eteign: 'eteindre',
+  resolv: 'resoudre', cous: 'coudre', moul: 'moudre',
+  vainqu: 'vaincre', romp: 'rompre',
+  ouvr: 'ouvrir', couvr: 'couvrir', offr: 'offrir', souffr: 'souffrir',
+  cueill: 'cueillir', acquier: 'acquerir',
+  aill: 'aller', envoi: 'envoyer', enverr: 'envoyer',
+  assoi: 'asseoir', assey: 'asseoir',
+  faill: 'falloir', vaill: 'valoir', vaudr: 'valoir',
+  mour: 'mourir', meur: 'mourir',
+  ser: 'etre', soy: 'etre', fus: 'etre', somm: 'etre',
+  av: 'avoir', aur: 'avoir', ay: 'avoir', eu: 'avoir',
+}));
+
+function infinitif(r) {
+  if (r.length < 2) return false;
+  for (const s of INF) if (MOTS.has(r + s)) return true;
+  const inf = IRREG.get(r);
+  return !!inf && MOTS.has(inf);
+}
+
+function formeVerbale(m) {
+  for (const f of FIN_V) {
+    if (!m.endsWith(f) || m.length - f.length < 2) continue;
+    const r = m.slice(0, m.length - f.length);
+    if (infinitif(r)) return true;
+    // 2e groupe : « finissons » → fin(iss) + ir.
+    if (r.endsWith('iss') && infinitif(r.slice(0, -3))) return true;
+    // Consonne doublée : « appelle » → appel(er), « jette » → jet(er).
+    if (/([bcdfglmnprst])\1$/.test(r) && infinitif(r.slice(0, -1))) return true;
+  }
+  return false;
+}
+
+function formeNominale(m) {
+  for (const [fin, bases] of FIN_N) {
+    if (!m.endsWith(fin) || m.length - fin.length < 2) continue;
+    const r = m.slice(0, m.length - fin.length);
+    for (const s of bases) if (MOTS.has(r + s)) return true;
+    if (DERIVE.has(fin) && infinitif(r)) return true;
+  }
+  return false;
+}
+
+// Adverbes en -ment : ils se forment sur une voyelle (« vraiment ») ou sur
+// le féminin de l'adjectif (« grandement », « heureusement »).
+function adverbe(m) {
+  if (!m.endsWith('ment') || m.length < 7) return false;
+  const r = m.slice(0, -4);
+  if (!VOYELLES.includes(r[r.length - 1])) return false;
+  return MOTS.has(r) || formeNominale(r);
+}
+
+// Le mot est-il au dictionnaire, forme fléchie comprise ?
 export function accepte(mot) {
   if (typeof mot !== 'string' || mot.length < 3) return false;
   if (MOTS.has(mot)) return true;
-  if (mot.length < 5) return false;
-  const pistes = [];
-  if (mot.endsWith('s') || mot.endsWith('x')) pistes.push(mot.slice(0, -1));
-  if (mot.endsWith('es')) pistes.push(mot.slice(0, -2));
-  if (mot.endsWith('ent')) pistes.push(`${mot.slice(0, -3)}e`, mot.slice(0, -3));
-  if (mot.endsWith('e')) pistes.push(mot.slice(0, -1));
-  for (const p of pistes) {
-    if (p.length >= 3 && MOTS.has(p)) return true;
-  }
-  return false;
+  if (mot.length < 4) return false;
+  return formeNominale(mot) || formeVerbale(mot) || adverbe(mot);
 }
 
 // Un mot du dictionnaire contenant la syllabe, hors `exclus` (Set).

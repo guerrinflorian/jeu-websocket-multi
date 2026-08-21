@@ -1,6 +1,6 @@
 # Les jeux : LA KERMESSE
 
-Quinze stands de fête foraine : quatre jeux d'arcade (dont deux originaux), dix classiques de société et de bistrot revisités (Ligne 4, Blackjack, Yams, Petits Chevaux, Pétanque, Bataille Navale, Menteur, Huit américain, Bomber, Poker) et un original au tour par tour (Barrières).
+Dix-sept stands de fête foraine : quatre jeux d'arcade (dont deux originaux), dix classiques de société et de bistrot revisités (Ligne 4, Blackjack, Yams, Petits Chevaux, Pétanque, Bataille Navale, Menteur, Huit américain, Bomber, Poker) et un original au tour par tour (Barrières).
 Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, manches courtes, règles en jeu (`rules.md` + mini-tuto), vignette d'aperçu (`preview.js`) dans les menus, titres rigolos en fin de partie.
 
 ---
@@ -140,12 +140,33 @@ Tous : 1-8 joueurs (bots en complément), >= 3 formats dont un asymétrique, man
 - **Asymétrique : « Le Requin »** : tapis double et un **coup d'oeil** par main sur une carte fermée d'un adversaire. La table est prévenue qu'il regarde, mais pas de quoi.
 - **Contrôles** : tout au doigt (réglette de relance, mises rapides), raccourcis F, C, R, A sur PC.
 
+## 🎰 ROULETTE : classique de casino (roulette française)
+
+**Pitch** : faites vos jeux, rien ne va plus, et douze secondes plus tard on sait.
+
+- **Boucle** : un cylindre à 37 cases, un seul zéro. Tu choisis un jeton (1, 5, 25, 100) et tu le poses sur le tapis. **L'endroit exact décide de la mise**, comme sur une vraie table : au milieu d'une case c'est un plein (35 pour 1), sur une ligne un cheval (17), sur un coin un carré (8), en bout de rangée une transversale (11) ou un sixain (5), plus les colonnes, douzaines et chances simples. Garde le doigt appuyé : le nom de la mise, son rapport et le maximum s'affichent, les cases couvertes s'allument, tu peux corriger en glissant.
+- **Le rythme** : 12 secondes pour miser (réglable), le cylindre part 2 secondes avant la fin, « rien ne va plus », la bille tombe 2 secondes plus tard. Si tout le monde est prêt, ça part sans attendre.
+- **Le twist** : les **maximums de table à la française** (le gain maximal est le même partout : 350 aux chances simples, donc 10 sur un plein), la **règle du zéro** au choix (le partage, en prison avec la mise verrouillée sous cadenas, ou tout perdu), le bouton **REJOUER** qui remet exactement les mises du tour d'avant, et le tableau des derniers numéros sortis.
+- **Asymétrique : « Le Chef de Table »** : il tient la banque, son tapis vaut celui de tous les joueurs réunis, et il a trois **coups de poignet** pour faire sauter la bille d'une case pendant qu'elle tourne. Si la banque saute, la table ferme.
+- **Contrôles** : tout au doigt. Au clavier : 1 2 3 4 pour le jeton, R rejouer, D doubler, Retour arrière annuler, Espace prêt.
+
+## 🚜 TANKS : arcade (les blindés à rebonds)
+
+**Pitch** : le tir qui gagne la partie est celui que personne n'a vu venir.
+
+- **Boucle** : des chars vus du dessus dans une arène à murs. Le joystick (ou ZQSD) déplace, la tourelle suit la direction de marche, TIRER envoie un obus. Une recharge entre deux tirs, cinq obus maximum en l'air.
+- **Le twist** : **les obus rebondissent** sur les murs, 1, 3 ou 5 fois selon le réglage. Une **ligne pointillée** part du canon et montre le trajet exact, rebonds compris, jusqu'à la cible : viser un mur devient un vrai calcul et non de la devinette. Les obus traversent les coéquipiers, mais **ton propre obus peut te revenir dessus** une fois qu'il a rebondi.
+- **Trois vies** affichées en haut à droite, réapparition 2,6 secondes plus tard au point le plus éloigné des adversaires, avec une seconde et demie d'invulnérabilité. Plus de vies, tu sors du terrain.
+- **Les terrains** : L'Arène (ouverte), Le Labyrinthe (des couloirs partout), Le Bastion (cour centrale et anneau), plus un plan **tiré au sort** symétrique et toujours praticable.
+- **Asymétrique : « Le Char Lourd »** : deux vies de plus, un obus plus gros et plus rapide qui **transperce un char et continue**, mais il roule moins vite.
+- **Contrôles** : joystick + bouton TIRER sur téléphone ; ZQSD ou flèches, souris pour viser et clic ou Espace pour tirer sur ordinateur.
+
 ## Stands retirés
 
 - **7 FAMILLES** : retiré à la demande (le dossier peut revenir via le contrat de jeu).
 - **CANARDS** : remplacé par la PÉTANQUE (même esprit forain, gameplay plus lisible et plus drôle).
 
-## Idée en réserve pour un 16ᵉ stand
+## Idée en réserve pour un 18ᵉ stand
 
 **🎭 INCOGNITO** (bluff & paranoïa) : fonds-toi dans une foule de figurants PNJ pendant que des tireurs au réticule essaient de te démasquer. Conçu, non implémenté : le contrat de jeu permet de l'ajouter en créant simplement `games/incognito/`.
 

@@ -6,6 +6,7 @@ export default {
   emoji: '🔴',
   color: '#FF3D8A',
   tagline: 'Aligne 4 jetons. Bouche leurs trous.',
+  genre: 'plateau',
   pitch: 'Le puissance 4 de la fête foraine : chacun son tour, lâche un jeton dans la grille lumineuse. 4 alignés = manche gagnée. La grille grandit avec le nombre de camps, et en équipe les coéquipiers alternent : un cerveau à plusieurs têtes.',
   minPlayers: 2,
   maxPlayers: 8,

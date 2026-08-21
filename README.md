@@ -6,7 +6,7 @@ les places, jouable au doigt sur téléphone comme au clavier. Un seul process
 Node, zéro base de données, zéro asset sous licence (cartes, dés et boules
 dessinés au Canvas).
 
-**Les stands (15) :**
+**Les stands (17) :**
 
 | Jeu | Genre | Le twist |
 |---|---|---|
@@ -25,6 +25,8 @@ dessinés au Canvas).
 | 🎴 **HUIT AMÉRICAIN** | L'ancêtre d'UNO | 8 joker, 7 qui fait piocher (cumulable), As demi-tour, Roi qui saute. Et le « CARTE SEULE ! » à ne pas oublier. Asym : « Le Requin » |
 | 💣 **BOMBER** | Mot à la bombe | Une syllabe, un mot français, vite : la mèche brûle pendant que la bombe circule. Dico de 3595 mots. Asym : « L'Artificier » |
 | ♠️ **POKER** | Texas Hold'em | Les uns contre les autres : blindes, flop, turn, river, relance libre, tapis, pots secondaires. Asym : « Le Requin » qui jette un coup d'oeil |
+| 🎰 **ROULETTE** | Roulette française | Le vrai tapis : pleins, chevaux, carrés, sixains, douzaines, chances simples. Maximums de table, règle du zéro, REJOUER. Asym : « Le Chef de Table » |
+| 🚜 **TANKS** | Blindés à rebonds | Vue de dessus, obus qui ricochent sur les murs, trois vies, trois terrains au choix. Asym : « Le Char Lourd »   |
 
 ## Lancer en local
 

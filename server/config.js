@@ -26,6 +26,7 @@ export const CFG = {
   SWEEP_MS: 5_000 / TURBO,
 
   HEARTBEAT_MS: 25_000,
+  MAX_BACKLOG_BYTES: 96 * 1024,        // socket congestionnee : on saute des snapshots
   MAX_PAYLOAD: 8 * 1024,
 
   // Rate limiting par connexion (token buckets).

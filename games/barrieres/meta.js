@@ -6,6 +6,7 @@ export default {
   emoji: '🚧',
   color: '#FF4757',
   tagline: 'Avance. Ou mure-les vivants.',
+  genre: 'plateau',
   pitch: 'Deux camps face à face, en bas et en haut. À ton tour : avance d\'une case, ou pose une barrière pour faire faire le grand tour à l\'ennemi. Interdit d\'emmurer complètement : il reste TOUJOURS un passage. Le premier pion qui touche la base adverse gagne.',
   minPlayers: 2,
   maxPlayers: 8,

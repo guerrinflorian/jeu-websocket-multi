@@ -126,3 +126,23 @@
 - [x] POKER Texas Hold'em (blindes montantes, 4 tours d'enchères, relance
       libre, tapis, évaluateur 7 vers 5 avec kickers, pots secondaires,
       partage à égalité ; asym « Le Requin » et son coup d'oeil)
+
+## Phase 11 : Le socle, le casino et les blindés (août 2026)
+- [x] Socle : résolution adaptative (la cadence pilote le dpr), redimensionnements
+      regroupés et ignorés s'ils ne changent rien (barre d'URL des téléphones),
+      reprise propre au retour d'arrière-plan, rectangle du canvas mis en cache
+- [x] Socle : reconnexion immédiate au réveil de l'onglet, gigue anti-troupeau,
+      snapshots sautés quand la socket d'un joueur est bouchée, un forain qui
+      plante n'emporte plus la table, trois hoquets tolérés avant abandon
+- [x] Mobile : boutons d'action passés à GAUCHE, marges sûres latérales,
+      cibles tactiles minimales, gabarit spécial téléphone couché
+- [x] Accueil et lobby : grille complète sans défilement horizontal, recherche,
+      familles de jeux, bouton d'aide par carte, et surtout : choisir un jeu ne
+      renvoie plus le joueur ailleurs dans la page (rendu ignoré si rien n'a changé)
+- [x] BOMBER : moteur d'acceptation des formes fléchies (pluriels, féminins,
+      conjugaisons des trois groupes, radicaux forts, adverbes en -ment) et
+      dictionnaire porté à 5346 mots
+- [x] ROULETTE française complète (155 mises, maximums de table, règle du zéro,
+      REJOUER, tableau d'affichage ; asym « Le Chef de Table »)
+- [x] TANKS (vue de dessus en volume, obus à rebonds avec ligne de visée,
+      trois vies, quatre terrains ; asym « Le Char Lourd »)

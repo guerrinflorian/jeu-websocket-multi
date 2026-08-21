@@ -6,6 +6,7 @@ export default {
   emoji: '💣',
   color: '#FF7A3D',
   tagline: 'Un mot, vite, avant que ça pète.',
+  genre: 'mots',
   pitch: 'La bombe du stand tourne autour de la table avec une syllabe collée dessus : TRA, ON, BLE. Celui qui la tient doit taper un mot français qui contient ces lettres, et la refiler au suivant. La mèche brûle sans jamais s\'arrêter : quand ça explose, c\'est celui qui tient la bombe qui perd un cœur. Trois cœurs chacun, dernier debout gagne.',
   minPlayers: 2,
   maxPlayers: 8,

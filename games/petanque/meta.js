@@ -6,6 +6,7 @@ export default {
   emoji: '🥌',
   color: '#63D6C4',
   tagline: 'Pointe, tire, et gare à Fanny.',
+  genre: 'adresse',
   pitch: 'Le boulodrome du champ de foire, sous les lampions : lance tes boules au plus près du cochonnet, ou dégomme celles des autres d\'un tir sec. À la fin de la mène, chaque boule mieux placée que la meilleure boule adverse rapporte un point. Le carreau fait lever la foule, la Fanny fait rire tout le monde.',
   minPlayers: 2,
   maxPlayers: 8,

@@ -6,6 +6,7 @@ export default {
   emoji: '🃏',
   color: '#B14BFF',
   tagline: 'Mise ce que tu veux. Tire, double, splitte.',
+  genre: 'casino',
   pitch: 'Le vrai 21, table complète : tu mises le montant que TU veux, tu joues ta main contre le croupier, et tout le monde décide EN MÊME TEMPS. Tirer, rester, doubler, SPLITTER jusqu\'à 4 mains, s\'assurer contre l\'as, abandonner à temps. Blackjack payé 3 pour 2, sabot de 6 jeux, règles de la maison réglables. En 1 contre tous, un joueur devient la banque.',
   minPlayers: 2,
   maxPlayers: 8,

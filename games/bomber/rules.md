@@ -7,7 +7,7 @@ Une bombe tourne autour de la table avec une syllabe collée dessus. Celui qui l
 ## Ton tour
 
 1. La bombe arrive chez toi avec une syllabe : **TRA**, **ON**, **BLE**...
-2. Tape un mot qui **contient cette suite de lettres**, dans l'ordre, n'importe où dans le mot. Pour « TRA » : monTRAge, TRAvail, specTAcle non, oeuvre non.
+2. Tape un mot qui **contient cette suite de lettres**, dans l'ordre, n'importe où dans le mot : au début, au milieu ou à la fin. Pour « TRA » : **TRA**vail, mon**TRA**it, con**TRA**t, ex**TRA**ordinaire. Le mot n'a aucune raison de commencer par la syllabe.
 3. Valide avec **Entrée**. Mot accepté : la bombe file au voisin avec une nouvelle syllabe.
 4. Mot refusé ? Tu peux retenter autant que tu veux. Mais la mèche continue de brûler.
 
@@ -16,7 +16,7 @@ Les accents ne comptent pas : « éléphant » et « elephant », c'est pareil. 
 ## Un mot est refusé si
 
 - **il ne contient pas la syllabe** ;
-- **il n'est pas dans le dico du forain** (environ 3 500 mots courants) ;
+- **il n'est pas dans le dico du forain** (5 300 mots courants, plus toutes leurs formes : pluriels, féminins, conjugaisons et adverbes en -ment sont acceptés) ;
 - **il a déjà été servi** dans la partie : chaque mot ne sert qu'une fois, pour tout le monde.
 
 ## La mèche

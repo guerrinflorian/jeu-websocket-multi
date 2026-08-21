@@ -6,6 +6,7 @@ export default {
   emoji: '🎴',
   color: '#FF7A3D',
   tagline: 'Pose, cumule les 7, crie CARTE SEULE.',
+  genre: 'cartes',
   pitch: 'Le crazy eights, ancêtre de toutes les batailles de famille : pose une carte de la même couleur ou du même rang, dégaine un 8 pour changer la couleur, empile les 7 pour faire piocher le voisin, et surtout : quand il ne te reste qu\'UNE carte, annonce-la. Sinon la table te dénonce et tu repioches.',
   minPlayers: 2,
   maxPlayers: 8,

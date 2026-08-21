@@ -6,6 +6,7 @@ export default {
   emoji: '🥫',
   color: '#3DFF8A',
   tagline: 'Vise en secret. Boum général.',
+  genre: 'adresse',
   pitch: 'Billard humain au-dessus du vide : chacun choisit en secret sa direction et sa puissance (10 s max), puis tout le monde part EN MÊME TEMPS. Ça carambole, ça propulse, ça tombe.',
   minPlayers: 2,
   maxPlayers: 8,

@@ -29,7 +29,25 @@ export class GameHost {
     this.h = 0;
     this.dpr = 1;
     this.running = false;
-    this.boundResize = () => this.resize();
+    this.frameEma = 16;      // duree moyenne d'une frame (ms)
+    this.dprWish = 0;        // resolution visee (0 = calcul auto)
+    this.dprHold = 0;        // anti-oscillation entre deux paliers
+    this.resizeT = 0;        // timer de regroupement des redimensionnements
+    // Sur telephone la barre d'URL qui se retracte declenche une rafale de
+    // « resize » : on les regroupe et on ignore ceux qui ne changent rien.
+    this.boundResize = () => {
+      clearTimeout(this.resizeT);
+      this.resizeT = setTimeout(() => this.resize(), 120);
+    };
+    // Retour d'arriere-plan (autre appli, ecran verrouille) : les snapshots
+    // en memoire sont perimes, on repart d'une horloge propre.
+    this.boundVis = () => {
+      if (document.hidden) return;
+      this.snaps.length = 0;
+      this.offset = null;
+      this.lastFrame = performance.now();
+      this.frameEma = 16;
+    };
   }
 
   async start(gameId, config, you, meta) {
@@ -38,7 +56,9 @@ export class GameHost {
     this.snaps = [];
     this.offset = null;
     addEventListener('resize', this.boundResize);
-    this.resize();
+    addEventListener('orientationchange', this.boundResize);
+    document.addEventListener('visibilitychange', this.boundVis);
+    this.resize(true);
 
     const mod = await import(`/games/${gameId}/client.js`);
     const host = this;
@@ -113,10 +133,15 @@ export class GameHost {
     this.lastFrame = performance.now();
     const loop = (now) => {
       if (!this.running) return;
+      this.raf = requestAnimationFrame(loop);
+      if (document.hidden) { this.lastFrame = now; return; }
       const dt = Math.min(0.05, (now - this.lastFrame) / 1000);
       this.lastFrame = now;
+      const t0 = performance.now();
       this.frame(dt, now);
-      this.raf = requestAnimationFrame(loop);
+      // Moyenne glissante du cout d'une frame : pilote la resolution.
+      this.frameEma = this.frameEma * 0.92 + (performance.now() - t0) * 0.08;
+      this.autoQuality(now);
     };
     this.raf = requestAnimationFrame(loop);
   }
@@ -164,7 +189,10 @@ export class GameHost {
   stop() {
     this.running = false;
     cancelAnimationFrame(this.raf);
+    clearTimeout(this.resizeT);
     removeEventListener('resize', this.boundResize);
+    removeEventListener('orientationchange', this.boundResize);
+    document.removeEventListener('visibilitychange', this.boundVis);
     if (this.textEl) { this.textEl.remove(); this.textEl = null; this.textCb = {}; }
     try { this.instance?.destroy?.(); } catch { /* jeu déjà démonté */ }
     this.instance = null;
@@ -229,12 +257,44 @@ export class GameHost {
     }
   }
 
-  resize() {
-    this.dpr = Math.min(2.5, devicePixelRatio || 1);
-    this.w = this.canvas.clientWidth;
-    this.h = this.canvas.clientHeight;
-    this.canvas.width = Math.round(this.w * this.dpr);
-    this.canvas.height = Math.round(this.h * this.dpr);
+  // Resolution de depart : plein pixel sur PC, bride sur les grands ecrans
+  // de telephone (un 1440p x3 = 12 millions de pixels par frame, inutile).
+  baseDpr() {
+    const raw = devicePixelRatio || 1;
+    const cssPx = (this.canvas.clientWidth || innerWidth) * (this.canvas.clientHeight || innerHeight);
+    const plafond = cssPx > 700000 ? 1.5 : cssPx > 380000 ? 2 : 2.5;
+    return Math.max(1, Math.min(plafond, raw));
+  }
+
+  // Si les frames coutent trop cher, on descend d'un cran de resolution ;
+  // si elles redeviennent legeres, on remonte. Aucun jeu n'a a le savoir.
+  autoQuality(now) {
+    if (now < this.dprHold) return;
+    const base = this.baseDpr();
+    const cible = this.dprWish || base;
+    if (this.frameEma > 21 && cible > 1) {
+      this.dprWish = Math.max(1, Math.round((cible - 0.5) * 2) / 2);
+      this.dprHold = now + 4000;
+      this.resize(true);
+    } else if (this.frameEma < 9 && cible < base) {
+      this.dprWish = Math.min(base, cible + 0.5);
+      this.dprHold = now + 8000;
+      this.resize(true);
+    }
+  }
+
+  resize(force = false) {
+    const w = this.canvas.clientWidth;
+    const h = this.canvas.clientHeight;
+    const dpr = this.dprWish || this.baseDpr();
+    // Rien n'a bouge (barre d'URL du telephone) : on ne touche a rien, sinon
+    // le canvas est efface et tous les caches des jeux sont jetes pour rien.
+    if (!force && w === this.w && h === this.h && dpr === this.dpr) return;
+    this.dpr = dpr;
+    this.w = w;
+    this.h = h;
+    this.canvas.width = Math.round(w * dpr);
+    this.canvas.height = Math.round(h * dpr);
     this.bgCache = null;
   }
 

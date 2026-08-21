@@ -19,8 +19,21 @@ export class Input {
     this.boundKeyDown = (e) => this.keyDown(e);
     this.boundKeyUp = (e) => this.keyUp(e);
     this.boundPointer = null;
+    // getBoundingClientRect() force un recalcul de mise en page : appele a
+    // chaque pointermove il coute cher sur telephone. On le met en cache et
+    // on l'invalide quand la fenetre bouge.
+    this.rect = null;
+    this.boundInval = () => { this.rect = null; };
     addEventListener('keydown', this.boundKeyDown);
     addEventListener('keyup', this.boundKeyUp);
+    addEventListener('resize', this.boundInval);
+    addEventListener('orientationchange', this.boundInval);
+    addEventListener('scroll', this.boundInval, true);
+  }
+
+  canvasRect() {
+    if (!this.rect) this.rect = this.canvas.getBoundingClientRect();
+    return this.rect;
   }
 
   setScheme(controls) {
@@ -49,6 +62,9 @@ export class Input {
     this.clear();
     removeEventListener('keydown', this.boundKeyDown);
     removeEventListener('keyup', this.boundKeyUp);
+    removeEventListener('resize', this.boundInval);
+    removeEventListener('orientationchange', this.boundInval);
+    removeEventListener('scroll', this.boundInval, true);
   }
 
   // ── Boutons d'action ─────────────────────────────────────────────────
@@ -115,7 +131,8 @@ export class Input {
   pointerDown(e) {
     if (e.target.closest('.ctl-btn, .hud, .emote-bar, .modal, .game-text')) return;
     e.preventDefault();
-    const r = this.canvas.getBoundingClientRect();
+    this.rect = null;                      // un nouveau doigt : mesure fraiche
+    const r = this.canvasRect();
     const x = e.clientX - r.left, y = e.clientY - r.top;
     if (this.scheme === 'tap') {
       this.tapId = e.pointerId;
@@ -136,7 +153,7 @@ export class Input {
 
   pointerMove(e) {
     if (this.scheme === 'tap' && this.tapId === e.pointerId) {
-      const r = this.canvas.getBoundingClientRect();
+      const r = this.canvasRect();
       this.onTap?.(e.clientX - r.left, e.clientY - r.top, 'move');
       return;
     }
@@ -154,7 +171,7 @@ export class Input {
   pointerUp(e) {
     if (this.scheme === 'tap' && this.tapId === e.pointerId) {
       this.tapId = null;
-      const r = this.canvas.getBoundingClientRect();
+      const r = this.canvasRect();
       this.onTap?.(e.clientX - r.left, e.clientY - r.top, 'end');
     }
     if (this.joy && e.pointerId === this.joy.id) {
