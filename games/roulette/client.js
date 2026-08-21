@@ -10,6 +10,7 @@ import {
   ORDRE, ROUGES, MISES, mise, maximum, rangee, colonne, JETONS, couleur,
 } from '/shared/roulette.js';
 
+
 const GOLD = '#FFC93C';
 const CREAM = '#F5EFE6';
 const MAUVE = '#B9A8D0';
@@ -26,15 +27,17 @@ const GW = 14, GH = 5;
 
 const LAND = {
   AW: 1000, AH: 700, portrait: false,
-  rx: 208, ry: 252, rr: 146,
+  rx: 208, ry: 250, rr: 142,
   fx: 400, fy: 96, fw: 540, fh: 296,
-  barY: 476, stripY: 424, histX: 976, histY: 96, histR: 14,
+  barY: 476, stripY: 424,
+  tab: [32, 522, 306, 92],          // tableau d'affichage : x, y, largeur, hauteur
 };
 const PORT = {
   AW: 620, AH: 1240, portrait: true,
-  rx: 310, ry: 208, rr: 126,
-  fx: 52, fy: 402, fw: 480, fh: 560,
-  barY: 980, stripY: 354, histX: 590, histY: 420, histR: 13,
+  rx: 310, ry: 274, rr: 128,
+  fx: 52, fy: 462, fw: 480, fh: 545,
+  barY: 1020, stripY: 424,
+  tab: [24, 76, 572, 74],
 };
 
 const fmt = (n) => String(Math.round(n));
@@ -648,26 +651,56 @@ export function createClient({ ctx, helpers, config, you, send }) {
     label('relâche pour poser le jeton', L.AW / 2, boite.y + 28, { size: 10, weight: 600, color: MAUVE });
   }
 
-  // ── Le tableau d'affichage : les derniers numeros sortis ─────────────
-  function drawHistorique() {
+  // ── Le tableau d'affichage : les derniers numéros sortis ─────────────
+  // Comme dans un vrai casino : les numéros défilent, le dernier en tête,
+  // avec le compte des rouges, des noirs, des pairs et des impairs.
+  function drawTableau() {
+    const [x, y, w, h] = L.tab;
+    panel(x, y, w, h, { fill: 'rgba(6,3,14,.8)', stroke: 'rgba(255,201,60,.25)', r: 12 });
+    label('DERNIERS NUMÉROS', x + 12, y + 16, {
+      size: 10, weight: 800, color: MAUVE, align: 'left', display: true,
+    });
+
     const hist = v.hist || [];
-    const n = Math.min(hist.length, L.portrait ? 8 : 12);
-    if (!n) return;
-    const r = L.histR;
-    const x0 = L.histX;
-    const y0 = L.histY;
-    label('SORTIS', x0 - r + 2, y0 - r - 8, { size: 9, weight: 800, color: MAUVE, align: 'center' });
-    for (let i = 0; i < n; i++) {
-      const y = y0 + i * (r * 2 + 4);
-      ctx.beginPath();
-      ctx.arc(x0 - r + 2, y, r, 0, TAU);
-      ctx.fillStyle = teinte(hist[i]);
-      ctx.fill();
-      ctx.strokeStyle = i === 0 ? GOLD : 'rgba(255,255,255,.25)';
-      ctx.lineWidth = i === 0 ? 2 : 1;
-      ctx.stroke();
-      label(String(hist[i]), x0 - r + 2, y + 4, { size: r * 0.82, weight: 800, color: CREAM });
+    const r = L.portrait ? 15 : 16;
+    const pas = r * 2 + 6;
+    const parLigne = Math.max(1, Math.floor((w - 20) / pas));
+    const lignes = Math.max(1, Math.floor((h - 30) / (r * 2 + 6)));
+    const n = Math.min(hist.length, parLigne * lignes);
+
+    if (!n) {
+      label('la bille n\'est pas encore tombée', x + w / 2, y + h / 2 + 8, {
+        size: 11, weight: 600, color: 'rgba(185,168,208,.65)',
+      });
+      return;
     }
+    for (let i = 0; i < n; i++) {
+      const col = i % parLigne;
+      const lig = Math.floor(i / parLigne);
+      const cx = x + 12 + r + col * pas;
+      const cy = y + 30 + r + lig * (r * 2 + 6);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, TAU);
+      // Sur fond sombre, le noir de la roue disparaitrait : on l'eclaircit
+      // juste assez pour qu'il se lise, comme sur un vrai tableau lumineux.
+      ctx.fillStyle = hist[i] === 0 ? '#12A85A' : ROUGES.has(hist[i]) ? '#D8202F' : '#3A3048';
+      ctx.fill();
+      ctx.strokeStyle = i === 0 ? GOLD : 'rgba(255,255,255,.35)';
+      ctx.lineWidth = i === 0 ? 2.5 : 1;
+      ctx.stroke();
+      label(String(hist[i]), cx, cy + r * 0.34, {
+        size: r * (hist[i] > 9 ? 0.78 : 0.9), weight: 800, color: CREAM,
+      });
+    }
+
+    // Le compte, sur les numéros affichés.
+    const vus = hist.slice(0, 18);
+    const rouges = vus.filter((k) => k !== 0 && ROUGES.has(k)).length;
+    const noirs = vus.filter((k) => k !== 0 && !ROUGES.has(k)).length;
+    const zeros = vus.filter((k) => k === 0).length;
+    const pairs = vus.filter((k) => k !== 0 && k % 2 === 0).length;
+    const cpt = `R ${rouges}  ·  N ${noirs}  ·  0 ${zeros}  ·  P ${pairs}  ·  I ${vus.length - pairs - zeros}`;
+    label(cpt, x + w - 12, y + 16, { size: 10, weight: 700, color: 'rgba(185,168,208,.9)', align: 'right' });
   }
 
   // ── La barre du bas : jetons, boutons, tapis ─────────────────────────
@@ -931,8 +964,9 @@ export function createClient({ ctx, helpers, config, you, send }) {
       drawGagnants();
       drawMises(now);
       drawCibleTapis();
-      drawHistorique();
       drawBarre();
+      // Le tableau se glisse dans la barre en paysage : il passe apres elle.
+      drawTableau();
       drawHud();
       drawCibleNom();
 
