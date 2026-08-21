@@ -41,6 +41,9 @@ export function createClient({ ctx, helpers, config, you, send }) {
   let drag = null;
   let raiseTo = null;       // valeur locale de la reglette
   let lastSent = 0;
+  let cachees = false;      // cartes retournees : on joue a plusieurs autour
+  let coupOeil = false;     // appui maintenu : on jette un oeil
+  let maintien = null;      // zone tenue sous le doigt
   let flyChips = [];        // jetons qui glissent vers le vainqueur
 
   // ── Sprites de cartes ──
@@ -366,17 +369,46 @@ export function createClient({ ctx, helpers, config, you, send }) {
     if (!p) return;
     const cw = L.myHoleW;
     const winSet = new Set(v.me && v.me.hand ? v.me.hand.cards : []);
+    // Cache : on joue souvent a plusieurs autour du meme ecran. Les cartes
+    // passent face contre table, et un appui prolonge les montre le temps
+    // qu'on regarde. L'abattage, lui, se voit toujours.
+    const abattage = v.phase === 'showdown' || v.phase === 'payout';
+    const masque = cachees && !abattage && !p.folded && !coupOeil;
     p.hole.forEach((id, i) => {
-      blitCard(x + (i - 0.5) * cw * 0.72, y, cw, id, {
+      blitCard(x + (i - 0.5) * cw * 0.72, y, cw, masque ? -1 : id, {
         angle: (i - 0.5) * 0.09,
-        dim: p.folded ? 0.55 : 0,
-        glow: !p.folded && winSet.has(id) ? GOLD : null,
+        dim: p.folded ? 0.55 : (cachees && !masque && !abattage ? 0.3 : 0),
+        glow: !p.folded && !masque && winSet.has(id) ? GOLD : null,
       });
     });
     if (p.folded) {
       label('COUCHÉ', x, y, { size: 17, weight: 800, color: RED, display: true, outline: 4 });
+    } else if (masque) {
+      label('CACHÉES', x, y - cw * 0.82, { size: 12, weight: 800, color: MAUVE, outline: 3 });
     } else if (v.me && v.me.hand) {
-      label(v.me.hand.name, x, y + cw * 0.86, { size: 12, weight: 800, color: GOLD, outline: 3 });
+      label(v.me.hand.name, x, y - cw * 0.82, { size: 12, weight: 800, color: GOLD, outline: 3 });
+    }
+
+    // Le bouton, juste sous les cartes, cale au bas de l'ecran.
+    const bw = Math.min(148, cw * 1.6), bh = 34;
+    const bx = x - bw / 2;
+    const by = Math.min(y + cw * 0.78, L.AH - bh - 6);
+    panel(bx, by, bw, bh, {
+      fill: cachees ? 'rgba(177,75,255,.22)' : 'rgba(10,5,22,.7)',
+      stroke: cachees ? '#B14BFF' : 'rgba(255,255,255,.18)', r: 9,
+    });
+    label(cachees ? '👁 MONTRER' : '🙈 CACHER', bx + bw / 2, by + (cachees ? 15 : 21), {
+      size: 11, weight: 800, color: cachees ? CREAM : MAUVE,
+    });
+    zones.push({
+      x: bx, y: by, w: bw, h: bh,
+      fn: () => { cachees = !cachees; coupOeil = false; sfx.play('click'); },
+      hold: () => { if (cachees) coupOeil = true; },
+      release: () => { coupOeil = false; },
+    });
+    if (cachees) {
+      label(masque ? 'maintiens pour voir' : 'relâche pour recacher',
+        bx + bw / 2, by + 27, { size: 9, weight: 600, color: 'rgba(185,168,208,.85)' });
     }
   }
 
@@ -551,6 +583,16 @@ export function createClient({ ctx, helpers, config, you, send }) {
   }
 
   function onKey(e) {
+    const tag0 = e.target && e.target.tagName;
+    if (tag0 === 'INPUT' || tag0 === 'TEXTAREA') return;
+    // Cacher ses cartes marche a tout moment, meme quand ce n'est pas a soi.
+    if (e.code === 'KeyH' && !e.repeat) {
+      e.preventDefault();
+      cachees = !cachees;
+      coupOeil = false;
+      sfx.play('click');
+      return;
+    }
     if (!view || !view.me || view.toAct !== you || view.phase !== 'bet') return;
     const tag = e.target && e.target.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
@@ -579,12 +621,21 @@ export function createClient({ ctx, helpers, config, you, send }) {
         for (const z of zones) {
           if (w.x >= z.x && w.x <= z.x + z.w && w.y >= z.y && w.y <= z.y + z.h) {
             if (z.slider) { drag = z; z.fn(w.x); }
+            else if (z.hold) { maintien = z; z.at = performance.now(); z.hold(); }
             return;
           }
         }
         return;
       }
       if (phase === 'move') { if (drag) drag.fn(w.x); return; }
+      if (maintien) {
+        // Appui bref : on bascule. Appui maintenu : on a juste regarde.
+        const bref = performance.now() - (maintien.at || 0) < 260;
+        maintien.release?.();
+        if (bref) maintien.fn();
+        maintien = null;
+        return;
+      }
       if (drag) { drag.fn(w.x); drag = null; return; }
       for (const z of zones) {
         if (w.x >= z.x && w.x <= z.x + z.w && w.y >= z.y && w.y <= z.y + z.h) {

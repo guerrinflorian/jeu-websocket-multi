@@ -49,6 +49,7 @@ export default {
     { icon: '💰', text: 'Quatre tours d\'enchères : CHECKER, SUIVRE, RELANCER (montant libre) ou SE COUCHER.' },
     { icon: '🔥', text: 'TAPIS : tu mises tout. Si tu es à tapis pour moins, un pot secondaire se crée : tu ne peux gagner que ta part.' },
     { icon: '🎭', text: 'Personne ne voit tes cartes avant l\'abattage. Le bluff est autorisé, et fortement conseillé.' },
+    { icon: '🙈', text: 'CACHER retourne tes cartes face contre table : pratique à plusieurs autour du même écran. Maintiens le bouton pour jeter un oeil, ou appuie sur H.' },
     { icon: '🦈', text: 'Le Requin (1 contre tous) : tapis double, et un coup d\'oeil par main dans le jeu d\'un adversaire (annoncé à tous).' },
   ],
 };

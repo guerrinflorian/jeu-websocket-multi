@@ -23,6 +23,18 @@ Entre chaque, on mise. À la fin, s'il reste au moins deux joueurs, c'est l'**ab
 
 Le chrono tourne : sans réponse, tu checkes si c'est gratuit, sinon tu te couches. Comme au casino.
 
+## Cacher ses cartes
+
+On joue souvent à plusieurs autour du même téléphone, et le voisin a des yeux.
+
+Le bouton **🙈 CACHER**, sous tes deux cartes, les retourne **face contre table**. Elles restent cachées jusqu'à ce que tu changes d'avis, y compris entre deux mains.
+
+- **Appui court** sur le bouton : tu caches ou tu remontres.
+- **Appui maintenu** : tu jettes un oeil le temps que tu gardes le doigt dessus, et elles se recachent dès que tu relâches.
+- Au clavier : la touche **H**, à tout moment, même quand ce n'est pas ton tour.
+
+À l'abattage, tes cartes se montrent quand même : c'est le jeu.
+
 ## L'ordre des mains (de la plus forte à la plus faible)
 
 | Main | Exemple |
